@@ -9,3 +9,7 @@ Dubstep, riddim, melodic bass and drum & bass shows around Chicago, plus Midwest
 - Updated daily. All listings live in `data.json`.
 
 Lineups and set times change, so check the ticket link before you go.
+
+## Crews
+
+Crew plans (Going / Interested / Got tix) are stored in Supabase against each show and festival `id` in data.json. Never change an existing id: it would wipe everyone's plans for that show. Database setup is in `supabase/setup.sql`.

@@ -1,6 +1,7 @@
 {
+ "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id.",
  "updated": "2026-10-17",
- "checked":"2026-10-18",
+ "checked": "2026-10-18",
  "links": {},
  "locals": [],
  "shows": [
