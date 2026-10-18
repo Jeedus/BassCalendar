@@ -301,6 +301,138 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
 @media (max-width:640px){.fev{font-size:0;padding:0;height:6px;margin:0 -2px}}
 @media (max-width:640px){.pgrid{grid-template-columns:minmax(0,1fr)}.t2{font-size:17px}}
 
+/* crews */
+.crewnav{display:flex;align-items:center;gap:8px;padding:0 16px;font-weight:500;font-size:17px;letter-spacing:-.03em;text-decoration:none;color:var(--ink)}
+.crewnav[aria-current="true"]{background:var(--ink);color:var(--paper)}
+@media (hover:hover){.crewnav:hover{background:var(--volt);color:var(--on-volt)}}
+.av{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;flex:none;font-family:var(--font-sans);font-weight:700;font-size:11px;line-height:1;letter-spacing:0;color:#000000;box-shadow:0 0 0 2px var(--paper),inset 0 0 0 1px rgba(0,0,0,.25)}
+.av.me{box-shadow:0 0 0 2px var(--paper),inset 0 0 0 2px #000000}
+.av.more{background:var(--ink);color:var(--paper);font-size:10px}
+.avs{display:inline-flex;align-items:center;vertical-align:middle}
+.avs .av+.av{margin-left:-7px}
+.avs.sm .av{width:18px;height:18px;font-size:9px}
+.avs.sm .av+.av{margin-left:-5px}
+.avs.big .av{width:36px;height:36px;font-size:14px}
+.crewl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
+.crewl .t{min-width:0}
+.crewl .tx{font-family:var(--font-mono);font-size:11px;background:var(--volt);color:var(--on-volt);padding:1px 4px;margin-right:2px}
+.rsvp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-width:440px}
+.rb{min-height:44px;padding:0 6px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);letter-spacing:-.01em;cursor:pointer;border-radius:0}
+@media (hover:hover){.rb:hover{border-color:var(--ink)}}
+.rb[aria-pressed="true"]{border-color:transparent;font-weight:700}
+.rb-going[aria-pressed="true"]{background:var(--signal);color:var(--on-signal)}
+.rb-interested[aria-pressed="true"]{background:var(--volt);color:var(--on-volt)}
+.rb-tix[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.hero .rsvp{max-width:none}
+.hero .rb{border-color:var(--on-signal);color:var(--on-signal)}
+.hero .rb[aria-pressed="true"]{background:var(--on-signal);color:var(--signal)}
+.hero .crewl{color:var(--on-signal)}
+.hero .av{box-shadow:0 0 0 2px var(--signal),inset 0 0 0 2px #000000}
+.nshow .crewl{padding-left:19px;margin-top:4px}
+.nbody .rsvp{max-width:none}
+.nfest .crewl{color:var(--on-signal);margin-top:6px}
+.nfest .av{box-shadow:0 0 0 2px var(--signal),inset 0 0 0 2px #000000}
+.fev .avs{margin-left:6px}
+.fev .av{box-shadow:0 0 0 2px var(--signal),inset 0 0 0 2px #000000}
+.ev .avs{margin-left:5px}
+.cchips{display:flex;gap:6px;flex-wrap:wrap}
+.cchip{height:40px;padding:0 14px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border-radius:0}
+.cchip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cchip .n{font-family:var(--font-mono);font-size:12px;background:var(--signal);color:var(--on-signal);padding:1px 5px}
+.crewview{padding-top:4px}
+.cview{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"head wk" "mem wk";gap:24px 32px;align-items:start}
+.chead{grid-area:head;display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--rule);padding-top:10px}
+.cmem{grid-area:mem;display:flex;flex-direction:column;gap:16px}
+.wkend{grid-area:wk;display:flex;flex-direction:column;gap:16px;border-top:1px solid var(--rule);padding-top:10px;min-width:0}
+.cname{margin:0;font-size:clamp(40px,5vw,56px);font-weight:700;letter-spacing:-.05em;line-height:.95;text-wrap:balance;overflow-wrap:anywhere}
+.cbtns{display:flex;gap:8px}
+.cbtns .btn{min-height:48px;justify-content:center}
+.btn.cy{flex:1;background:var(--signal);color:var(--on-signal);border-color:var(--signal);font-weight:700}
+.clink{font-family:var(--font-mono);font-size:12px;color:var(--ink-meta);overflow-wrap:anywhere}
+.mrow{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft)}
+.mrow .av{width:36px;height:36px;font-size:14px}
+.mrow b{font-size:18px;font-weight:500;letter-spacing:-.01em}
+.mrow .sub{display:block;font-size:14px;color:var(--ink-muted);margin-top:2px}
+.mrow .cnt{font-family:var(--font-mono);font-size:13px;color:var(--ink-soft)}
+.ytag{font-family:var(--font-mono);font-size:11px;color:var(--ink-meta);margin-left:6px;letter-spacing:.02em}
+.ytag.nw{background:var(--volt);color:var(--on-volt);padding:1px 4px}
+.most{display:flex;flex-direction:column;gap:8px}
+.mostc{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:var(--signal);color:var(--on-signal);border:0;text-align:left;cursor:pointer;font:inherit}
+.mostc b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em}
+.mostc span{font-family:var(--font-mono);font-size:11px;text-transform:uppercase}
+.mostc .of{font-family:var(--font-sans);font-size:28px;font-weight:700;letter-spacing:-.04em;text-transform:none}
+.wkhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.wkhead h3{margin:4px 0 0;font-size:clamp(28px,3.5vw,40px);font-weight:500;letter-spacing:-.04em;line-height:1.05}
+.wkbtns{display:flex;gap:6px}
+.wkbtns .btn{min-height:44px}
+.wkbtns .btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.wkbtns .sq{width:44px;justify-content:center;padding:0;font-family:var(--font-mono)}
+.wdays{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.wday{display:flex;flex-direction:column;gap:10px;border-top:2px solid var(--rule);padding-top:10px;min-width:0}
+.wday.hot{border-top-color:var(--signal)}
+.wday h4{margin:0;display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:22px;font-weight:500;letter-spacing:-.03em}
+.wday h4 span{font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--ink-meta);letter-spacing:.02em}
+.wpick{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--rule-soft);min-width:0}
+.wpick.top{background:var(--mist);border-color:transparent;box-shadow:inset 0 3px 0 var(--signal)}
+.wpick.fest{background:var(--signal);color:var(--on-signal);border-color:transparent}
+.wpick.fest .crewl{color:var(--on-signal)}
+.wpick.fest .av{box-shadow:0 0 0 2px var(--signal),inset 0 0 0 2px #000000}
+.wpick .ttl{border:0;background:none;padding:0;color:inherit;font:500 19px var(--font-sans);letter-spacing:-.02em;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px}
+@media (hover:hover){.wpick .ttl:hover{text-decoration-color:currentColor}}
+.wpick .wh{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;opacity:.8}
+.wpick .av{box-shadow:0 0 0 2px var(--mist),inset 0 0 0 1px rgba(0,0,0,.25)}
+.wnone{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px dashed var(--rule-soft);font-size:15px;color:var(--ink-soft)}
+.wnone .sug{border:0;background:none;padding:0;color:var(--ink);font:500 15px var(--font-sans);text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.wquiet{font-size:14px;color:var(--ink-meta)}
+.wfree{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.wfree .crewl{font-size:13px}
+.fbt{min-height:36px;padding:0 10px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 13px var(--font-sans);cursor:pointer}
+.fbt[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.walso{font-size:13px;color:var(--ink-meta)}
+.cstart{max-width:620px;display:flex;flex-direction:column;gap:18px;border-top:1px solid var(--rule);padding-top:10px}
+.cstart h2{margin:6px 0 0;font-size:clamp(36px,5vw,56px);font-weight:700;letter-spacing:-.05em;line-height:.95}
+.cstart p{margin:0;font-size:16px;line-height:1.5;color:var(--ink-soft);max-width:52ch}
+.cform{display:grid;gap:10px}
+.cform label{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-soft)}
+.cform input{height:52px;box-sizing:border-box;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:0 14px;font:500 18px var(--font-sans);border-radius:0;min-width:0}
+.cform .go{height:54px;border:0;background:var(--ink);color:var(--paper);font:700 18px var(--font-sans);cursor:pointer;border-radius:0}
+.cform .go:disabled{opacity:.5;cursor:default}
+.cleave{align-self:flex-start;border:0;background:none;padding:6px 0;color:var(--ink-muted);font:500 14px var(--font-sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.cleave.arm{color:var(--heat)}
+.joinx{position:fixed;inset:0;z-index:60;background:var(--paper);overflow-y:auto;overscroll-behavior:contain}
+.jgrid{min-height:100%;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.jleft{background:var(--signal);color:var(--on-signal);display:flex;flex-direction:column;justify-content:center;gap:18px;padding:max(48px,env(safe-area-inset-top,0px)) 48px 48px max(48px,env(safe-area-inset-left,0px))}
+.jleft .kicker{border-top:1px solid var(--on-signal);padding-top:12px}
+.jleft .who{font-size:clamp(20px,2.4vw,26px);font-weight:500;letter-spacing:-.02em}
+.jleft .cname{font-size:clamp(52px,8vw,112px)}
+.jleft .crewl{color:var(--on-signal);font-size:17px;font-weight:500}
+.jleft .av{box-shadow:0 0 0 3px var(--signal),inset 0 0 0 2px #000000}
+.jleft .going .kicker{border-top:0;padding-top:0}
+.jleft .going{border-top:1px solid var(--on-signal);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.jleft .going b{font-size:clamp(17px,1.8vw,20px);font-weight:500;line-height:1.35}
+.jright{display:flex;flex-direction:column;justify-content:center;gap:18px;padding:48px max(48px,env(safe-area-inset-right,0px)) max(48px,env(safe-area-inset-bottom,0px)) 48px}
+.jright h2{margin:0;font-size:clamp(26px,2.8vw,36px);font-weight:500;letter-spacing:-.035em}
+.jright p{margin:0;font-size:15px;line-height:1.5;color:var(--ink-muted)}
+.jclose{position:absolute;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));min-height:40px;padding:0 14px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font:500 14px var(--font-sans);cursor:pointer;z-index:1}
+.jerr{color:var(--heat);font-weight:500}
+.jmsg{padding:48px;display:flex;flex-direction:column;gap:14px;max-width:560px}
+@media (max-width:900px){
+  .cview{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"head" "wk" "mem"}
+  .wdays{grid-template-columns:minmax(0,1fr)}
+  .jgrid{grid-template-columns:minmax(0,1fr);min-height:0}
+  .jleft{padding:calc(64px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 28px max(20px,env(safe-area-inset-left,0px))}
+  .jright{padding:24px max(20px,env(safe-area-inset-right,0px)) max(32px,env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));justify-content:flex-start}
+}
+@media (max-width:640px){
+  .crewnav{margin-left:auto;padding:0 14px;font-size:16px}
+  .cchips{flex-basis:100%;order:2}
+  .cchip{flex:1;height:44px;padding:0 4px;font-size:14px;white-space:nowrap;gap:5px}
+  .cchip .n{font-size:11px;padding:1px 4px}
+  .bar #countLine{order:3}
+  .wkhead .wkbtns{width:100%}
+  .wkhead .wkbtns .btn:first-child{flex:1;justify-content:center}
+}
+
 /* phone + tablet */
 .sheethead{display:none}
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:29}
@@ -366,10 +498,11 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
       <a href="#month" id="navMonth">Month</a>
       <a href="#list" id="navList">List</a>
     </nav>
+    <a href="#crew" class="crewnav" id="navCrew" hidden><span>Crew</span><span id="navCrewAv"></span></a>
   </div>
 </header>
 
-<section class="hero" aria-labelledby="heroTitle">
+<section class="hero" id="heroSec" aria-labelledby="heroTitle">
   <div class="wrap" id="hero"></div>
 </section>
 
@@ -425,6 +558,7 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
           <button role="tab" id="tabMonth" aria-selected="true" type="button">Month</button>
           <button role="tab" id="tabList" aria-selected="false" type="button">List</button>
         </div>
+        <div class="cchips" id="cchips" role="group" aria-label="Whose plans" hidden></div>
         <span class="meta" id="countLine"></span>
       </div>
       <div id="monthView">
@@ -445,6 +579,7 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
       </div>
       <div id="listView" hidden></div>
       <section class="festsec" id="festSec" aria-label="Festivals"></section>
+      <section class="crewview" id="crewView" aria-label="Crew" hidden></section>
     </section>
   </div>
 
@@ -454,6 +589,7 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
   </footer>
 </div>
 <div class="scrim" id="scrim" hidden></div>
+<div class="joinx" id="joinx" role="dialog" aria-modal="true" aria-label="Join a crew" hidden></div>
 <div class="toast" id="toast" hidden></div>
 
 <script>
@@ -511,9 +647,9 @@ function gcal(s){
 /* state */
 const KEY="basschi:v1";
 let saved=new Set();
-let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,ym:null,sel:TODAY};
+let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY};
 try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state)Object.assign(state,o.state,{sel:TODAY,ym:null});}}catch(e){}
-function persist(){try{localStorage.setItem(KEY,JSON.stringify({saved:[...saved],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly}}));}catch(e){}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify({saved:[...saved],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly,crewF:state.crewF}}));}catch(e){}}
 const tp=parts(TODAY);
 state.ym = (TODAY<iso(FIRST.y,FIRST.m,1)) ? {...FIRST} : (TODAY>iso(LAST.y,LAST.m,31) ? {...LAST} : {y:tp.y,m:tp.m});
 if(location.hash==="#list")state.view="list"; else if(location.hash==="#month")state.view="month";
@@ -546,6 +682,7 @@ const miniTags=s=>isNew(s)?'<span class="nsaved">New</span>':'';
 function fvis(f){
   if(!state.fests||state.venue||state.newOnly)return false;
   if(state.followOnly&&!fArtists(f).some(isF))return false;
+  if(!crewPass(f.id))return false;
   if(state.savedOnly&&!saved.has(f.id))return false;
   if(state.cityOnly&&f.city!=="Chicago")return false;
   if(!state.showPast&&f.end&&f.end<TODAY)return false;
@@ -577,8 +714,8 @@ function festPoster(f,onDay){
   else if(f.lineup==="full")body=tiers(f.artists,f.head||0,f.mid||0,f.id+"|all",null);
   else body='<div class="phold"><span class="kicker">'+(f.start?"Lineup not announced":"Dates and lineup TBA")+'</span><span class="note">'+esc(f.note||"Artists show up here as soon as the festival posts them.")+'</span></div>';
   return '<article class="poster'+(lined||onDay?" wide":"")+'" data-fest="'+f.id+'"'+(onDay?'':' id="fest-'+f.id+'"')+'>'+band+'<div class="pbody"><h3 class="ptitle">'+esc(f.name)+'</h3>'+
-    (lined&&f.note?'<p class="rsup">'+esc(f.note)+'</p>':'')+body+
-    '<div class="racts"><button class="btn save" type="button" data-save="'+f.id+'" aria-pressed="'+saved.has(f.id)+'">'+(saved.has(f.id)?"Saved":"Save")+'</button>'+
+    (lined&&f.note?'<p class="rsup">'+esc(f.note)+'</p>':'')+body+crewLine(f.id,6)+rsvpBtns(f.id)+
+    '<div class="racts">'+saveBtn(f.id)+
     (f.start?'<a class="btn" href="'+esc(fgcal(f))+'" target="_blank" rel="noopener"><span class="lg">Add to Google </span>Calendar</a>':'')+
     '<a class="btn" href="'+esc(f.url)+'" target="_blank" rel="noopener">'+(lined?"Tickets":"Festival site")+'</a></div></div></article>';
 }
@@ -591,6 +728,217 @@ function renderFests(){
     (list.length?'<div class="pgrid">'+list.map(f=>festPoster(f)).join("")+'</div>':'<div class="empty"><b>No festivals match these filters.</b></div>')+'</div>';
 }
 
+
+/* ---------- crews ---------- */
+const CREW_API={url:"",key:""};
+const CREW_ON=!!(CREW_API.url&&CREW_API.key);
+const CKEY=KEY+":crew";
+let me=null,crew=null,RS=new Map();
+try{me=JSON.parse(localStorage.getItem(CKEY)||"null");}catch(e){}
+try{const c=JSON.parse(localStorage.getItem(CKEY+":state")||"null");if(c&&me&&c.code===me.code)crew=c;}catch(e){}
+const AV=["#19c6d6","#d6f45a","#ffffff","#3292ff","#ff4b5c","#d1ddd3","#597e87"];
+const saveMe=()=>{try{me?localStorage.setItem(CKEY,JSON.stringify(me)):localStorage.removeItem(CKEY);}catch(e){}};
+const saveCrew=()=>{try{crew?localStorage.setItem(CKEY+":state",JSON.stringify(crew)):localStorage.removeItem(CKEY+":state");}catch(e){}};
+const lastName=()=>{try{return localStorage.getItem(CKEY+":name")||"";}catch(e){return "";}};
+const keepName=n=>{try{localStorage.setItem(CKEY+":name",n);}catch(e){}};
+async function api(fn,body){
+  const h={"Content-Type":"application/json","apikey":CREW_API.key};
+  if(/^eyJ/.test(CREW_API.key))h.Authorization="Bearer "+CREW_API.key;
+  let r;try{r=await fetch(CREW_API.url.replace(/\/+$/,"")+"/rest/v1/rpc/"+fn,{method:"POST",headers:h,body:JSON.stringify(body)});}
+  catch(e){throw new Error("offline");}
+  let j=null;try{j=await r.json();}catch(e){}
+  if(!r.ok)throw new Error((j&&(j.message||j.msg))||("http_"+r.status));
+  return j;
+}
+const ERRS={crew_not_found:"That invite link doesn't work anymore. Ask your friend to send a fresh one.",name_required:"Type your name first.",crew_name_required:"Give the crew a name first.",not_a_member:"This device isn't in that crew anymore. Open the invite link to rejoin.",crew_full:"That crew is full.",offline:"Can't reach the crew right now. Check your connection and try again."};
+const errMsg=e=>ERRS[e.message]||"Something went wrong saving that. Try again in a minute.";
+const EVMAP=new Map();
+SHOWS.forEach(s=>EVMAP.set(s.id,{id:s.id,title:s.title,tag:s.tag,date:s.date,where:s.venue,kind:"show"}));
+FESTS.forEach(f=>EVMAP.set(f.id,{id:f.id,title:f.name,date:f.start,end:f.end,where:f.city,kind:"fest"}));
+const evDate=x=>x.date||"9999-12-31";
+const evUpcoming=x=>!x.date||(x.end||x.date)>=TODAY;
+function indexCrew(){
+  RS=new Map();if(!crew)return;
+  const mm=new Map(crew.members.map(m=>[m.id,m]));
+  crew.rsvps.forEach(r=>{const m=mm.get(r.member_id);if(!m)return;if(!RS.has(r.event_id))RS.set(r.event_id,[]);RS.get(r.event_id).push({m,status:r.status});});
+  const order={tix:0,going:1,interested:2};
+  RS.forEach(a=>a.sort((x,y)=>(me&&y.m.id===me.member_id)-(me&&x.m.id===me.member_id)||order[x.status]-order[y.status]));
+}
+indexCrew();
+const inCrew=()=>CREW_ON&&!!me&&!!crew;
+const crewOn=id=>inCrew()?(RS.get(id)||[]):[];
+const committed=id=>crewOn(id).filter(x=>x.status!=="interested");
+function myStatus(id){if(!inCrew())return null;const x=(RS.get(id)||[]).find(r=>r.m.id===me.member_id);return x?x.status:null;}
+const isMe=m=>!!me&&m.id===me.member_id;
+const ini=n=>esc(String(n||"?").trim().charAt(0).toUpperCase()||"?");
+const av=m=>'<span class="av'+(isMe(m)?" me":"")+'" style="background:'+AV[(m.color||0)%AV.length]+'" title="'+esc(m.name)+(isMe(m)?" (you)":"")+'">'+ini(m.name)+'</span>';
+function avStack(list,max,cls){max=max||4;const ms=list.map(x=>x.m||x);
+  return '<span class="avs'+(cls?" "+cls:"")+'">'+ms.slice(0,max).map(av).join("")+(ms.length>max?'<span class="av more">+'+(ms.length-max)+'</span>':'')+'</span>';}
+const jn=a=>a.length<=2?a.join(" + "):a.slice(0,2).join(", ")+" + "+(a.length-2);
+function crewText(a){
+  const name=x=>isMe(x.m)?"You":x.m.name;const g={tix:[],going:[],interested:[]};a.forEach(x=>g[x.status].push(name(x)));
+  const out=[];
+  if(g.tix.length)out.push('<span class="tx">TIX</span>'+esc(jn(g.tix)));
+  if(g.going.length)out.push(esc(jn(g.going))+" going");
+  if(g.interested.length)out.push(esc(jn(g.interested))+" interested");
+  return out.join(" · ");
+}
+function crewLine(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl">'+avStack(a,max||4)+'<span class="t">'+crewText(a)+'</span></div>';}
+function rsvpBtns(id){if(!inCrew())return "";const st=myStatus(id);
+  const b=(v,l)=>'<button class="rb rb-'+v+'" type="button" data-rsvp="'+esc(id)+'" data-st="'+v+'" aria-pressed="'+(st===v)+'">'+l+'</button>';
+  return '<div class="rsvp" role="group" aria-label="Your plans">'+b("going","Going")+b("interested","Interested")+b("tix","Got tix")+'</div>';}
+const saveBtn=(id,cls)=>inCrew()?'':'<button class="btn save'+(cls?" "+cls:"")+'" type="button" data-save="'+id+'" aria-pressed="'+saved.has(id)+'">'+(saved.has(id)?"Saved":"Save")+'</button>';
+function crewPass(id){
+  if(!inCrew()||state.crewF==="all")return true;
+  if(state.crewF==="crew")return crewOn(id).length>0;
+  return !!myStatus(id)||saved.has(id);
+}
+async function refreshCrew(){
+  if(!CREW_ON||!me)return;
+  try{
+    const c=await api("crew_state",{p_code:me.code});
+    if(!c.members.some(m=>m.id===me.member_id)){me=null;crew=null;saveMe();saveCrew();indexCrew();render();toast("You're no longer in that crew");return;}
+    const changed=JSON.stringify(c)!==JSON.stringify(crew);
+    crew=c;me.crew_name=c.name;saveMe();saveCrew();indexCrew();if(changed)render();
+  }catch(e){if(e.message==="crew_not_found"){me=null;crew=null;saveMe();saveCrew();indexCrew();render();toast("That crew no longer exists");}}
+}
+async function setRsvp(id,st){
+  if(!inCrew())return;
+  const cur=myStatus(id);const next=cur===st?"":st;const before=JSON.stringify(crew.rsvps);
+  crew.rsvps=crew.rsvps.filter(r=>!(r.member_id===me.member_id&&r.event_id===id));
+  if(next)crew.rsvps.push({member_id:me.member_id,event_id:id,status:next});
+  indexCrew();render();
+  const ev=EVMAP.get(id);const t=ev?ev.title:"that";
+  toast(next==="going"?"Going: "+t:next==="tix"?"Got tix: "+t:next==="interested"?"Interested: "+t:"Cleared your plans for "+t);
+  try{await api("crew_rsvp",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_event_id:id,p_status:next});saveCrew();}
+  catch(e){crew.rsvps=JSON.parse(before);indexCrew();render();toast(errMsg(e));}
+}
+const isFree=(mid,night)=>!!crew&&crew.free.some(f=>f.member_id===mid&&f.night===night);
+async function setFree(nights,free){
+  if(!inCrew())return;const before=JSON.stringify(crew.free);
+  nights.forEach(n=>{crew.free=crew.free.filter(f=>!(f.member_id===me.member_id&&f.night===n));if(free)crew.free.push({member_id:me.member_id,night:n});});
+  render();
+  try{for(const n of nights)await api("crew_set_free",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_night:n,p_free:free});saveCrew();}
+  catch(e){crew.free=JSON.parse(before);render();toast(errMsg(e));}
+}
+const inviteUrl=()=>location.origin+location.pathname+"?join="+encodeURIComponent(me.code);
+function copyText(txt,done){
+  const fb=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast(done);}catch(e){toast("Copy this link: "+txt);}ta.remove();};
+  try{navigator.clipboard.writeText(txt).then(()=>toast(done),fb);}catch(e){fb();}
+}
+function shareInvite(){
+  const url=inviteUrl();const text="Join "+crew.name+" on BassCalendar so we can see who's going to what.";
+  if(navigator.share){navigator.share({title:"Join "+crew.name,text,url}).catch(()=>{});}else copyText(url,"Invite link copied");
+}
+function weekendStart(){const d=dow(TODAY);const off=d===0?4:4-d;return addDays(TODAY,off+7*(state.wkOff||0));}
+function nextPlan(m){
+  const mine=crew.rsvps.filter(r=>r.member_id===m.id&&r.status!=="interested").map(r=>({r,e:EVMAP.get(r.event_id)})).filter(x=>x.e&&evUpcoming(x.e));
+  mine.sort((a,b)=>evDate(a.e).localeCompare(evDate(b.e)));
+  return {count:crew.rsvps.filter(r=>r.member_id===m.id&&EVMAP.has(r.event_id)&&evUpcoming(EVMAP.get(r.event_id))).length,next:mine[0]||null};
+}
+function shortDay(d){if(!d)return "dates TBA";if(d===TODAY)return "tonight";if(d===addDays(TODAY,1))return "tomorrow";return DOW[dow(d)]+" "+MON[parts(d).m]+" "+parts(d).d;}
+function renderCrewStart(){
+  return '<div class="cstart"><span class="kicker">Crews</span><h2>Start a crew</h2>'+
+    '<p>A crew is you and your friends. Everyone marks shows Going, Interested or Got tix, and the calendar shows who\'s going to what. No accounts: you share one invite link and friends type their name.</p>'+
+    '<form class="cform" id="createForm" autocomplete="off"><label for="crName">Crew name</label><input id="crName" maxlength="40" placeholder="Wobble Crew" required>'+
+    '<label for="crMe">Your name</label><input id="crMe" maxlength="30" value="'+esc(lastName())+'" required><button class="go" type="submit">Start the crew</button></form>'+
+    '<p class="note">Got an invite? Just open the link your friend sent.</p></div>';
+}
+function renderCrewView(){
+  const el=$("crewView");
+  if(!me){el.innerHTML=renderCrewStart();return;}
+  if(!crew){el.innerHTML='<div class="cstart"><span class="kicker">Crews</span><h2>'+esc(me.crew_name||"Your crew")+'</h2><p>Loading the crew\'s plans…</p></div>';return;}
+  const members=crew.members;
+  const head='<div class="chead"><span class="kicker">Your crew · '+members.length+(members.length===1?" person":" people")+'</span><h2 class="cname">'+esc(crew.name)+'</h2>'+
+    '<div class="cbtns"><button class="btn cy" type="button" id="crShare">'+(navigator.share?"Share invite link":"Copy invite link")+'</button>'+(navigator.share?'<button class="btn" type="button" id="crCopy">Copy</button>':'')+'</div>'+
+    '<span class="clink">'+esc(inviteUrl())+'</span>'+
+    (members.length<2?'<p class="note">Send the invite link to your friends. They\'ll show up here as they join.</p>':'')+'</div>';
+  const rows=members.map(m=>{const p=nextPlan(m);const meM=members.find(isMe);const fresh=!isMe(m)&&m.joined_at&&(Date.now()-Date.parse(m.joined_at))<3*864e5&&(!meM||Date.parse(m.joined_at)>Date.parse(meM.joined_at));
+    const sub=p.next?"Next: "+esc(p.next.e.title)+", "+shortDay(p.next.e.date)+(p.next.r.status==="tix"?" · has tix":""):"No shows picked yet";
+    return '<div class="mrow">'+av(m)+'<span><b>'+esc(m.name)+'</b>'+(isMe(m)?'<span class="ytag">YOU</span>':fresh?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span></span><span class="cnt">'+p.count+(p.count===1?" show":" shows")+'</span></div>';}).join("");
+  const top=[...RS.entries()].map(([id,a])=>({e:EVMAP.get(id),n:a.filter(x=>x.status!=="interested").length,a})).filter(x=>x.e&&evUpcoming(x.e)&&x.n>=2)
+    .sort((a,b)=>b.n-a.n||evDate(a.e).localeCompare(evDate(b.e))).slice(0,3);
+  const most=top.length?'<div class="most"><span class="kicker">Most of the crew is going</span>'+top.map(x=>'<button class="mostc" type="button" data-goto="'+esc(x.e.id)+'"><span><b>'+esc(x.e.title)+'</b><span>'+(x.e.kind==="fest"&&x.e.date?range(x.e.date,x.e.end):shortDay(x.e.date))+' · '+esc(x.e.where)+'</span></span><span class="of">'+x.n+'/'+members.length+'</span></button>').join("")+'</div>':'';
+  const mem='<div class="cmem"><div>'+rows+'</div>'+most+'<button class="cleave" type="button" id="crLeave">Leave '+esc(crew.name)+'</button></div>';
+  // weekend
+  const ws=weekendStart();const nights=[0,1,2,3].map(i=>addDays(ws,i));
+  const label=(state.wkOff||0)===0?"This weekend":(state.wkOff===1?"Next weekend":"Weekend");
+  const allFree=nights.every(n=>isFree(me.member_id,n));
+  const days=nights.map(k=>{
+    const evs=SHOWS.filter(s=>s.date===k).map(s=>EVMAP.get(s.id)).concat(FESTS.filter(f=>f.start&&f.start<=k&&k<=f.end).map(f=>EVMAP.get(f.id)));
+    const picked=evs.map(e=>({e,a:crewOn(e.id)})).filter(x=>x.a.length).sort((a,b)=>b.a.length-a.a.length);
+    const rest=evs.filter(e=>!crewOn(e.id).length);
+    const freeM=members.filter(m=>isFree(m.id,k));
+    const dn=DOWL[dow(k)];
+    let body=picked.map((x,i)=>'<div class="wpick'+(x.e.kind==="fest"?" fest":i===0?" top":"")+'"><button class="ttl" type="button" data-goto="'+esc(x.e.id)+'">'+esc(x.e.title)+'</button><span class="wh">'+esc(x.e.where)+'</span><div class="crewl">'+avStack(x.a,5)+'<span class="t">'+crewText(x.a)+'</span></div></div>').join("");
+    if(!picked.length&&evs.length)body+='<div class="wnone"><span>Nobody\'s picked '+dn+' yet</span>'+rest.slice(0,2).map(e=>'<button class="sug" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+', '+esc(e.where)+'?</button>').join("")+'</div>';
+    else if(picked.length&&rest.length)body+='<span class="walso">Also: '+rest.map(e=>esc(e.title)).join(", ")+'</span>';
+    if(!evs.length)body+='<span class="wquiet">No bass shows listed</span>';
+    const mf=isFree(me.member_id,k);
+    body+='<div class="wfree">'+(freeM.length?'<div class="crewl">'+avStack(freeM,4,"sm")+'<span class="t">'+(freeM.length===1&&isMe(freeM[0])?"You\'re free":esc(jn(freeM.map(m=>isMe(m)?"You":m.name)))+' free')+'</span></div>':'<span class="wquiet">Nobody\'s said they\'re free</span>')+
+      '<button class="fbt" type="button" data-free="'+k+'" aria-pressed="'+mf+'">I\'m free</button></div>';
+    return '<div class="wday'+(picked.length?" hot":"")+'"><h4>'+DOW[dow(k)]+' '+parts(k).d+'<span>'+(evs.length?evs.length+(evs.length===1?" SHOW":" SHOWS"):"NO SHOWS")+'</span></h4>'+body+'</div>';
+  }).join("");
+  const wk='<div class="wkend"><div class="wkhead"><div><span class="kicker">'+label+' · '+MON[parts(nights[0]).m]+' '+parts(nights[0]).d+'–'+(parts(nights[3]).m!==parts(nights[0]).m?MON[parts(nights[3]).m]+" ":"")+parts(nights[3]).d+'</span><h3>Where\'s everyone at?</h3></div>'+
+    '<div class="wkbtns"><button class="btn" type="button" id="wkFree" aria-pressed="'+allFree+'">'+"I'm free this weekend"+'</button>'+
+    '<button class="btn sq" type="button" id="wkPrev" aria-label="Previous weekend"'+((state.wkOff||0)<=0?" disabled":"")+'>&lt;</button><button class="btn sq" type="button" id="wkNext" aria-label="Next weekend">&gt;</button></div></div>'+
+    '<div class="wdays">'+days+'</div></div>';
+  el.innerHTML='<div class="cview">'+head+wk+mem+'</div>';
+}
+function renderCrewNav(){
+  const n=$("navCrew");n.hidden=!CREW_ON;if(!CREW_ON)return;
+  n.setAttribute("aria-current",String(state.view==="crew"));
+  $("navCrewAv").innerHTML=inCrew()?avStack(crew.members,3,"sm"):"";
+}
+function renderChips(){
+  const c=$("cchips");const on=inCrew();c.hidden=!on;if(!on)return;
+  const nCrew=SHOWS.filter(s=>s.date>=TODAY&&crewOn(s.id).length).length+FESTS.filter(f=>evUpcoming(EVMAP.get(f.id))&&crewOn(f.id).length).length;
+  const b=(v,l,extra)=>'<button class="cchip" type="button" data-cf="'+v+'" aria-pressed="'+((state.crewF||"all")===v)+'">'+l+(extra||"")+'</button>';
+  c.innerHTML=b("all","All shows")+b("crew","Crew's going",nCrew?'<span class="n">'+nCrew+'</span>':'')+b("mine","Mine");
+}
+function gotoEvent(id){
+  const e=EVMAP.get(id);if(!e)return;
+  if(e.kind==="fest"){state.view="month";render();requestAnimationFrame(()=>{const p=document.getElementById("fest-"+id);if(p)p.scrollIntoView({block:"start"});});return;}
+  state.view="month";state.sel=e.date;const p=parts(e.date);state.ym={y:p.y,m:p.m};openShows.add(id);
+  try{history.replaceState(null,"","#month");}catch(x){}
+  render();
+  requestAnimationFrame(()=>{const t=PHONE.matches?document.querySelector('details.nshow[data-show="'+id+'"]'):document.getElementById("r-"+id);if(t){t.scrollIntoView({block:"center"});const r=document.getElementById("r-"+id);if(r&&!PHONE.matches){r.classList.remove("flash");void r.offsetWidth;r.classList.add("flash");}}});
+}
+/* join flow */
+const joinCode=(()=>{try{return (new URLSearchParams(location.search).get("join")||"").trim().toLowerCase();}catch(e){return "";}})();
+function stripJoin(){try{const u=new URL(location.href);u.searchParams.delete("join");history.replaceState(null,"",u.pathname+u.search+u.hash);}catch(e){}}
+function closeJoin(){$("joinx").hidden=true;document.documentElement.style.overflow="";stripJoin();}
+async function openJoin(code){
+  const x=$("joinx");x.hidden=false;document.documentElement.style.overflow="hidden";
+  x.innerHTML='<div class="jmsg"><span class="kicker">Crew invite</span><h2 style="margin:0;font-size:32px;font-weight:500">Opening the invite…</h2></div>';
+  let c;
+  try{c=await api("crew_state",{p_code:code});}
+  catch(e){x.innerHTML='<button class="jclose" type="button" data-jclose>Close</button><div class="jmsg"><span class="kicker">Crew invite</span><h2 style="margin:0;font-size:32px;font-weight:500">'+(e.message==="crew_not_found"?"This invite link doesn't work":"Can't open the invite right now")+'</h2><p class="note">'+esc(errMsg(e))+'</p><button class="btn" type="button" data-jclose style="align-self:flex-start;min-height:44px">Go to the calendar</button></div>';return;}
+  const mm=new Map(c.members.map(m=>[m.id,m]));
+  const goingIds=[...new Set(c.rsvps.filter(r=>r.status!=="interested").map(r=>r.event_id))].map(id=>EVMAP.get(id)).filter(e=>e&&evUpcoming(e)).sort((a,b)=>evDate(a).localeCompare(evDate(b))).slice(0,3);
+  const names=c.members.map(m=>m.name);
+  const switching=me&&me.code!==c.code;
+  x.innerHTML='<button class="jclose" type="button" data-jclose>Not now</button><div class="jgrid"><div class="jleft"><span class="kicker">Crew invite</span>'+
+    '<span class="who">'+(c.members.length?esc(c.members[0].name)+" invited you to":"You're invited to")+'</span><h2 class="cname">'+esc(c.name)+'</h2>'+
+    (c.members.length?'<div class="crewl">'+avStack(c.members,5,"big")+'<span class="t">'+esc(names.length<=4?names.slice(0,-1).join(", ")+(names.length>1?" and ":"")+names[names.length-1]:names.slice(0,3).join(", ")+" and "+(names.length-3)+" more")+'</span></div>':'')+
+    (goingIds.length?'<div class="going"><span class="kicker">Already going</span><b>'+goingIds.map(e=>esc(e.title)+" "+shortDay(e.date)).join(" · ")+'</b></div>':'')+
+    '</div><div class="jright"><h2>What should the crew call you?</h2><form class="cform" id="joinForm" autocomplete="off"><label for="jnName">Your name</label><input id="jnName" maxlength="30" value="'+esc((me&&me.name)||lastName())+'" required><button class="go" type="submit">Join the crew</button><span class="jerr" id="jnErr" role="alert"></span></form>'+
+    '<p>No account or app needed. This device remembers you. Only the crew sees which shows you mark Going, Interested or Got tix.'+(switching?' You\'ll leave '+esc(me.crew_name||"your current crew")+' on this device.':'')+'</p></div></div>';
+  $("joinForm").addEventListener("submit",async ev=>{
+    ev.preventDefault();const name=$("jnName").value.trim();const btn=ev.target.querySelector(".go");
+    if(!name){$("jnErr").textContent=ERRS.name_required;return;}
+    btn.disabled=true;btn.textContent="Joining…";
+    try{
+      if(switching){try{await api("crew_leave",{p_code:me.code,p_member_id:me.member_id,p_token:me.token});}catch(e){}}
+      const r=await api("crew_join",{p_code:c.code,p_member_name:name});
+      me={code:r.code,crew_name:r.crew_name,member_id:r.member_id,token:r.token,name:r.name};saveMe();keepName(r.name);crew=null;saveCrew();
+      closeJoin();state.view="crew";state.wkOff=0;try{history.replaceState(null,"",location.pathname+"#crew");}catch(e){}
+      render();await refreshCrew();render();toast("You're in "+r.crew_name);
+    }catch(e){btn.disabled=false;btn.textContent="Join the crew";$("jnErr").textContent=errMsg(e);}
+  });
+  setTimeout(()=>{const i=$("jnName");if(i&&!PHONE.matches)i.focus();},50);
+}
+
 function visible(s){
   if(!state.genres.includes(s.genre))return false;
   if(state.venue&&s.venue!==state.venue)return false;
@@ -599,6 +947,7 @@ function visible(s){
   if(!state.showPast&&s.date<TODAY)return false;
   if(state.followOnly&&!followHit(s))return false;
   if(state.newOnly&&!isNew(s))return false;
+  if(!crewPass(s.id))return false;
   if(state.q){const q=state.q.toLowerCase();const hay=(s.title+" "+(s.tag||"")+" "+s.venue+" "+s.city+" "+s.support.join(" ")).toLowerCase();if(!hay.includes(q))return false;}
   return true;
 }
@@ -607,18 +956,20 @@ const filtered=()=>SHOWS.filter(visible).sort((a,b)=>a.date.localeCompare(b.date
 /* hero */
 function renderHero(){
   const up=SHOWS.filter(s=>s.date>=TODAY).sort((a,b)=>a.date.localeCompare(b.date)||(a.doors||"99").localeCompare(b.doors||"99"));
-  const s=up.find(x=>saved.has(x.id))||up[0];
+  const mineH=x=>inCrew()?["going","tix"].includes(myStatus(x.id)):saved.has(x.id);
+  const s=up.find(mineH)||up[0];
   const h=$("hero");
   if(!s){h.innerHTML='<div class="row1 kicker"><span>Next up</span></div><h1 id="heroTitle">Nothing listed</h1>';return;}
   const n=daysBetween(TODAY,s.date);
   const when=n===0?"Tonight":n===1?"Tomorrow":"In "+n+" days";
   const others=clash(s.date)-1;
   h.innerHTML=
-   '<div class="row1 kicker"><span>'+(saved.has(s.id)?"Your next saved show":"Next up")+' · '+when+'</span><span>'+esc(gLabel(s.genre))+'</span></div>'+
+   '<div class="row1 kicker"><span>'+(mineH(s)?(inCrew()?"Your next plan":"Your next saved show"):"Next up")+' · '+when+'</span><span>'+esc(gLabel(s.genre))+'</span></div>'+
    '<h1 id="heroTitle">'+esc(s.title)+'</h1>'+
    '<p class="lede">'+esc(longDate(s.date))+' at '+esc(s.venue)+(s.doors?', doors '+fmtTime(s.doors):'')+(s.tag?'. '+esc(s.tag):'')+'</p>'+
    (s.support.length?'<p class="support">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'.'+(others>0?' '+others+' other bass '+(others>1?'shows':'show')+' the same night.':'')+'</p>':(others>0?'<p class="support">'+others+' other bass '+(others>1?'shows':'show')+' the same night.</p>':''))+
-   '<div class="acts"><button class="btn solid save" type="button" data-save="'+s.id+'" aria-pressed="'+saved.has(s.id)+'">'+(saved.has(s.id)?"Saved":"Save")+'</button>'+
+   crewLine(s.id,5)+rsvpBtns(s.id)+
+   '<div class="acts">'+saveBtn(s.id,"solid")+
    '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener"><span class="lg">Add to Google </span>Calendar</a>'+
    '<a class="btn" href="'+esc(s.url)+'" target="_blank" rel="noopener">Tickets<span class="lg"> &amp; info</span></a></div>';
 }
@@ -661,9 +1012,9 @@ function row(s,opts){
    (n>1?'<span class="tag clash">'+n+' shows this night</span>':'')+(s.flag?'<span class="tag warn">Unconfirmed</span>':'')+statusTags(s)+'</div>'+
    '<h3 class="rtitle">'+nm(s.title)+(s.tag?' <span style="color:var(--ink-muted)">'+esc(s.tag)+'</span>':'')+'</h3>'+
    supportHtml(s)+
-   '<div class="rmeta">'+meta.join("")+'</div>'+listenRow(s.title)+
-   (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+
-   '<div class="racts"><button class="btn save" type="button" data-save="'+s.id+'" aria-pressed="'+saved.has(s.id)+'">'+(saved.has(s.id)?"Saved":"Save")+'</button>'+
+   '<div class="rmeta">'+meta.join("")+'</div>'+crewLine(s.id,6)+listenRow(s.title)+
+   (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+rsvpBtns(s.id)+
+   '<div class="racts">'+saveBtn(s.id)+
    '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener"><span class="lg">Add to Google </span>Calendar</a>'+
    '<a class="btn" href="'+esc(s.url)+'" target="_blank" rel="noopener">Tickets<span class="lg"> &amp; info</span></a></div></div></article>';
 }
@@ -675,11 +1026,11 @@ function nightShow(s){
   const meta=[esc(s.venue)+(s.city!=="Chicago"?", "+esc(s.city):""),s.doors?fmtTime(s.doors):"Time TBA"];
   if(s.price)meta.push(esc(s.price));if(s.age)meta.push(esc(s.age));
   return '<details class="nshow" data-show="'+s.id+'"'+(openShows.has(s.id)?" open":"")+'><summary>'+
-    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)?'<span class="nsaved">Saved</span>':'')+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span></span>'+
-    '<span class="nmeta">'+meta.join(" · ")+'</span></summary><div class="nbody">'+
-    supportHtml(s)+listenRow(s.title)+
+    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)&&!inCrew()?'<span class="nsaved">Saved</span>':'')+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span></span>'+
+    '<span class="nmeta">'+meta.join(" · ")+'</span>'+crewLine(s.id,4)+'</summary><div class="nbody">'+
+    rsvpBtns(s.id)+supportHtml(s)+listenRow(s.title)+
     (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+
-    '<div class="racts"><button class="btn save" type="button" data-save="'+s.id+'" aria-pressed="'+saved.has(s.id)+'">'+(saved.has(s.id)?"Saved":"Save")+'</button>'+
+    '<div class="racts">'+saveBtn(s.id)+
     '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener">Calendar</a>'+
     '<a class="btn" href="'+esc(s.url)+'" target="_blank" rel="noopener">Tickets</a></div></div></details>';
 }
@@ -695,7 +1046,7 @@ function renderNights(y,m,days,vmap){
     const today=k===TODAY;
     h+='<div class="nrow'+(today?" today":"")+(k<TODAY?" past":"")+'"><div class="nd">'+(today?'<span class="k t">Tonight</span>':'')+
       '<span class="n">'+parts(k).d+'</span><span class="k">'+DOW[dow(k)]+'</span>'+(tot>1?'<span class="x">×'+tot+'</span>':'')+'</div><div class="nev">'+
-      fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><b>'+esc(f.name)+'</b><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span></a>').join("")+
+      fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><b>'+esc(f.name)+'</b><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span>'+crewLine(f.id,5)+'</a>').join("")+
       ev.map(nightShow).join("")+'</div></div>';
   }
   flush();
@@ -715,8 +1066,8 @@ function renderMonth(){
     const cls=["cell"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel)cls.push("sel");
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
       '<span class="d"><span>'+d+'</span>'+(tot>1?'<span class="x">×'+tot+'</span>':'')+'</span>'+
-      fe.map(f=>'<span class="fev">'+esc(f.name)+'</span>').join("")+
-      ev.map(s=>'<span class="ev'+(saved.has(s.id)?" saved":"")+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+'</span></span>').join("")+
+      fe.map(f=>'<span class="fev">'+esc(f.name)+(crewOn(f.id).length?avStack(crewOn(f.id),3,"sm"):'')+'</span>').join("")+
+      ev.map(s=>{const a=crewOn(s.id);return '<span class="ev'+((inCrew()?!!myStatus(s.id):saved.has(s.id))?" saved":"")+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+(a.length?avStack(a,3,"sm"):'')+'</span></span>';}).join("")+
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   $("grid").innerHTML=h;
@@ -741,22 +1092,26 @@ function renderList(){
 }
 
 function render(){
-  const isM=state.view==="month"||PHONE.matches;
-  $("monthView").hidden=!isM;$("listView").hidden=isM;
+  if(state.view==="crew"&&!CREW_ON)state.view="month";
+  const isC=state.view==="crew";
+  const isM=!isC&&(state.view==="month"||PHONE.matches);
+  $("monthView").hidden=!isM;$("listView").hidden=isM||isC;
+  $("heroSec").hidden=isC;$("stats").hidden=isC;document.querySelector(".bar").hidden=isC;$("crewView").hidden=!isC;
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
-  $("navMonth").setAttribute("aria-current",isM);$("navList").setAttribute("aria-current",!isM);
+  $("navMonth").setAttribute("aria-current",isM);$("navList").setAttribute("aria-current",!isM&&!isC);
+  renderCrewNav();renderChips();
   const n=filtered().length;const nf=FESTS.filter(fvis).length;$("countLine").textContent=n+(n===1?" show":" shows")+(nf?" + "+nf+(nf===1?" festival":" festivals"):"");
   const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+(state.savedOnly?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
   $("fcount").hidden=!active;$("fcount").textContent=active+" on";
   $("sheetDone").textContent="Show "+(n+nf)+" results";
   renderHero();renderStats();renderRail();
-  isM?renderMonth():renderList();
-  renderFests();
+  if(isC){renderCrewView();$("festSec").hidden=true;}
+  else{isM?renderMonth():renderList();renderFests();}
   persist();
 }
 
 function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
-function setView(v){state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}render();}
+function setView(v){state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if(v==="crew"&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);render();}
 
 document.addEventListener("click",e=>{
   const sv=e.target.closest("[data-save]");
@@ -828,8 +1183,46 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matche
   $(id).addEventListener("touchend",e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)(dx<0?$("next"):$("prev")).click();},{passive:true});
 });
 setRail(false);
-window.addEventListener("hashchange",()=>{if(location.hash==="#list"||location.hash==="#month"){state.view=location.hash.slice(1);render();}});
+$("navCrew").onclick=e=>{e.preventDefault();setView("crew");window.scrollTo(0,0);if(inCrew())refreshCrew();};
+let leaveArm=0;
+document.addEventListener("click",e=>{
+  const t=e.target;
+  const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();setRsvp(rb.dataset.rsvp,rb.dataset.st);return;}
+  const cf=t.closest("[data-cf]");if(cf){state.crewF=cf.dataset.cf;render();return;}
+  const fr=t.closest("[data-free]");if(fr){setFree([fr.dataset.free],fr.getAttribute("aria-pressed")!=="true");return;}
+  const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
+  if(t.closest("[data-jclose]")){closeJoin();return;}
+  if(t.closest("#crShare")){shareInvite();return;}
+  if(t.closest("#crCopy")){copyText(inviteUrl(),"Invite link copied");return;}
+  if(t.closest("#wkPrev")){state.wkOff=Math.max(0,(state.wkOff||0)-1);render();return;}
+  if(t.closest("#wkNext")){state.wkOff=(state.wkOff||0)+1;render();return;}
+  if(t.closest("#wkFree")){const ws=weekendStart();const ns=[0,1,2,3].map(i=>addDays(ws,i));setFree(ns,!ns.every(n=>isFree(me.member_id,n)));return;}
+  const lv=t.closest("#crLeave");
+  if(lv){
+    if(!leaveArm){leaveArm=setTimeout(()=>{leaveArm=0;const b=$("crLeave");if(b){b.classList.remove("arm");b.textContent="Leave "+(crew?crew.name:"crew");}},4000);lv.classList.add("arm");lv.textContent="Tap again to leave";return;}
+    clearTimeout(leaveArm);leaveArm=0;const old=me;
+    api("crew_leave",{p_code:old.code,p_member_id:old.member_id,p_token:old.token}).catch(()=>{});
+    me=null;crew=null;saveMe();saveCrew();indexCrew();state.crewF="all";render();toast("You left the crew");return;
+  }
+},true);
+document.addEventListener("submit",async e=>{
+  if(e.target.id!=="createForm")return;
+  e.preventDefault();const cn=$("crName").value.trim(),mn=$("crMe").value.trim();const btn=e.target.querySelector(".go");
+  if(!cn||!mn){toast(!cn?ERRS.crew_name_required:ERRS.name_required);return;}
+  btn.disabled=true;btn.textContent="Starting…";
+  try{const r=await api("crew_create",{p_crew_name:cn,p_member_name:mn});
+    me={code:r.code,crew_name:r.crew_name,member_id:r.member_id,token:r.token,name:r.name};saveMe();keepName(r.name);
+    await refreshCrew();render();toast("Crew started. Send your friends the invite link.");}
+  catch(err){btn.disabled=false;btn.textContent="Start the crew";toast(errMsg(err));}
+});
+if(CREW_ON){
+  setInterval(()=>{if(document.visibilityState==="visible"&&me)refreshCrew();},45000);
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&me)refreshCrew();});
+}
+window.addEventListener("hashchange",()=>{if(["#list","#month","#crew"].includes(location.hash)){state.view=location.hash.slice(1);render();}});
+if(location.hash==="#crew")state.view="crew";
 render();
+if(CREW_ON){if(joinCode&&!(me&&me.code===joinCode))openJoin(joinCode);else{if(joinCode){stripJoin();toast("You're already in "+(me.crew_name||"this crew"));}if(me)refreshCrew();}}
 const up=parts(DATA.updated);$("stamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;
 }
 (function(){
