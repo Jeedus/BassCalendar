@@ -163,11 +163,11 @@ button,input,select{font:inherit;color:inherit}
 .cell.today{box-shadow:inset 0 3px 0 var(--signal)}
 .cell.sel{background:var(--mist);box-shadow:inset 0 0 0 2px var(--ink)}
 .cell.today.sel{box-shadow:inset 0 0 0 2px var(--ink),inset 0 5px 0 var(--signal)}
-.ev{display:grid;grid-template-columns:10px 1fr;gap:6px;align-items:start;font-size:clamp(12px,1.65cqi,16px);line-height:1.2;font-weight:500;letter-spacing:0;min-width:0;flex:none}
+.ev{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:6px;align-items:start;font-size:clamp(12px,1.65cqi,16px);line-height:1.2;font-weight:500;letter-spacing:0;min-width:0;flex:none}
 .ev .sw{width:10px;height:10px}
 .ev .sw{margin-top:.25em}
-.ev span:last-child{overflow-wrap:anywhere}
-.ev.saved span:last-child{background:var(--volt);color:var(--on-volt);padding:0 3px}
+.ev>span:nth-child(2){overflow-wrap:anywhere;min-width:0}
+.ev.saved>span:nth-child(2){background:var(--volt);color:var(--on-volt);padding:0 3px;justify-self:start}
 .dots{display:none;gap:3px;flex-wrap:wrap}
 .dots .sw{width:7px;height:7px}
 @media (max-width:640px){.cell{padding:4px}.cell .ev{display:none}.dots{display:flex}.cell .x{font-size:10px;padding:1px 3px}}
@@ -273,13 +273,13 @@ details.more[open] .c{display:none}
 .nev{display:flex;flex-direction:column;gap:12px;min-width:0}
 details.nshow>summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:4px}
 details.nshow>summary::-webkit-details-marker{display:none}
-.nname{display:grid;grid-template-columns:11px minmax(0,1fr);gap:8px;align-items:start;font-size:21px;font-weight:500;letter-spacing:-.02em;line-height:1.15}
+.nname{display:grid;grid-template-columns:11px minmax(0,1fr) auto;gap:8px;align-items:start;font-size:21px;font-weight:500;letter-spacing:-.02em;line-height:1.15}
 .nname .sw{width:11px;height:11px;margin-top:.3em}
 .nname .tg{color:var(--ink-muted)}
 .nsaved{display:inline-block;margin-left:6px;padding:1px 5px;background:var(--volt);color:var(--on-volt);font-family:var(--font-mono);font-size:11px;letter-spacing:0;vertical-align:middle;text-transform:uppercase}
 .nmeta{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;color:var(--ink-soft);padding-left:19px;line-height:1.4}
 details.nshow .nbody{padding:10px 0 4px 19px;display:grid;gap:10px}
-details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 .nfest{display:block;padding:10px 12px;background:var(--signal);color:var(--on-signal);text-decoration:none}
 .nfest b{display:block;font-size:19px;font-weight:700;letter-spacing:-.02em}
 .nfest span{font-family:var(--font-mono);font-size:11px;text-transform:uppercase}
@@ -334,13 +334,22 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
 .hero .rb[aria-pressed="true"]{background:var(--on-signal);color:var(--signal)}
 .hero .crewl{color:var(--on-signal)}
 .hero .av{box-shadow:0 0 0 2px var(--signal),inset 0 0 0 2px #000000}
-.nshow .crewl{padding-left:19px;margin-top:4px}
+.nshow .crewl{margin-top:2px}
 .nbody .rsvp{max-width:none}
 .nfest .crewl{color:var(--on-signal);margin-top:6px}
 .nfest .av{box-shadow:0 0 0 2px var(--signal),inset 0 0 0 2px #000000}
-.fev .avs{margin-left:6px}
-.fev .av{box-shadow:0 0 0 2px var(--signal),inset 0 0 0 2px #000000}
-.ev .avs{margin-left:5px}
+.cc{display:inline-flex;align-items:center;gap:4px;flex:none;height:18px;padding:0 5px;box-sizing:border-box;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 11px/1 var(--font-mono);font-variant-numeric:tabular-nums;letter-spacing:0;text-transform:none}
+.cc svg{width:10px;height:10px;flex:none}
+.cc.me{background:var(--signal);border-color:var(--signal);color:var(--on-signal)}
+.ev .cc{margin-top:1px}
+.fev{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.fev>span:first-child{min-width:0;overflow-wrap:anywhere}
+.fev .cc,.nfest .cc{background:var(--on-signal);border-color:var(--on-signal);color:var(--signal)}
+.nname .cc{height:22px;padding:0 7px;font-size:12px;gap:5px;margin-top:2px}
+.nname .cc svg{width:11px;height:11px}
+.nft{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.nfest .cc{height:22px;padding:0 7px;font-size:12px;gap:5px;margin-top:1px}
+@media (max-width:640px){.fev .cc{display:none}}
 .cchips{display:flex;gap:6px;flex-wrap:wrap}
 .cchip{height:40px;padding:0 14px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border-radius:0}
 .cchip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -861,6 +870,10 @@ function crewText(a){
   if(g.interested.length)out.push(esc(jn(g.interested))+" interested");
   return out.join(" · ");
 }
+const PERSON='<svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="3" r="2" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.2 9.2c.6-2 2-3 3.8-3s3.2 1 3.8 3" fill="none" stroke="currentColor" stroke-width="1.4"></path></svg>';
+function crewChip(id){const a=crewOn(id);if(!a.length)return "";const mine=!!myStatus(id);
+  const lbl=a.length+(a.length===1?" person":" people")+" from your crew"+(mine?", including you":"");
+  return '<span class="cc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+PERSON+a.length+'</span>';}
 function crewLine(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl" data-ev="'+esc(id)+'">'+avStack(a,max||4)+'<span class="t">'+crewText(a)+'</span></div>';}
 function rsvpBtns(id){if(!inCrew())return "";const st=myStatus(id);
   const b=(v,l)=>'<button class="rb rb-'+v+'" type="button" data-rsvp="'+esc(id)+'" data-st="'+v+'" aria-pressed="'+(st===v)+'">'+l+'</button>';
@@ -1107,9 +1120,9 @@ function nightShow(s){
   const meta=[esc(s.venue)+(s.city!=="Chicago"?", "+esc(s.city):""),s.doors?fmtTime(s.doors):"Time TBA"];
   if(s.price)meta.push(esc(s.price));if(s.age)meta.push(esc(s.age));
   return '<details class="nshow" data-show="'+s.id+'"'+(openShows.has(s.id)?" open":"")+'><summary>'+
-    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)&&!inCrew()?'<span class="nsaved">Saved</span>':'')+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span></span>'+
-    '<span class="nmeta">'+meta.join(" · ")+'</span>'+crewLine(s.id,4)+'</summary><div class="nbody">'+
-    rsvpBtns(s.id)+supportHtml(s)+listenRow(s.title)+
+    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)&&!inCrew()?'<span class="nsaved">Saved</span>':'')+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span>'+crewChip(s.id)+'</span>'+
+    '<span class="nmeta">'+meta.join(" · ")+'</span></summary><div class="nbody">'+
+    crewLine(s.id,5)+rsvpBtns(s.id)+supportHtml(s)+listenRow(s.title)+
     (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+
     '<div class="racts">'+saveBtn(s.id)+
     '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener">Calendar</a>'+
@@ -1127,7 +1140,7 @@ function renderNights(y,m,days,vmap){
     const today=k===TODAY;
     h+='<div class="nrow'+(today?" today":"")+(k<TODAY?" past":"")+'"><div class="nd">'+(today?'<span class="k t">Tonight</span>':'')+
       '<span class="n">'+parts(k).d+'</span><span class="k">'+DOW[dow(k)]+'</span>'+(tot>1?'<span class="x">×'+tot+'</span>':'')+'</div><div class="nev">'+
-      fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><b>'+esc(f.name)+'</b><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span>'+crewLine(f.id,5)+'</a>').join("")+
+      fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><div class="nft"><b>'+esc(f.name)+'</b>'+crewChip(f.id)+'</div><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span></a>').join("")+
       ev.map(nightShow).join("")+'</div></div>';
   }
   flush();
@@ -1147,8 +1160,8 @@ function renderMonth(){
     const cls=["cell"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel)cls.push("sel");
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
       '<span class="d"><span>'+d+'</span>'+(tot>1?'<span class="x">×'+tot+'</span>':'')+'</span>'+
-      fe.map(f=>'<span class="fev">'+esc(f.name)+(crewOn(f.id).length?avStack(crewOn(f.id),3,"sm"):'')+'</span>').join("")+
-      ev.map(s=>{const a=crewOn(s.id);return '<span class="ev'+((inCrew()?!!myStatus(s.id):saved.has(s.id))?" saved":"")+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+(a.length?avStack(a,3,"sm"):'')+'</span></span>';}).join("")+
+      fe.map(f=>'<span class="fev"><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
+      ev.map(s=>'<span class="ev'+(!inCrew()&&saved.has(s.id)?" saved":"")+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   $("grid").innerHTML=h;
