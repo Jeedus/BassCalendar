@@ -633,8 +633,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 
 /* top bar: focus rings sit inside the bar; the active Crew bar replaces the rule beneath it */
 .top a:focus-visible,.top button:focus-visible{outline-offset:-4px}
-.crewnav{margin-bottom:-1px;position:relative;z-index:1}
-.crewnav[aria-current="true"]{box-shadow:inset 0 -3px 0 var(--signal)}
+.crewnav[aria-current="true"]{margin-bottom:-1px;position:relative;z-index:1;box-shadow:inset 0 -3px 0 var(--signal)}
 .nw{white-space:nowrap}
 @media (max-width:359px){.sbar .sum{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.6;padding-block:8px}}
 @media (min-width:901px) and (max-width:1200px){.wdays{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -698,7 +697,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
       <div class="block">
         <div class="kicker">Show</div>
         <div class="toggles">
-          <label class="tog"><input type="checkbox" id="savedOnly"> Saved shows only</label>
+          <label class="tog"><input type="checkbox" id="savedOnly"> My plans only</label>
           <label class="tog"><input type="checkbox" id="cityOnly"> Inside city limits only</label>
           <label class="tog"><input type="checkbox" id="showPast"> Include past shows</label>
           <label class="tog"><input type="checkbox" id="showFests" checked> Festivals</label>
@@ -714,7 +713,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
       </div>
       <div class="block">
         <div class="kicker"><span>Your list</span><span class="tab" id="savedCount">0</span></div>
-        <p class="note" id="savedNote">Tap Save on any show. Your picks stay in this browser.</p>
+        <p class="note" id="savedNote">Mark shows Going, Interested or Got tix. Your picks stay on this device.</p>
         <div class="toggles">
           <button class="linkbtn" id="copySaved" type="button">Copy my list</button>
           <button class="linkbtn" id="reset" type="button">Reset filters</button>
@@ -823,10 +822,13 @@ function gcal(s){
 
 /* state */
 const KEY="basschi:v1";
-let saved=new Set();
+let saved=new Set();let plans={};
 let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY};
 try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state)Object.assign(state,o.state,{sel:TODAY,ym:null});}}catch(e){}
-function persist(){try{localStorage.setItem(KEY,JSON.stringify({saved:[...saved],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly,crewF:state.crewF}}));}catch(e){}}
+try{const pl=JSON.parse(localStorage.getItem(KEY+":plans")||"null");if(pl&&typeof pl==="object")plans=pl;}catch(e){}
+if(saved.size&&!Object.keys(plans).length){saved.forEach(id=>{plans[id]="interested";});}
+saved=new Set();
+function persist(){try{localStorage.setItem(KEY+":plans",JSON.stringify(plans));}catch(e){}try{localStorage.setItem(KEY,JSON.stringify({saved:[],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly,crewF:state.crewF}}));}catch(e){}}
 const tp=parts(TODAY);
 state.ym = (TODAY<iso(FIRST.y,FIRST.m,1)) ? {...FIRST} : (TODAY>iso(LAST.y,LAST.m,31) ? {...LAST} : {y:tp.y,m:tp.m});
 if(location.hash==="#list")state.view="list"; else if(location.hash==="#month")state.view="month";
@@ -861,7 +863,7 @@ function fvis(f){
   if(!state.fests||state.venue||state.newOnly)return false;
   if(state.followOnly&&!fArtists(f).some(isF))return false;
   if(!crewPass(f.id))return false;
-  if(state.savedOnly&&!saved.has(f.id))return false;
+  if(state.savedOnly&&!hasPlan(f.id))return false;
   if(state.cityOnly&&f.city!=="Chicago")return false;
   if(!state.showPast&&f.end&&f.end<TODAY)return false;
   if(state.q){const q=state.q.toLowerCase();const hay=(f.name+" "+f.place+" "+f.city+" "+fArtists(f).join(" ")).toLowerCase();if(!hay.includes(q))return false;}
@@ -1007,7 +1009,8 @@ indexCrew();
 const inCrew=()=>CREW_ON&&!!me&&!!crew;
 const crewOn=id=>inCrew()?(RS.get(id)||[]):[];
 const committed=id=>crewOn(id).filter(x=>x.status!=="interested");
-function myStatus(id){if(!inCrew())return null;const x=(RS.get(id)||[]).find(r=>r.m.id===me.member_id);return x?x.status:null;}
+function myStatus(id){if(!inCrew())return plans[id]||null;const x=(RS.get(id)||[]).find(r=>r.m.id===me.member_id);return x?x.status:null;}
+const hasPlan=id=>!!myStatus(id);
 const isMe=m=>!!me&&m.id===me.member_id;
 const ini=n=>esc(String(n||"?").trim().charAt(0).toUpperCase()||"?");
 const av=m=>'<span class="av'+(isMe(m)?" me":"")+'" style="background:'+AV[(m.color||0)%AV.length]+'" title="'+esc(m.name)+(isMe(m)?" (you)":"")+'">'+ini(m.name)+'</span>';
@@ -1024,7 +1027,8 @@ function crewText(a){
 }
 const INVITE_ICON='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="8.5" cy="7" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"></circle><path d="M2.5 19c.8-3.6 3.1-5.4 6-5.4s5.2 1.8 6 5.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path><path d="M17.5 3.5v6M14.5 6.5h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>';
 const PERSON='<svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="3" r="2" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.2 9.2c.6-2 2-3 3.8-3s3.2 1 3.8 3" fill="none" stroke="currentColor" stroke-width="1.4"></path></svg>';
-function crewChip(id){const a=crewOn(id);if(!a.length)return "";const mine=!!myStatus(id);
+function crewChip(id){if(!inCrew()){const st=myStatus(id);if(!st)return "";return '<span class="cc me" role="img" aria-label="You: '+ST[st]+'" title="You: '+ST[st]+'">'+IC(I[st==="tix"?"tixst":st],10)+'</span>';}
+  const a=crewOn(id);if(!a.length)return "";const mine=!!myStatus(id);
   const lbl=a.length+(a.length===1?" person":" people")+" from your crew"+(mine?", including you":"");
   return '<span class="cc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+PERSON+a.length+'</span>';}
 function crewLine(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl" data-ev="'+esc(id)+'">'+avStack(a,max||4)+'<span class="t">'+crewText(a)+'</span></div>';}
@@ -1039,11 +1043,15 @@ function rsvpSelect(id){const st=myStatus(id);
   return '<span class="rsel"><button type="button" class="rst'+(st?" on rst-"+st:"")+'" data-rmenu="'+esc(id)+'" aria-haspopup="menu" aria-expanded="false" aria-label="Your plans: '+(st?ST[st]:"none yet")+'">'+
     (st?IC(I[st==="tix"?"tixst":st],15):'')+'<span>'+(st?ST[st]:"Going?")+'</span>'+IC(I.down,14)+'</button><span class="rmenu" role="menu" hidden>'+items+'</span></span>';}
 const icoLink=(href,label,icon)=>'<a class="ib" href="'+esc(href)+'" target="_blank" rel="noopener" aria-label="'+label+'" title="'+label+'">'+IC(icon)+'</a>';
-const saveBtn=(id,cls)=>inCrew()?rsvpSelect(id):'<button class="btn save'+(cls?" "+cls:"")+'" type="button" data-save="'+id+'" aria-pressed="'+saved.has(id)+'">'+(saved.has(id)?"Saved":"Save")+'</button>';
+const saveBtn=(id,cls)=>rsvpSelect(id);const oldSaveBtn=(id,cls)=>'<button class="btn save'+(cls?" "+cls:"")+'" type="button" data-save="'+id+'" aria-pressed="'+saved.has(id)+'">'+(saved.has(id)?"Saved":"Save")+'</button>';
 function crewPass(id){
   if(!inCrew()||state.crewF==="all")return true;
   if(state.crewF==="crew")return crewOn(id).length>0;
-  return !!myStatus(id)||saved.has(id);
+  return !!myStatus(id);
+}
+async function carryPlans(){
+  if(!CREW_ON||!me)return;const ids=Object.keys(plans).filter(id=>{const e=EVMAP.get(id);return e&&evUpcoming(e);});
+  for(const id of ids){try{await api("crew_rsvp",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_event_id:id,p_status:plans[id]});}catch(e){}}
 }
 async function refreshCrew(){
   if(!CREW_ON||!me)return;
@@ -1055,7 +1063,15 @@ async function refreshCrew(){
   }catch(e){if(e.message==="crew_not_found"){me=null;crew=null;saveMe();saveCrew();indexCrew();render();toast("That crew no longer exists");}}
 }
 async function setRsvp(id,st){
-  if(!inCrew())return;
+  if(!inCrew()){
+    const cur=plans[id]||null;const next=cur===st?"":st;
+    if(next)plans[id]=next;else delete plans[id];
+    later(()=>{document.querySelectorAll('[data-rmenu="'+CSS.escape(id)+'"]').forEach(b=>fx(b,"fx-pop"));});
+    render();const ev=EVMAP.get(id);const t=ev?ev.title:"that";
+    toast(next==="going"?"Going: "+t:next==="tix"?"Got tix: "+t:next==="interested"?"Interested: "+t:"Cleared your plans for "+t);
+    if(CREW_ON&&me&&!crew){api("crew_rsvp",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_event_id:id,p_status:next}).catch(()=>{});}
+    return;
+  }
   const cur=myStatus(id);const next=cur===st?"":st;const before=JSON.stringify(crew.rsvps);
   crew.rsvps=crew.rsvps.filter(r=>!(r.member_id===me.member_id&&r.event_id===id));
   if(next)crew.rsvps.push({member_id:me.member_id,event_id:id,status:next});
@@ -1192,7 +1208,7 @@ async function openJoin(code){
     try{
       if(switching){try{await api("crew_leave",{p_code:me.code,p_member_id:me.member_id,p_token:me.token});}catch(e){}}
       const r=await api("crew_join",{p_code:c.code,p_member_name:name});
-      me={code:r.code,crew_name:r.crew_name,member_id:r.member_id,token:r.token,name:r.name};saveMe();keepName(r.name);crew=null;saveCrew();
+      me={code:r.code,crew_name:r.crew_name,member_id:r.member_id,token:r.token,name:r.name};saveMe();keepName(r.name);crew=null;saveCrew();await carryPlans();
       closeJoin();state.view="crew";state.wkOff=0;try{history.replaceState(null,"",location.pathname+"#crew");}catch(e){}
       render();await refreshCrew();render();toast("You're in "+r.crew_name);
     }catch(e){btn.disabled=false;btn.textContent="Join the crew";$("jnErr").textContent=errMsg(e);}
@@ -1203,7 +1219,7 @@ async function openJoin(code){
 function visible(s){
   if(!state.genres.includes(s.genre))return false;
   if(state.venue&&s.venue!==state.venue)return false;
-  if(state.savedOnly&&!saved.has(s.id))return false;
+  if(state.savedOnly&&!hasPlan(s.id))return false;
   if(state.cityOnly&&s.city!=="Chicago")return false;
   if(!state.showPast&&s.date<TODAY)return false;
   if(state.followOnly&&!followHit(s))return false;
@@ -1217,7 +1233,7 @@ const filtered=()=>SHOWS.filter(visible).sort((a,b)=>a.date.localeCompare(b.date
 /* hero */
 function renderHero(){
   const up=SHOWS.filter(s=>s.date>=TODAY).sort((a,b)=>a.date.localeCompare(b.date)||(a.doors||"99").localeCompare(b.doors||"99"));
-  const mineH=x=>inCrew()?["going","tix"].includes(myStatus(x.id)):saved.has(x.id);
+  const mineH=x=>["going","tix"].includes(myStatus(x.id));
   const s=up.find(mineH)||up[0];
   const h=$("hero");
   if(!s){h.innerHTML='<div class="row1 kicker"><span>Next up</span></div><h1 id="heroTitle">Nothing listed</h1>';return;}
@@ -1225,7 +1241,7 @@ function renderHero(){
   const when=n===0?"Tonight":n===1?"Tomorrow":"In "+n+" days";
   const others=clash(s.date)-1;
   h.innerHTML=
-   '<div class="row1 kicker"><span><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'+(mineH(s)?(inCrew()?"Your next plan":"Your next saved show"):"Next up")+' · '+when+'</span><span>'+esc(gLabel(s.genre))+'</span></div>'+
+   '<div class="row1 kicker"><span><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'+(mineH(s)?"Your next plan":"Next up")+' · '+when+'</span><span>'+esc(gLabel(s.genre))+'</span></div>'+
    '<h1 id="heroTitle">'+esc(s.title)+'</h1>'+
    '<p class="lede">'+esc(longDate(s.date))+' at '+esc(s.venue)+(s.doors?', doors '+fmtTime(s.doors):'')+(s.tag?'. '+esc(s.tag):'')+'</p>'+
    (s.support.length?'<p class="support">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'.'+(others>0?' '+others+' other bass '+(others>1?'shows':'show')+' the same night.':'')+'</p>':(others>0?'<p class="support">'+others+' other bass '+(others>1?'shows':'show')+' the same night.</p>':''))+
@@ -1253,8 +1269,8 @@ function renderRail(){
   $("folCount").textContent=follows.size;
   $("folChips").innerHTML=[...follows.values()].sort((a,b)=>a.localeCompare(b)).map(a=>'<button class="fchip" type="button" data-unfollow="'+esc(a)+'" aria-label="Unfollow '+esc(a)+'">'+esc(a)+'<span class="fx" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span></button>').join("");
   $("folNote").hidden=follows.size>0;
-  $("savedCount").textContent=saved.size;
-  $("savedNote").textContent=saved.size?saved.size+(saved.size===1?" show":" shows")+" saved in this browser.":"Tap Save on any show. Your picks stay in this browser.";
+  const np=[...EVMAP.keys()].filter(hasPlan).length;$("savedCount").textContent=np;
+  $("savedNote").textContent=inCrew()?"Your picks are shared with "+crew.name+".":np?np+(np===1?" show":" shows")+" marked on this device. Start or join a crew to share them.":"Mark shows Going, Interested or Got tix. Your picks stay on this device.";
 }
 
 function row(s,opts){
@@ -1281,7 +1297,7 @@ function nightShow(s){
   const meta=[esc(s.venue)+(s.city!=="Chicago"?", "+esc(s.city):""),s.doors?fmtTime(s.doors):"Time TBA"];
   if(s.price)meta.push(esc(s.price));if(s.age)meta.push(esc(s.age));
   return '<details class="nshow" data-show="'+s.id+'"'+(openShows.has(s.id)?" open":"")+'><summary>'+
-    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)&&!inCrew()?'<span class="nsaved">Saved</span>':'')+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span>'+crewChip(s.id)+'</span>'+
+    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+''+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span>'+crewChip(s.id)+'</span>'+
     '<span class="nmeta">'+meta.join(" · ")+'</span></summary><div class="nbody">'+
     crewLine(s.id,5)+'<div class="racts">'+saveBtn(s.id)+
     '<span class="icons">'+icoLink(gcal(s),"Add to Google Calendar",I.cal)+icoLink(s.url,"Tickets and info",I.ext)+'</span></div>'+
@@ -1320,7 +1336,7 @@ function renderMonth(){
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
       '<span class="d"><span>'+d+'</span>'+'</span>'+
       fe.map(f=>'<span class="fev"><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
-      ev.map(s=>'<span class="ev'+(!inCrew()&&saved.has(s.id)?" saved":"")+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
+      ev.map(s=>'<span class="ev"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   $("grid").innerHTML=h;
@@ -1409,10 +1425,11 @@ document.addEventListener("click",e=>{
 $("allGenres").onclick=()=>{state.genres=GENRES.map(g=>g.id);render();};
 $("reset").onclick=()=>{Object.assign(state,{genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false});$("q").value="";render();toast("Filters cleared");};
 $("copySaved").onclick=()=>{
-  const shows=SHOWS.filter(s=>saved.has(s.id)).map(s=>({k:s.date,t:longDate(s.date)+": "+s.title+(s.tag?" ("+s.tag+")":"")+" @ "+s.venue+(s.doors?", doors "+fmtTime(s.doors):"")+"\n  "+s.url}));
-  const fests=FESTS.filter(f=>saved.has(f.id)).map(f=>({k:f.start||f.sortKey,t:(f.start?range(f.start,f.end):"Dates TBA")+": "+f.name+" "+f.edition+" @ "+f.place+", "+f.city+", "+f.st+"\n  "+f.url}));
+  const lab=id=>" ["+ST[myStatus(id)]+"]";
+  const shows=SHOWS.filter(s=>hasPlan(s.id)).map(s=>({k:s.date,t:longDate(s.date)+": "+s.title+lab(s.id)+(s.tag?" ("+s.tag+")":"")+" @ "+s.venue+(s.doors?", doors "+fmtTime(s.doors):"")+"\n  "+s.url}));
+  const fests=FESTS.filter(f=>hasPlan(f.id)).map(f=>({k:f.start||f.sortKey,t:(f.start?range(f.start,f.end):"Dates TBA")+": "+f.name+" "+f.edition+lab(f.id)+" @ "+f.place+", "+f.city+", "+f.st+"\n  "+f.url}));
   const list=shows.concat(fests).sort((a,b)=>a.k.localeCompare(b.k));
-  if(!list.length){toast("Save a show first");return;}
+  if(!list.length){toast("Mark a show Going or Interested first");return;}
   const txt="My Chicago bass shows\n"+list.map(x=>x.t).join("\n");
   const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Copied "+list.length+" shows");}catch(e){toast("Copy blocked here");}ta.remove();};
   try{navigator.clipboard.writeText(txt).then(()=>toast("Copied "+list.length+" shows"),fallback);}catch(e){fallback();}
@@ -1474,7 +1491,7 @@ document.addEventListener("submit",async e=>{
   if(!cn||!mn){toast(!cn?ERRS.crew_name_required:ERRS.name_required);return;}
   btn.disabled=true;btn.textContent="Starting…";
   try{const r=await api("crew_create",{p_crew_name:cn,p_member_name:mn});
-    me={code:r.code,crew_name:r.crew_name,member_id:r.member_id,token:r.token,name:r.name};saveMe();keepName(r.name);
+    me={code:r.code,crew_name:r.crew_name,member_id:r.member_id,token:r.token,name:r.name};saveMe();keepName(r.name);await carryPlans();
     await refreshCrew();render();toast("Crew started. Send your friends the invite link.");}
   catch(err){btn.disabled=false;btn.textContent="Start the crew";toast(errMsg(err));}
 });
