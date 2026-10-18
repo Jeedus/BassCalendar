@@ -548,7 +548,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 /* compact actions: status menu on the left, icon buttons on the right */
 .racts,.hero .acts{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
 .racts .btn,.hero .acts .btn{min-height:34px;font-size:14px;padding:0 12px}
-.icons{display:flex;gap:6px;margin-left:auto}
+.icons{display:flex;gap:6px}
 .ib{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--rule-soft);color:var(--ink);text-decoration:none;flex:none;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
 @media (hover:hover){.ib:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}}
 .rsel{position:relative;display:inline-flex}
@@ -1013,7 +1013,7 @@ function festPoster(f,onDay){
   return '<article class="poster'+(lined||onDay?" wide":"")+'" data-fest="'+f.id+'"'+(onDay?'':' id="fest-'+f.id+'"')+'>'+band+'<div class="pbody"><h3 class="ptitle">'+esc(f.name)+'</h3>'+
     (lined&&f.note?'<p class="rsup">'+esc(f.note)+'</p>':'')+body+crewLine(f.id,6)+rsvpBtns(f.id)+
     '<div class="racts">'+saveBtn(f.id)+
-    '<span class="icons">'+(f.start?icoLink(fgcal(f),"Add to Google Calendar",I.cal):'')+icoLink(f.url,lined?"Tickets":"Festival site",I.ext)+'</span></div></div></article>';
+    '<span class="icons">'+(f.start?icoLink(fgcal(f),"Add to Google Calendar",I.cal):'')+icoLink(f.url,lined?"Tickets":"Festival site",lined?I.tixgo:I.ext)+'</span></div></div></article>';
 }
 function renderFests(){
   const sec=$("festSec");sec.hidden=!state.fests;if(!state.fests)return;
@@ -1154,7 +1154,7 @@ function crewLine0(id,max){const a=crewOn(id);if(!a.length)return "";return '<di
 const IC=(d,sz)=>'<svg viewBox="0 0 16 16" width="'+(sz||16)+'" height="'+(sz||16)+'" aria-hidden="true"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 const I={cal:"M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3",tix:"M2 5h12v2a1.5 1.5 0 0 0 0 3v2H2v-2a1.5 1.5 0 0 0 0-3zM10 5v8",ext:"M6 3H3v10h10v-3M9 2.5h4.5V7M13.5 2.5 7.5 8.5",
   going:"M3 8.5 6.5 12 13 4.5",interested:"M8 2.5l1.7 3.5 3.8.5-2.8 2.6.7 3.8L8 11.1l-3.4 1.8.7-3.8-2.8-2.6 3.8-.5z",down:"M4 6l4 4 4-4"};
-I.tixst=I.tix;
+I.tixst=I.tix;I.tixgo="M7 6.5H2v2.2a1.3 1.3 0 0 1 0 2.6v2.2h11v-2.2a1.3 1.3 0 0 1 0-2.6M10.5 2H14v3.5M14 2 8.5 7.5";
 const ST={going:"Going",interested:"Interested",tix:"Got tix"};
 function rsvpBtns(){return "";}
 function rsvpSelect(id){const st=myStatus(id);
@@ -1514,7 +1514,7 @@ function renderHero(){
    (s.support.length?'<p class="support">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'.'+(others>0?' '+others+' other bass '+(others>1?'shows':'show')+' the same night.':'')+'</p>':(others>0?'<p class="support">'+others+' other bass '+(others>1?'shows':'show')+' the same night.</p>':''))+
    crewLine(s.id,5)+rsvpBtns(s.id)+
    '<div class="acts">'+saveBtn(s.id,"solid")+
-   '<span class="icons">'+icoLink(gcal(s),"Add to Google Calendar",I.cal)+icoLink(s.url,"Tickets and info",I.ext)+'</span></div>';
+   '<span class="icons">'+icoLink(gcal(s),"Add to Google Calendar",I.cal)+icoLink(s.url,"Tickets and info",I.tixgo)+'</span></div>';
 }
 
 function renderStats(){
@@ -1554,7 +1554,7 @@ function row(s,opts){
    '<div class="rmeta">'+meta.join("")+'</div>'+crewLine(s.id,6)+listenRow(s.title)+
    (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+rsvpBtns(s.id)+
    '<div class="racts">'+saveBtn(s.id)+
-   '<span class="icons">'+icoLink(gcal(s),"Add to Google Calendar",I.cal)+icoLink(s.url,"Tickets and info",I.ext)+'</span></div></div></article>';
+   '<span class="icons">'+icoLink(gcal(s),"Add to Google Calendar",I.cal)+icoLink(s.url,"Tickets and info",I.tixgo)+'</span></div></div></article>';
 }
 
 function addDays(s,n){const p=parts(s);const d=new Date(Date.UTC(p.y,p.m,p.d+n));return iso(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());}
@@ -1567,7 +1567,7 @@ function nightShow(s){
     '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+''+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span>'+crewChip(s.id)+'</span>'+
     '<span class="nmeta">'+meta.join(" · ")+'</span></summary><div class="nbody">'+
     crewLine(s.id,5)+'<div class="racts">'+saveBtn(s.id)+
-    '<span class="icons">'+icoLink(gcal(s),"Add to Google Calendar",I.cal)+icoLink(s.url,"Tickets and info",I.ext)+'</span></div>'+
+    '<span class="icons">'+icoLink(gcal(s),"Add to Google Calendar",I.cal)+icoLink(s.url,"Tickets and info",I.tixgo)+'</span></div>'+
     supportHtml(s)+listenRow(s.title)+(s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+'</div></details>';
 }
 function renderNights(y,m,days,vmap){
