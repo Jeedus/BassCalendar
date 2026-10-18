@@ -86,25 +86,16 @@ button,input,select{font:inherit;color:inherit}
 
 /* stat row */
 .stats{border-bottom:1px solid var(--rule)}
-.sbar{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:40px;padding:0;border:0;background:transparent;color:var(--ink-meta);font-family:var(--font-mono);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;text-align:left;cursor:pointer;transition:color .18s ease}
+.sbar{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:40px;padding:0;border:0;background:transparent;color:var(--ink-meta);font-family:var(--font-mono);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;text-align:left;cursor:default}
 .sbar .sum{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sbar b{color:var(--ink);font-weight:500}
 .sbar .sh{display:none}
 @media (max-width:640px){.sbar{font-size:11px;letter-spacing:0;gap:8px}.sbar .lo{display:none}.sbar .sh{display:inline}}
-.sbar .pm{flex:none;width:12px;text-align:center;font-size:15px}
-.sgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-height:0;overflow:hidden;opacity:0;visibility:hidden;transition:max-height .35s cubic-bezier(.22,1,.36,1),opacity .25s ease,visibility 0s linear .35s}
-.stats.open .sgrid{max-height:360px;opacity:1;visibility:visible;transition:max-height .35s cubic-bezier(.22,1,.36,1),opacity .25s ease}
-.stats.open .sbar{color:var(--ink)}
-@media (hover:hover){
-  .stats:hover .sbar{color:var(--ink)}
-  .stats:hover .sgrid{max-height:360px;opacity:1;visibility:visible;transition:max-height .35s cubic-bezier(.22,1,.36,1) .12s,opacity .25s ease .12s}
-}
-@media (prefers-reduced-motion:reduce){.sgrid,.stats.open .sgrid,.stats:hover .sgrid{transition:none}}
 .stat{padding:18px 16px 18px 0;display:grid;gap:6px;align-content:start}
 .stat+.stat{border-left:1px solid var(--rule-soft);padding-left:16px}
 .stat b{font-weight:500;font-size:clamp(40px,6vw,72px);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
 .stat span{font-size:14px;color:var(--ink-muted)}
-@media (max-width:640px){.sgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat:nth-child(3){border-left:0;padding-left:0}.stat:nth-child(n+3){border-top:1px solid var(--rule-soft)}}
+@media (max-width:640px){.stat:nth-child(3){border-left:0;padding-left:0}.stat:nth-child(n+3){border-top:1px solid var(--rule-soft)}}
 
 /* main split */
 .main{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:16px;padding-block:24px 64px}
@@ -373,6 +364,9 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .cchips{display:flex;gap:6px;flex-wrap:wrap}
 .cchip{height:40px;padding:0 14px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border-radius:0}
 .cchip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cchip .fcn{font-family:var(--font-mono);font-size:11px;background:var(--volt);color:var(--on-volt);padding:1px 5px}
+.cchip .pm{font-family:var(--font-mono);font-size:15px;line-height:1;width:10px;text-align:center}
+.ftoggle[hidden]{display:none}
 .cchip .n{font-family:var(--font-mono);font-size:12px;background:var(--signal);color:var(--on-signal);padding:1px 5px}
 .crewview{padding-top:4px}
 .cview{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"head wk" "mem wk";gap:24px 32px;align-items:start}
@@ -661,7 +655,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 
     <section class="content" aria-label="Calendar">
       <div class="bar">
-        <button class="ftoggle" id="ftoggle" type="button" aria-expanded="false" aria-controls="rail"><span>Filters</span><span class="fc" id="fcount" hidden></span><span class="pm" aria-hidden="true">+</span></button>
+        <button class="ftoggle" id="ftoggle" type="button" hidden aria-expanded="false" aria-controls="rail"><span>Filters</span><span class="fc" id="fcount" hidden></span><span class="pm" aria-hidden="true">+</span></button>
         <div class="tabs" role="tablist" aria-label="View">
           <button role="tab" id="tabMonth" aria-selected="true" type="button">Month</button>
           <button role="tab" id="tabList" aria-selected="false" type="button">List</button>
@@ -1077,10 +1071,13 @@ function renderCrewNav(){
   $("navCrewAv").innerHTML=inCrew()?avStack(crew.members,crew.members.length>3?2:3):"";
 }
 function renderChips(){
-  const c=$("cchips");const on=inCrew();c.hidden=!on;if(!on)return;
+  const c=$("cchips");const on=inCrew();c.hidden=false;
+  const allOn=(state.crewF||"all")==="all"||!on;const open=!$("rail").hidden;const af=state._af||0;
+  const allChip='<button class="cchip call" type="button" data-cf="all" aria-pressed="'+allOn+'" aria-expanded="'+open+'" aria-controls="rail" aria-label="All shows. '+(allOn?(open?"Close":"Open")+" filters":"Show all shows")+(af?". "+af+" filters on":"")+'">All shows'+(af?'<span class="fcn">'+af+'</span>':'')+'<span class="pm" aria-hidden="true">'+(open?"\u2212":"+")+'</span></button>';
+  if(!on){c.innerHTML=allChip;return;}
   const nCrew=SHOWS.filter(s=>s.date>=TODAY&&crewOn(s.id).length).length+FESTS.filter(f=>evUpcoming(EVMAP.get(f.id))&&crewOn(f.id).length).length;
   const b=(v,l,extra)=>'<button class="cchip" type="button" data-cf="'+v+'" aria-pressed="'+((state.crewF||"all")===v)+'">'+l+(extra||"")+'</button>';
-  c.innerHTML=b("all","All shows")+b("crew","Crew's going",nCrew?'<span class="n">'+nCrew+'</span>':'')+b("mine","Mine");
+  c.innerHTML=allChip+b("crew","Crew's going",nCrew?'<span class="n">'+nCrew+'</span>':'')+b("mine","Mine");
 }
 function gotoEvent(id){
   const e=EVMAP.get(id);if(!e)return;
@@ -1166,13 +1163,7 @@ function renderStats(){
   const nights=new Set(up.map(s=>s.date));
   const clashes=[...nights].filter(d=>clash(d)>1).length;
   const wk=up.filter(s=>daysBetween(TODAY,s.date)<7).length;
-  const open=$("stats").classList.contains("open");
-  $("stats").innerHTML='<button class="sbar" type="button" id="sbar" aria-expanded="'+open+'" aria-controls="sgrid"><span class="sum"><b>'+up.length+'</b> <span class="lo">shows </span>ahead · <b>'+wk+'</b> this week · <b>'+venues+'</b> venues · <b>'+clashes+'</b> <span class="lo">nights to pick</span><span class="sh">clashes</span></span><span class="pm" aria-hidden="true">'+(open?"\u2212":"+")+'</span></button>'+
-   '<div class="sgrid" id="sgrid">'+
-   '<div class="stat"><b>'+up.length+'</b><span>shows still ahead</span></div>'+
-   '<div class="stat"><b>'+wk+'</b><span>in the next 7 days</span></div>'+
-   '<div class="stat"><b>'+venues+'</b><span>venues on the map</span></div>'+
-   '<div class="stat"><b>'+clashes+'</b><span>nights where you have to pick</span></div></div>';
+  $("stats").innerHTML='<div class="sbar"><span class="sum"><b>'+up.length+'</b> <span class="lo">shows </span>ahead · <b>'+wk+'</b> this week · <b>'+venues+'</b> venues · <b>'+clashes+'</b> <span class="lo">nights to pick</span><span class="sh">clashes</span></span></div>';
 }
 
 function renderRail(){
@@ -1286,10 +1277,10 @@ function render(){
   $("monthView").hidden=!isM;$("listView").hidden=isM||isC;
   $("heroSec").hidden=isC;$("stats").hidden=isC;document.querySelector(".bar").hidden=isC;$("crewView").hidden=!isC;
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
-  renderCrewNav();renderChips();
+  renderCrewNav();
   const n=filtered().length;const nf=FESTS.filter(fvis).length;$("countLine").textContent=n+(n===1?" show":" shows")+(nf?" + "+nf+(nf===1?" festival":" festivals"):"");
   const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+(state.savedOnly?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
-  $("fcount").hidden=!active;$("fcount").textContent=active+" on";
+  $("fcount").hidden=!active;$("fcount").textContent=active+" on";state._af=active;renderChips();
   $("sheetDone").textContent="Show "+(n+nf)+" results";
   renderHero();renderStats();renderRail();
   if(isC){renderCrewView();$("festSec").hidden=true;}
@@ -1358,6 +1349,7 @@ function setRail(open){
   $("ftoggle").setAttribute("aria-expanded",String(open));$("ftoggle").querySelector(".pm").textContent=open?"\u2212":"+";
   const sheet=open&&mq.matches;$("scrim").hidden=!sheet;document.documentElement.style.overflow=sheet?"hidden":"";
   if(sheet)$("rail").scrollTop=0;
+  try{renderChips();}catch(e){}
 }
 $("ftoggle").onclick=()=>setRail($("rail").hidden);
 $("scrim").onclick=()=>setRail(false);
@@ -1381,10 +1373,10 @@ $("navCrew").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==
 let leaveArm=0;
 document.addEventListener("click",e=>{
   const t=e.target;
-  if(t.closest("#sbar")){const st=$("stats");const o=!st.classList.contains("open");st.classList.toggle("open",o);t.closest("#sbar").setAttribute("aria-expanded",String(o));st.querySelector(".pm").textContent=o?"\u2212":"+";return;}
   const mn=t.closest("[data-mini]");if(mn){if(!mn.disabled)jumpNight(mn.dataset.mini);return;}
   const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();setRsvp(rb.dataset.rsvp,rb.dataset.st);return;}
-  const cf=t.closest("[data-cf]");if(cf){if(cf.dataset.cf!==state.crewF)later(()=>{stagger($("nlist"),".nrow",8);if(!PHONE.matches)fx($("grid"),"fx-drop");});state.crewF=cf.dataset.cf;render();return;}
+  const cf=t.closest("[data-cf]");if(cf&&cf.dataset.cf==="all"&&(!inCrew()||(state.crewF||"all")==="all")){setRail($("rail").hidden);return;}
+  if(cf){if(cf.dataset.cf!==state.crewF)later(()=>{stagger($("nlist"),".nrow",8);if(!PHONE.matches)fx($("grid"),"fx-drop");});state.crewF=cf.dataset.cf;render();return;}
   const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
   if(t.closest("[data-jclose]")){closeJoin();return;}
   if(t.closest("#crShare")){shareInvite();return;}
