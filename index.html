@@ -365,7 +365,9 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .cchip{height:40px;padding:0 14px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border-radius:0}
 .cchip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .cchip .fcn{font-family:var(--font-mono);font-size:11px;background:var(--volt);color:var(--on-volt);padding:1px 5px}
-.cchip .pm{font-family:var(--font-mono);font-size:15px;line-height:1;width:10px;text-align:center}
+.cchip .fic{display:flex;width:14px;height:12px;flex:none}
+.cchip .fic svg{width:100%;height:100%}
+.cchip[aria-expanded="true"] .fic{color:var(--signal)}
 .ftoggle[hidden]{display:none}
 .cchip .n{font-family:var(--font-mono);font-size:12px;background:var(--signal);color:var(--on-signal);padding:1px 5px}
 .crewview{padding-top:4px}
@@ -1073,7 +1075,7 @@ function renderCrewNav(){
 function renderChips(){
   const c=$("cchips");const on=inCrew();c.hidden=false;
   const allOn=(state.crewF||"all")==="all"||!on;const open=!$("rail").hidden;const af=state._af||0;
-  const allChip='<button class="cchip call" type="button" data-cf="all" aria-pressed="'+allOn+'" aria-expanded="'+open+'" aria-controls="rail" aria-label="All shows. '+(allOn?(open?"Close":"Open")+" filters":"Show all shows")+(af?". "+af+" filters on":"")+'">All shows'+(af?'<span class="fcn">'+af+'</span>':'')+'<span class="pm" aria-hidden="true">'+(open?"\u2212":"+")+'</span></button>';
+  const allChip='<button class="cchip call" type="button" data-cf="all" aria-pressed="'+allOn+'" aria-expanded="'+open+'" aria-controls="rail" aria-label="All shows. '+(allOn?(open?"Close":"Open")+" filters":"Show all shows")+(af?". "+af+" filters on":"")+'">All shows'+(af?'<span class="fcn">'+af+'</span>':'')+'<span class="fic" aria-hidden="true"><svg viewBox="0 0 14 12"><path d="M1 2h12M3.5 6h7M5.5 10h3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg></span></button>';
   if(!on){c.innerHTML=allChip;return;}
   const nCrew=SHOWS.filter(s=>s.date>=TODAY&&crewOn(s.id).length).length+FESTS.filter(f=>evUpcoming(EVMAP.get(f.id))&&crewOn(f.id).length).length;
   const b=(v,l,extra)=>'<button class="cchip" type="button" data-cf="'+v+'" aria-pressed="'+((state.crewF||"all")===v)+'">'+l+(extra||"")+'</button>';
