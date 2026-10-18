@@ -357,10 +357,12 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .cmem{grid-area:mem;display:flex;flex-direction:column;gap:16px}
 .wkend{grid-area:wk;display:flex;flex-direction:column;gap:16px;border-top:1px solid var(--rule);padding-top:10px;min-width:0}
 .cname{margin:0;font-size:clamp(40px,5vw,56px);font-weight:700;letter-spacing:-.05em;line-height:.95;text-wrap:balance;overflow-wrap:anywhere}
-.cbtns{display:flex;gap:8px}
-.cbtns .btn{min-height:48px;justify-content:center}
-.btn.cy{flex:1;background:var(--signal);color:var(--on-signal);border-color:var(--signal);font-weight:700}
-.clink{font-family:var(--font-mono);font-size:12px;color:var(--ink-meta);overflow-wrap:anywhere}
+.cnrow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.cnrow .cname{min-width:0;font-size:clamp(38px,3.8vw,50px)}
+.inv{width:44px;height:44px;flex:none;display:grid;place-items:center;margin-top:2px;padding:0;border:1px solid var(--rule);border-radius:0;background:transparent;color:var(--ink);cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease,transform .14s ease}
+.inv svg{width:22px;height:22px}
+@media (hover:hover){.inv:hover{background:var(--signal);border-color:var(--signal);color:var(--on-signal)}}
+.inv:active{transform:scale(.95)}
 .mrow{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft)}
 .mrow .av{width:36px;height:36px;font-size:14px}
 .mrow b{font-size:18px;font-weight:500;letter-spacing:-.01em}
@@ -396,10 +398,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .wnone{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px dashed var(--rule-soft);font-size:15px;color:var(--ink-soft)}
 .wnone .sug{border:0;background:none;padding:0;color:var(--ink);font:500 15px var(--font-sans);text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .wquiet{font-size:14px;color:var(--ink-meta)}
-.wfree{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.wfree .crewl{font-size:13px}
-.fbt{min-height:36px;padding:0 10px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 13px var(--font-sans);cursor:pointer}
-.fbt[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .walso{font-size:13px;color:var(--ink-meta)}
 .cstart{max-width:620px;display:flex;flex-direction:column;gap:18px;border-top:1px solid var(--rule);padding-top:10px}
 .cstart h2{margin:6px 0 0;font-size:clamp(36px,5vw,56px);font-weight:700;letter-spacing:-.05em;line-height:.95}
@@ -441,8 +439,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   .cchip{flex:1;height:44px;padding:0 4px;font-size:14px;white-space:nowrap;gap:5px}
   .cchip .n{font-size:11px;padding:1px 4px}
   .bar #countLine{order:3}
-  .wkhead .wkbtns{width:100%}
-  .wkhead .wkbtns .btn:first-child{flex:1;justify-content:center}
+  .wkhead{flex-wrap:nowrap}
 }
 
 /* motion: one opening sequence, directional slides, small pops on taps. Off for reduced motion. */
@@ -863,6 +860,7 @@ function crewText(a){
   if(g.interested.length)out.push(esc(jn(g.interested))+" interested");
   return out.join(" · ");
 }
+const INVITE_ICON='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="8.5" cy="7" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"></circle><path d="M2.5 19c.8-3.6 3.1-5.4 6-5.4s5.2 1.8 6 5.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path><path d="M17.5 3.5v6M14.5 6.5h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>';
 const PERSON='<svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="3" r="2" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M1.2 9.2c.6-2 2-3 3.8-3s3.2 1 3.8 3" fill="none" stroke="currentColor" stroke-width="1.4"></path></svg>';
 function crewChip(id){const a=crewOn(id);if(!a.length)return "";const mine=!!myStatus(id);
   const lbl=a.length+(a.length===1?" person":" people")+" from your crew"+(mine?", including you":"");
@@ -936,10 +934,9 @@ function renderCrewView(){
   if(!me){el.innerHTML=renderCrewStart();return;}
   if(!crew){el.innerHTML='<div class="cstart"><span class="kicker">Crews</span><h2>'+esc(me.crew_name||"Your crew")+'</h2><p>Loading the crew\'s plans…</p></div>';return;}
   const members=crew.members;
-  const head='<div class="chead"><span class="kicker">Your crew · '+members.length+(members.length===1?" person":" people")+'</span><h2 class="cname">'+esc(crew.name)+'</h2>'+
-    '<div class="cbtns"><button class="btn cy" type="button" id="crShare">'+(navigator.share?"Share invite link":"Copy invite link")+'</button>'+(navigator.share?'<button class="btn" type="button" id="crCopy">Copy</button>':'')+'</div>'+
-    '<span class="clink">'+esc(inviteUrl())+'</span>'+
-    (members.length<2?'<p class="note">Send the invite link to your friends. They\'ll show up here as they join.</p>':'')+'</div>';
+  const head='<div class="chead"><span class="kicker">Your crew · '+members.length+(members.length===1?" person":" people")+'</span><div class="cnrow"><h2 class="cname">'+esc(crew.name)+'</h2>'+
+    '<button class="inv" type="button" id="crShare" aria-label="'+(navigator.share?"Share invite link":"Copy invite link")+'" title="'+(navigator.share?"Share invite link":"Copy invite link")+'">'+INVITE_ICON+'</button></div>'+
+    (members.length<2?'<p class="note">Tap the invite button to send friends the link. They\'ll show up here as they join.</p>':'')+'</div>';
   const rows=members.map(m=>{const p=nextPlan(m);const meM=members.find(isMe);const fresh=!isMe(m)&&m.joined_at&&(Date.now()-Date.parse(m.joined_at))<3*864e5&&(!meM||Date.parse(m.joined_at)>Date.parse(meM.joined_at));
     const sub=p.next?"Next: "+esc(p.next.e.title)+", "+shortDay(p.next.e.date)+(p.next.r.status==="tix"?" · has tix":""):"No shows picked yet";
     return '<div class="mrow">'+av(m)+'<span><b>'+esc(m.name)+'</b>'+(isMe(m)?'<span class="ytag">YOU</span>':fresh?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span></span><span class="cnt">'+p.count+(p.count===1?" show":" shows")+'</span></div>';}).join("");
@@ -950,25 +947,19 @@ function renderCrewView(){
   // weekend
   const ws=weekendStart();const nights=[0,1,2,3].map(i=>addDays(ws,i));
   const label=(state.wkOff||0)===0?"This weekend":(state.wkOff===1?"Next weekend":"Weekend");
-  const allFree=nights.every(n=>isFree(me.member_id,n));
   const days=nights.map(k=>{
     const evs=SHOWS.filter(s=>s.date===k).map(s=>EVMAP.get(s.id)).concat(FESTS.filter(f=>f.start&&f.start<=k&&k<=f.end).map(f=>EVMAP.get(f.id)));
     const picked=evs.map(e=>({e,a:crewOn(e.id)})).filter(x=>x.a.length).sort((a,b)=>b.a.length-a.a.length);
     const rest=evs.filter(e=>!crewOn(e.id).length);
-    const freeM=members.filter(m=>isFree(m.id,k));
     const dn=DOWL[dow(k)];
     let body=picked.map((x,i)=>'<div class="wpick'+(x.e.kind==="fest"?" fest":i===0?" top":"")+'"><button class="ttl" type="button" data-goto="'+esc(x.e.id)+'">'+esc(x.e.title)+'</button><span class="wh">'+esc(x.e.where)+'</span><div class="crewl" data-ev="'+esc(x.e.id)+'">'+avStack(x.a,5)+'<span class="t">'+crewText(x.a)+'</span></div></div>').join("");
     if(!picked.length&&evs.length)body+='<div class="wnone"><span>Nobody\'s picked '+dn+' yet</span>'+rest.slice(0,2).map(e=>'<button class="sug" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+', '+esc(e.where)+'?</button>').join("")+'</div>';
     else if(picked.length&&rest.length)body+='<span class="walso">Also: '+rest.map(e=>esc(e.title)).join(", ")+'</span>';
     if(!evs.length)body+='<span class="wquiet">No bass shows listed</span>';
-    const mf=isFree(me.member_id,k);
-    body+='<div class="wfree">'+(freeM.length?'<div class="crewl">'+avStack(freeM,4,"sm")+'<span class="t">'+(freeM.length===1&&isMe(freeM[0])?"You\'re free":esc(jn(freeM.map(m=>isMe(m)?"You":m.name)))+' free')+'</span></div>':'<span class="wquiet">Nobody\'s said they\'re free</span>')+
-      '<button class="fbt" type="button" data-free="'+k+'" aria-pressed="'+mf+'">I\'m free</button></div>';
     return '<div class="wday'+(picked.length?" hot":"")+'"><h4>'+DOW[dow(k)]+' '+parts(k).d+'<span>'+(evs.length?evs.length+(evs.length===1?" SHOW":" SHOWS"):"NO SHOWS")+'</span></h4>'+body+'</div>';
   }).join("");
   const wk='<div class="wkend"><div class="wkhead"><div><span class="kicker">'+label+' · '+MON[parts(nights[0]).m]+' '+parts(nights[0]).d+'–'+(parts(nights[3]).m!==parts(nights[0]).m?MON[parts(nights[3]).m]+" ":"")+parts(nights[3]).d+'</span><h3>Where\'s everyone at?</h3></div>'+
-    '<div class="wkbtns"><button class="btn" type="button" id="wkFree" aria-pressed="'+allFree+'">'+"I'm free this weekend"+'</button>'+
-    '<button class="btn sq" type="button" id="wkPrev" aria-label="Previous weekend"'+((state.wkOff||0)<=0?" disabled":"")+'>&lt;</button><button class="btn sq" type="button" id="wkNext" aria-label="Next weekend">&gt;</button></div></div>'+
+    '<div class="wkbtns"><button class="btn sq" type="button" id="wkPrev" aria-label="Previous weekend"'+((state.wkOff||0)<=0?" disabled":"")+'>&lt;</button><button class="btn sq" type="button" id="wkNext" aria-label="Next weekend">&gt;</button></div></div>'+
     '<div class="wdays">'+days+'</div></div>';
   el.innerHTML='<div class="cview">'+head+wk+mem+'</div>';
 }
@@ -1281,14 +1272,11 @@ document.addEventListener("click",e=>{
   const t=e.target;
   const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();setRsvp(rb.dataset.rsvp,rb.dataset.st);return;}
   const cf=t.closest("[data-cf]");if(cf){if(cf.dataset.cf!==state.crewF)later(()=>{stagger($("nlist"),".nrow",8);if(!PHONE.matches)fx($("grid"),"fx-drop");});state.crewF=cf.dataset.cf;render();return;}
-  const fr=t.closest("[data-free]");if(fr){setFree([fr.dataset.free],fr.getAttribute("aria-pressed")!=="true");return;}
   const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
   if(t.closest("[data-jclose]")){closeJoin();return;}
   if(t.closest("#crShare")){shareInvite();return;}
-  if(t.closest("#crCopy")){copyText(inviteUrl(),"Invite link copied");return;}
   if(t.closest("#wkPrev")){state.wkOff=Math.max(0,(state.wkOff||0)-1);later(()=>fx(document.querySelector(".wdays"),"fx-prev"));render();return;}
   if(t.closest("#wkNext")){state.wkOff=(state.wkOff||0)+1;later(()=>fx(document.querySelector(".wdays"),"fx-next"));render();return;}
-  if(t.closest("#wkFree")){const ws=weekendStart();const ns=[0,1,2,3].map(i=>addDays(ws,i));setFree(ns,!ns.every(n=>isFree(me.member_id,n)));return;}
   const lv=t.closest("#crLeave");
   if(lv){
     if(!leaveArm){leaveArm=setTimeout(()=>{leaveArm=0;const b=$("crLeave");if(b){b.classList.remove("arm");b.textContent="Leave "+(crew?crew.name:"crew");}},4000);lv.classList.add("arm");lv.textContent="Tap again to leave";return;}
