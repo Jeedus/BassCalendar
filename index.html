@@ -314,7 +314,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .crewnav{--nb:var(--paper);margin-left:auto;display:flex;align-items:center;gap:10px;padding:0 16px;margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));background:var(--nb);color:var(--ink);font-weight:500;font-size:17px;line-height:1;letter-spacing:-.03em;text-decoration:none}
 .crewnav>span{display:flex;align-items:center}
 .crewnav>span:empty{display:none}
-.crewnav[aria-current="true"]{box-shadow:inset 0 -3px 0 var(--signal)}
 @media (hover:hover){.crewnav:hover{--nb:var(--volt);color:var(--on-volt)}}
 .crewnav .avs .av{width:24px;height:24px;font-size:11px;box-shadow:0 0 0 2px var(--nb),inset 0 0 0 1px rgba(0,0,0,.25)}
 .crewnav .avs .av+.av{margin-left:-7px}
@@ -633,7 +632,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 
 /* top bar: focus rings sit inside the bar; the active Crew bar replaces the rule beneath it */
 .top a:focus-visible,.top button:focus-visible{outline-offset:-4px}
-.crewnav[aria-current="true"]{margin-bottom:-1px;position:relative;z-index:1;box-shadow:inset 0 -3px 0 var(--signal)}
+.crewnav[aria-current="true"]{margin-bottom:-1px;position:relative;z-index:1;box-shadow:inset 0 -1px 0 var(--signal)}
 .nw{white-space:nowrap}
 @media (max-width:359px){.sbar .sum{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.6;padding-block:8px}}
 @media (min-width:901px) and (max-width:1200px){.wdays{grid-template-columns:repeat(2,minmax(0,1fr))}}
