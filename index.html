@@ -1363,7 +1363,7 @@ function renderFriendsView(){
   if(!fr){el.innerHTML='<div class="cstart"><span class="kicker">Friends</span><h2>Friends</h2><p>Loading your friends…</p></div>';return;}
   const fs=fr.friends;
   const qr=qrSvg(friendUrl());
-  if(!qr)loadQr().then(()=>{if(state.view==="friends")renderFriendsView();}).catch(()=>{});
+  if(!qr)loadQr().then(()=>{if(state.view==="friends"){renderFriendsView();inkAlign();}}).catch(()=>{});
   const head='<div class="frhead"><span class="kicker">Friends · '+fs.length+(fs.length===1?" person":" people")+' · outside your crew</span><h2 class="cname">Friends</h2></div>';
   const code='<div class="frcode"><span class="kicker">Your friend code</span><div class="frqr"><span class="qrbox">'+(qr||'<span class="qrwait">Loading…</span>')+'</span>'+
     '<div class="frqt"><p>Met someone at a show? Let them scan this with their phone camera.</p><span class="meta">'+esc(fr.name)+' · '+esc(fr.code.toUpperCase())+'</span></div></div>'+
@@ -1646,8 +1646,24 @@ function render(){
   persist();frSyncSoon();
   FXQ.splice(0).forEach(f=>{try{f();}catch(e){}});
   try{pinUpdate(true);}catch(e){}
+  inkAlign();
 }
 
+/* big type: pull each heading left by its first letter's side bearing so the ink lines up with everything else */
+const INK_SEL="#heroTitle,.hero .lede,.cname,.mhead h2,.cstart h2,.dayhead h3";
+let inkCtx=null;
+function inkAlign(){
+  try{
+    inkCtx=inkCtx||document.createElement("canvas").getContext("2d");
+    document.querySelectorAll(INK_SEL).forEach(el=>{
+      const t=(el.textContent||"").trim();if(!t){el.style.marginLeft="";return;}
+      const cs=getComputedStyle(el);el.style.marginLeft="";
+      inkCtx.font=cs.fontStyle+" "+cs.fontWeight+" "+cs.fontSize+" "+cs.fontFamily;
+      const m=inkCtx.measureText(t.charAt(0));const gap=-m.actualBoundingBoxLeft;
+      if(gap>0.25&&gap<parseFloat(cs.fontSize)*0.2)el.style.marginLeft=(-gap).toFixed(2)+"px";
+    });
+  }catch(e){}
+}
 function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
 function setView(v){const was=state.view;state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if((v==="crew"||v==="friends")&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);
   if(v===was){render();return;}
@@ -1796,6 +1812,8 @@ if(location.hash==="#crew")state.view="crew";
 if(location.hash==="#friends")state.view="friends";
 render();
 intro();
+try{document.fonts.ready.then(inkAlign);}catch(e){}
+{let rt=0;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(inkAlign,120);});}
 if(CREW_ON){if(fme)refreshFriends();if(friendCode&&!joinCode)openAddFriend(friendCode);}
 if(CREW_ON){if(joinCode&&!(me&&me.code===joinCode))openJoin(joinCode);else{if(joinCode){stripJoin();toast("You're already in "+(me.crew_name||"this crew"));}if(me)refreshCrew();}}
 const up=parts(DATA.updated);$("stamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;$("footStamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;
