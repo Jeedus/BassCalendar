@@ -202,8 +202,17 @@ button,input,select{font:inherit;color:inherit}
 .empty b{font-weight:500;font-size:20px;letter-spacing:-.02em}
 @media (max-width:480px){.rowx{grid-template-columns:56px minmax(0,1fr);gap:12px}.date .num{font-size:38px}}
 
-.foot{border-top:1px solid var(--rule);padding-block:16px 40px;display:grid;gap:8px}
-.foot p{margin:0;font-size:14px;color:var(--ink-muted);max-width:80ch}
+.foot{border-top:1px solid var(--rule-soft);padding-block:0 32px}
+.fsrc>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;cursor:pointer}
+.fsrc>summary::-webkit-details-marker{display:none}
+.fsl{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
+.fsl .pm{width:10px;text-align:center;font-size:15px}
+@media (hover:hover){.fsrc>summary:hover .fsl{color:var(--ink)}}
+.fsrc[open] .fsl{color:var(--ink)}
+.fbody{display:grid;gap:12px;padding-bottom:8px}
+.srcs{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.srcs li{font-family:var(--font-mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;padding:4px 7px;border:1px solid var(--rule-soft);color:var(--ink-soft)}
+.fbody p{margin:0;font-size:13px;line-height:1.5;color:var(--ink-muted);max-width:62ch}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 16px;font-size:14px;font-weight:500;z-index:40}
 @media (prefers-reduced-motion:reduce){.rowx.flash{animation:none}}
 
@@ -632,8 +641,13 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   </div>
 
   <footer class="foot">
-    <div class="kicker">Source</div>
-    <p>Venue calendars (Radius, Concord Music Hall, Ramova Theatre), JamBase, Songkick, Concerts50, Concertfix, Discotech, EDM.com, The Daily Frequency and the Dubstation Massacre lineup page, pulled October 17, 2026. Small recurring nights that only post a week or two out (Proper Drum &amp; Bass, Bassline) aren't listed. Lineups and set times move around, so check the ticket link before you head out. Bass Station and BaseCamp Pub are in the suburbs (Waukegan and Lisle). Festival dates and lineups come from each festival's site, Insomniac's press page and EDM.com.</p>
+    <details class="fsrc">
+      <summary><span class="meta" id="footStamp">Updated daily</span><span class="fsl">Sources<span class="pm" aria-hidden="true">+</span></span></summary>
+      <div class="fbody">
+        <ul class="srcs"><li>Radius</li><li>Concord Music Hall</li><li>Ramova Theatre</li><li>JamBase</li><li>Songkick</li><li>Concerts50</li><li>Concertfix</li><li>Discotech</li><li>EDM.com</li><li>The Daily Frequency</li><li>Insomniac</li><li>Festival sites</li></ul>
+        <p>Set times move around, so check the ticket link before you head out. Small nights that only post a week out, like Proper Drum &amp; Bass and Bassline, aren't listed.</p>
+      </div>
+    </details>
   </footer>
 </div>
 <div class="scrim" id="scrim" hidden></div>
@@ -1258,8 +1272,8 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matche
   document.querySelectorAll('details.more[data-more="'+id+'"]').forEach(x=>{if(x!==d&&x.open!==d.open)x.open=d.open;});},true);
 let sx=0,sy=0;
 $("grid").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
-document.addEventListener("click",e=>{const sm=e.target.closest("details.nshow>summary,details.more>summary");if(sm)sm.parentNode._tap=1;},true);
-document.addEventListener("toggle",e=>{const d=e.target;if(!d._tap||!d.open)return;d._tap=0;fx(d.querySelector(".nbody,.t3"),"fx-drop");},true);
+document.addEventListener("click",e=>{const sm=e.target.closest("details.nshow>summary,details.more>summary,details.fsrc>summary");if(sm)sm.parentNode._tap=1;},true);
+document.addEventListener("toggle",e=>{const d=e.target;if(!d._tap||!d.open)return;d._tap=0;fx(d.querySelector(".nbody,.t3,.fbody"),"fx-drop");},true);
 document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.nshow"))return;if(d.open)openShows.add(d.dataset.show);else openShows.delete(d.dataset.show);},true);
 ["grid","nlist"].forEach(id=>{
   $(id).addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
@@ -1304,7 +1318,8 @@ if(location.hash==="#crew")state.view="crew";
 render();
 intro();
 if(CREW_ON){if(joinCode&&!(me&&me.code===joinCode))openJoin(joinCode);else{if(joinCode){stripJoin();toast("You're already in "+(me.crew_name||"this crew"));}if(me)refreshCrew();}}
-const up=parts(DATA.updated);$("stamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;
+const up=parts(DATA.updated);$("stamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;$("footStamp").textContent="Listings updated "+MON[up.m]+" "+up.d+", "+up.y;
+document.addEventListener("toggle",e=>{if(e.target.classList&&e.target.classList.contains("fsrc"))e.target.querySelector(".pm").textContent=e.target.open?"\u2212":"+";},true);
 }
 (function(){
   const fail=()=>{document.getElementById("hero").innerHTML='<div class="row1 kicker"><span>Offline</span></div><h1 id="heroTitle">No saved copy yet</h1><p class="lede">Open this page once with a connection and it will work offline after that.</p>';};
