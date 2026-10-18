@@ -17,3 +17,7 @@ Crew plans (Going / Interested / Got tix) are stored in Supabase against each sh
 ## Friends
 
 Friends are people outside your crew. Each person gets a friend code (shown as a QR code and a `?friend=CODE` link). Opening someone's link and tapping Add makes you friends both ways, and friends see each other's plans. Plans are copied to Supabase whenever they change. The friend tables and `friend_*` functions are at the bottom of `supabase/setup.sql`. `qr.js` is the QR code library (qrcode-generator, MIT), loaded only on the Friends page.
+
+## Profile
+
+The **You** tab is your profile: your picture (one of eight built-in tiles), your name, the sounds you're into, the artists you follow, and your shows, upcoming and past. It works without a crew or friend code and lives on this device. With a friend code, your friends see your picture and sound, and tapping a friend opens their profile. Changing your name updates it for your friends and your crew. This needs the `pic`/`sounds` columns, `friend_set_profile` and `crew_rename` from `supabase/setup.sql`.

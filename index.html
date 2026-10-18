@@ -689,9 +689,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .fav.more{background:var(--paper);color:var(--ink)}
 .favs{display:inline-flex;align-items:center;vertical-align:middle}
 .favs .fav+.fav{margin-left:-4px}
-.crewnav .favs .fav{box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--nb);background:var(--nb)}
-.crewnav .favs .fav+.fav{margin-left:-7px}
-.crewnav .favs .fav.more{background:var(--nb);color:var(--ink)}
 .frl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .frl .t{min-width:0}
 .frl .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;color:var(--ink-meta);margin-right:6px}
@@ -756,12 +753,51 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   .qrbox{width:148px;height:148px}
   .frqt p{font-size:17px}
 }
-@media (max-width:400px){
-  #navFrAv{display:none}
-}
 @media (max-width:360px){
   #navCrewAv{display:none}
   .crewnav{padding:0 10px}
+}
+/* profile: volt is you, the way cyan is crew and pink is friends */
+.frnav,#navCrew{margin-right:0}
+.top .wrap>.crewnav[hidden]+.crewnav[hidden]+.menav{margin-left:auto}
+.menav[aria-current="true"]{margin-bottom:-1px;position:relative;z-index:1;box-shadow:inset 0 -3px 0 var(--volt)}
+.ppic,.cpic{flex:none}
+.frrow>.cpic{width:36px;height:36px}
+.frsel{display:block;min-width:0;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+@media (hover:hover){.frsel:hover b{text-decoration:underline;text-underline-offset:4px}}
+.pvback{align-self:flex-start;margin-bottom:-12px;padding-block:6px;text-decoration:none}
+.pvback:before{content:none}
+.pfname{margin-top:2px}
+.pfname .fracts .go,.pfname .fracts .btn{height:48px}
+.pchips{display:flex;flex-wrap:wrap;gap:6px}
+.pchip{display:inline-flex;align-items:center;gap:8px;min-height:var(--ctl);padding:0 12px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);letter-spacing:-.01em;border-radius:0}
+button.pchip{cursor:pointer}
+.pchip .sw{width:12px;height:12px}
+.pchip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.pchip[aria-pressed="true"] .sw{box-shadow:0 0 0 1px var(--paper)}
+@media (hover:hover){button.pchip[aria-pressed="false"]:hover{border-color:var(--ink)}}
+.pchip.same{border-color:var(--pink)}
+.pchip .you2{margin:0 0 0 2px}
+.pfol{display:flex;flex-wrap:wrap;gap:6px}
+.pfol .fx svg{width:10px;height:10px}
+.pvrm{align-self:flex-start;width:auto;height:var(--ctl);padding:0 12px;margin-top:8px;border-color:var(--rule-soft);color:var(--ink-muted);font:500 14px var(--font-sans)}
+.pstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--rule)}
+.pst{display:flex;flex-direction:column;gap:6px;padding:12px 12px 4px 0}
+.pst+.pst{border-left:1px solid var(--rule-soft);padding-left:14px}
+.pst b{font-size:clamp(36px,4vw,48px);font-weight:500;line-height:.9;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.pst span{font-family:var(--font-mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
+.pv .fvr .cup{margin-top:0}
+.pvup .cuprow>.rsel,.pvup .cuprow>.pwent{justify-self:end}
+.pwent,.pstat{align-self:flex-start;font-family:var(--font-mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;padding:2px 5px;box-shadow:inset 0 0 0 1px var(--rule-soft);color:var(--ink-soft)}
+.cuprow.past .cupd b{color:var(--ink-meta)}
+.pvup .cuprow>.pwent{align-self:center}
+@media (max-width:640px){
+  .top .crewnav{padding:0 12px}
+  .menav .mel{display:none}
+  .pstats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pst:nth-child(3){border-left:0;padding-left:0}
+  .pst:nth-child(n+3){border-top:1px solid var(--rule-soft)}
+  .pvup .cuprow>.rsel,.pvup .cuprow>.pwent{grid-column:2;justify-self:start}
 }
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
@@ -793,8 +829,9 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   <div class="wrap">
     <a class="brand" href="#month">BassCalendar</a>
     <span class="stamp meta" id="stamp"></span>
-    <a href="#friends" class="crewnav frnav" id="navFr" hidden><span>Friends</span><span id="navFrAv"></span></a>
+    <a href="#friends" class="crewnav frnav" id="navFr" hidden><span>Friends</span></a>
     <a href="#crew" class="crewnav" id="navCrew" hidden><span>Crew</span><span id="navCrewAv"></span></a>
+    <a href="#me" class="crewnav menav" id="navMe"><span class="mel">You</span><span id="navMeAv"></span></a>
   </div>
 </header>
 
@@ -883,6 +920,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
       <section class="festsec" id="festSec" aria-label="Festivals"></section>
       <section class="crewview" id="crewView" aria-label="Crew" hidden></section>
       <section class="crewview frview" id="frView" aria-label="Friends" hidden></section>
+      <section class="crewview meview" id="meView" aria-label="Your profile" hidden></section>
     </section>
   </div>
 
@@ -1121,7 +1159,8 @@ const CREW_PICS=[
  {n:"Stack",bg:"#d1ddd3",d:'<path d="M8 8h14v14H8zM26 26h14v14H26z" fill="#000"/><path d="M26 8h14v14H26zM8 26h14v14H8z" fill="none" stroke="#000" stroke-width="3"/>'},
 ];
 function crewPicIdx(c){if(!c)return 0;if(typeof c.pic==="number"&&c.pic>=0&&c.pic<CREW_PICS.length)return c.pic;let h=0;for(const ch of String(c.code||""))h=(h*31+ch.charCodeAt(0))>>>0;return h%CREW_PICS.length;}
-function picTile(i,size,cls){const p=CREW_PICS[i];return '<span class="cpic'+(cls?" "+cls:"")+'" style="width:'+size+'px;height:'+size+'px;background:'+p.bg+'" role="img" aria-label="'+p.n+' crew picture"><svg viewBox="0 0 48 48" aria-hidden="true">'+p.d+'</svg></span>';}
+const tileHtml=(p,size,cls,label)=>'<span class="cpic'+(cls?" "+cls:"")+'" style="width:'+size+'px;height:'+size+'px;background:'+p.bg+'" role="img" aria-label="'+esc(label)+'"><svg viewBox="0 0 48 48" aria-hidden="true">'+p.d+'</svg></span>';
+const picTile=(i,size,cls)=>tileHtml(CREW_PICS[i],size,cls,CREW_PICS[i].n+" crew picture");
 const crewPic=(c,size,cls)=>picTile(crewPicIdx(c),size,cls);
 const saveMe=()=>{try{me?localStorage.setItem(CKEY,JSON.stringify(me)):localStorage.removeItem(CKEY);}catch(e){}};
 const saveCrew=()=>{try{crew?localStorage.setItem(CKEY+":state",JSON.stringify(crew)):localStorage.removeItem(CKEY+":state");}catch(e){}};
@@ -1344,6 +1383,8 @@ async function refreshFriends(){
   if(!CREW_ON||!fme)return;
   try{
     const s=await api("friend_state",{p_id:fme.id,p_token:fme.token});
+    if(prof.pic===undefined&&typeof s.pic==="number"&&s.pic>=0){prof.pic=s.pic;saveProf();}
+    if(!prof.sounds&&Array.isArray(s.sounds)&&s.sounds.length){prof.sounds=s.sounds;saveProf();}
     const changed=JSON.stringify(s)!==JSON.stringify(fr);
     fr=s;saveFr();indexFriends();if(changed){const w=introUntil-performance.now();w>0?setTimeout(render,w):render();}
   }catch(e){if(e.message==="not_a_person"){fme=null;fr=null;saveFme();saveFr();indexFriends();render();}}
@@ -1351,7 +1392,7 @@ async function refreshFriends(){
 /* your plans go to your friends: one small upload whenever they change */
 function myPlansMap(){const o={};EVMAP.forEach((e,id)=>{if(!evUpcoming(e))return;const st=myStatus(id);if(st)o[id]=st;});return o;}
 let frSyncT=0;
-function frSyncSoon(){if(!CREW_ON||!fme)return;clearTimeout(frSyncT);frSyncT=setTimeout(frSync,700);}
+function frSyncSoon(){if(!CREW_ON||!fme)return;clearTimeout(frSyncT);frSyncT=setTimeout(()=>{frSync();profSync();},700);}
 async function frSync(){
   if(!fme||(me&&!crew))return;
   const m=myPlansMap();const j=JSON.stringify(m);let last="";try{last=localStorage.getItem(FSYNC)||"";}catch(e){}
@@ -1390,6 +1431,9 @@ function renderFriendsView(){
   const el=$("frView");
   if(!fme){el.innerHTML=renderFrStart();return;}
   if(!fr){el.innerHTML='<div class="cstart"><span class="kicker">Friends</span><h2>Friends</h2><p>Loading your friends…</p></div>';return;}
+  const sel=state.frSel&&fr.friends.find(f=>f.id===state.frSel);
+  if(sel){el.innerHTML=renderFriendProfile(sel);return;}
+  state.frSel=null;
   const fs=fr.friends;
   const qr=qrSvg(friendUrl());
   if(!qr)loadQr().then(()=>{if(state.view==="friends"){renderFriendsView();inkAlign();}}).catch(()=>{});
@@ -1400,7 +1444,7 @@ function renderFriendsView(){
   const fresh=f=>f.since&&(Date.now()-Date.parse(f.since))<3*864e5;
   const rows=fs.length?fs.map(f=>{const p=frNext(f);
     const sub=p.next?"Next: "+esc(p.next.e.title)+", "+shortDay(p.next.e.date)+(p.next.p.status==="tix"?" · has tix":""):"No shows picked yet";
-    return '<div class="frrow">'+fav(f)+'<span><b>'+esc(f.name)+'</b>'+(fresh(f)?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span>'+(f.note?'<span class="met">'+esc(f.note)+'</span>':'')+'</span>'+
+    return '<div class="frrow">'+frPic(f,36)+'<button class="frsel" type="button" data-frsel="'+esc(f.id)+'"><b>'+esc(f.name)+'</b>'+(fresh(f)?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span>'+(f.note?'<span class="met">'+esc(f.note)+'</span>':'')+'</button>'+
       '<span class="cnt">'+p.count+(p.count===1?" show":" shows")+'</span><button class="frx" type="button" data-unfriend="'+esc(f.id)+'" aria-label="Remove '+esc(f.name)+'" title="Remove '+esc(f.name)+'">'+XICON+'</button></div>';}).join(""):
     '<p class="note frnone">No friends yet. Show someone your code at the next show, or send them your link. Once they add you, you\'ll both see each other\'s plans.</p>';
   const list='<div class="frlist"><div class="cuphead"><span class="kicker">Your friends</span></div>'+rows+'</div>';
@@ -1416,7 +1460,109 @@ function renderFriendsView(){
 function renderFrNav(){
   const n=$("navFr");n.hidden=!CREW_ON;if(!CREW_ON)return;
   n.setAttribute("aria-current",String(state.view==="friends"));
-  $("navFrAv").innerHTML=hasFriends()?favStack(fr.friends,fr.friends.length>2?1:2):"";
+}
+/* ---------- profile ---------- */
+const PAGES=["crew","friends","me"];
+const PKEY=KEY+":profile",PSYNC=PKEY+":synced";
+let prof={};
+try{const o=JSON.parse(localStorage.getItem(PKEY)||"null");if(o&&typeof o==="object")prof=o;}catch(e){}
+const saveProf=()=>{try{localStorage.setItem(PKEY,JSON.stringify(prof));}catch(e){}};
+/* people pictures: square tiles like the crew's. No pick yet means one is chosen from the person's id */
+const PEOPLE_PICS=[
+ {n:"Bolt",bg:"#d6f45a",d:'<path d="M28 4 11 27h11l-3 17 18-25H26z" fill="#000"/>'},
+ {n:"Speaker",bg:"#19c6d6",d:'<path d="M12 5h24v38H12z" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="14" r="3.5" fill="#000"/><circle cx="24" cy="30" r="7.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="30" r="2.5" fill="#000"/>'},
+ {n:"Headphones",bg:"#ff4fb8",d:'<path d="M9 31v-7a15 15 0 0 1 30 0v7" fill="none" stroke="#000" stroke-width="3.5"/><path d="M7 28h8v14H7zM33 28h8v14h-8z" fill="#000"/>'},
+ {n:"Alien",bg:"#3292ff",d:'<path d="M24 6c9 0 15 6 15 14 0 10-9 20-15 22-6-2-15-12-15-22 0-8 6-14 15-14z" fill="none" stroke="#000" stroke-width="3"/><path d="M13 20l9 4-2 6-7-4zM35 20l-9 4 2 6 7-4z" fill="#000"/>'},
+ {n:"Flame",bg:"#ff4b5c",d:'<path d="M23 4c3 9 13 12 13 24a12 12 0 0 1-24 0c0-6 3-9 5-11 0 4 2 7 4 7-1-7 0-13 2-20z" fill="#000"/>'},
+ {n:"Moon",bg:"#000000",d:'<path d="M29 7a17 17 0 1 0 12 27A14 14 0 0 1 29 7z" fill="#d6f45a"/>'},
+ {n:"Eye",bg:"#d1ddd3",d:'<path d="M4 24c6-9 13-13 20-13s14 4 20 13c-6 9-13 13-20 13S10 33 4 24z" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="6" fill="#000"/>'},
+ {n:"Totem",bg:"#ffffff",d:'<path d="M14 44V5" stroke="#000" stroke-width="3.5"/><path d="M16 7h22l-6 8 6 8H16z" fill="#000"/>'},
+];
+const hashIdx=(s,n)=>{let h=0;for(const ch of String(s||""))h=(h*31+ch.charCodeAt(0))>>>0;return h%n;};
+const personPicIdx=(pic,seed)=>typeof pic==="number"&&pic>=0&&pic<PEOPLE_PICS.length?pic:hashIdx(seed,PEOPLE_PICS.length);
+const frPic=(f,size,cls)=>tileHtml(PEOPLE_PICS[personPicIdx(f.pic,f.id)],size,cls,f.name+"'s picture");
+const myName=()=>(fme&&fr&&fr.name)||(me&&me.name)||lastName()||"";
+const myPicIdx=()=>personPicIdx(prof.pic,fme?fme.id:me?me.member_id:"me");
+const myPic=(size,cls)=>tileHtml(PEOPLE_PICS[myPicIdx()],size,cls,"Your picture");
+const soundsOf=p=>GENRES.map(g=>g.id).filter(id=>(p.sounds||[]).includes(id));
+const PENCIL='<svg viewBox="0 0 22 22" aria-hidden="true"><path d="M4 18l1-4.2L15.2 3.6l3.2 3.2L8.2 17zM13 5.8l3.2 3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"></path></svg>';
+let profMissing=false;
+async function profSync(){
+  if(!CREW_ON||!fme||profMissing)return;
+  const body={p_pic:typeof prof.pic==="number"?prof.pic:-1,p_sounds:soundsOf(prof)};const j=JSON.stringify(body);
+  let last="";try{last=localStorage.getItem(PSYNC)||"";}catch(e){}
+  if(j===last)return;
+  try{await api("friend_set_profile",Object.assign({p_id:fme.id,p_token:fme.token},body));try{localStorage.setItem(PSYNC,j);}catch(e){}}
+  catch(e){if(/could not find|http_404/i.test(e.message))profMissing=true;}
+}
+async function renameMe(nm){
+  const old={fr:fr&&fr.name,me:me&&me.name,last:lastName()};
+  const setAll=n=>{if(fr){fr.name=n;saveFr();}if(me){me.name=n;saveMe();}if(crew){const m=crew.members.find(isMe);if(m)m.name=n;saveCrew();}};
+  keepName(nm);setAll(nm);state.pfEdit=false;
+  later(()=>fx(document.querySelector(".pvhead .cname"),"fx-pop"));render();
+  /* each side keeps the new name only if its save went through */
+  const jobs=[];
+  if(CREW_ON&&fme)jobs.push(api("friend_rename",{p_id:fme.id,p_token:fme.token,p_name:nm}).catch(e=>{if(fr&&old.fr){fr.name=old.fr;saveFr();}throw e;}));
+  if(CREW_ON&&me)jobs.push(api("crew_rename",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_name:nm}).catch(e=>{if(me&&old.me){me.name=old.me;saveMe();}refreshCrew();throw e;}));
+  const res=await Promise.allSettled(jobs);const bad=res.filter(r=>r.status==="rejected");
+  if(!bad.length){toast(jobs.length?"Saved. Everyone sees "+nm+" now":"Saved");return;}
+  if(bad.length===jobs.length)keepName(old.last);
+  render();toast(errMsg(bad[0].reason));
+}
+function renderMeNav(){
+  const n=$("navMe");n.setAttribute("aria-current",String(state.view==="me"));
+  $("navMeAv").innerHTML=myPic(24);
+}
+const whenCol=e=>{const p=parts(e.date);const fest=e.kind==="fest";
+  return '<span class="cupd"><b>'+p.d+'</b><span>'+(fest&&e.end&&e.end!==e.date?MON[p.m]+" "+p.d+"–"+(parts(e.end).m!==p.m?MON[parts(e.end).m]+" ":"")+parts(e.end).d:DOW[dow(e.date)]+" "+MON[p.m])+'</span></span>';};
+const evTitle=(e,extra)=>'<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button>'+(extra||"")+'<span class="wh">'+(e.kind==="fest"?"Festival · ":"")+esc(e.where)+'</span></span>';
+const statCell=(n,l)=>'<div class="pst"><b>'+n+'</b><span>'+l+'</span></div>';
+function renderProfile(){
+  const el=$("meView");const name=myName();
+  const mine=[...EVMAP.values()].filter(e=>e.date&&myStatus(e.id));
+  const next=mine.filter(evUpcoming).sort((a,b)=>a.date.localeCompare(b.date));
+  const been=mine.filter(e=>!evUpcoming(e)&&myStatus(e.id)!=="interested").sort((a,b)=>b.date.localeCompare(a.date));
+  const going=next.filter(e=>myStatus(e.id)!=="interested");
+  const who=fme&&inCrew()?"Your friends and "+esc(crew.name)+" see your name and plans. Friends also see your picture and sound.":
+    fme?"Your friends see your name, picture, sound and plans.":
+    inCrew()?esc(crew.name)+" sees your name and plans. <button class=\"linkbtn\" type=\"button\" data-gofr>Make a friend code</button> to share your picture and sound with friends too.":
+    "This profile only lives on this device for now. "+(CREW_ON?"<button class=\"linkbtn\" type=\"button\" data-gofr>Make a friend code</button> to share it with friends.":"");
+  const head='<div class="frhead pvhead"><span class="kicker">Your profile'+(inCrew()?" · "+esc(crew.name):"")+'</span>'+
+    '<div class="cnrow"><button class="cpicbtn" type="button" id="pfPic" aria-expanded="'+(!!state.pfPicOpen)+'" aria-label="Change your picture" title="Change your picture">'+myPic(56)+'</button>'+
+    '<h2 class="cname">'+(name?esc(name):"You")+'</h2><button class="inv" type="button" id="pfEdit" aria-label="Change your name" title="Change your name">'+PENCIL+'</button></div>'+
+    (state.pfPicOpen?'<div class="picrow" role="group" aria-label="Your picture">'+PEOPLE_PICS.map((p,i)=>'<button type="button" class="picpick" data-ppic="'+i+'" aria-pressed="'+(myPicIdx()===i)+'" aria-label="'+p.n+'">'+tileHtml(p,44,"",p.n)+'</button>').join("")+'</div>':'')+
+    (state.pfEdit||!name?'<form class="cform pfname" id="pfName" autocomplete="off"><label for="pfNameIn">'+(name?"Change your name":"What should people call you?")+'</label><input id="pfNameIn" maxlength="30" value="'+esc(name)+'" required>'+
+      '<div class="fracts"><button class="go" type="submit">Save name</button>'+(name?'<button class="btn" type="button" id="pfCancel">Cancel</button>':'')+'</div></form>':'')+
+    '<p class="note">'+who+'</p></div>';
+  const mySounds=soundsOf(prof);
+  const sound='<div class="frcode"><span class="kicker">Your sound</span><div class="pchips" role="group" aria-label="Your sound">'+
+    GENRES.map(g=>'<button class="pchip" type="button" data-psound="'+g.id+'" aria-pressed="'+mySounds.includes(g.id)+'"><span class="sw g-'+g.id+'"></span>'+esc(g.label)+'</button>').join("")+'</div>'+
+    '<p class="note">'+(mySounds.length?"Tap again to take one off.":"Pick what you're into. Friends see it on your profile.")+'</p></div>';
+  const fol=[...follows.values()].sort((a,b)=>a.localeCompare(b));
+  const follow='<div class="frcode"><span class="kicker">Artists you follow · '+fol.length+'</span>'+
+    (fol.length?'<div class="pfol">'+fol.map(a=>'<button class="fchip" type="button" data-unfollow="'+esc(a)+'" aria-label="Unfollow '+esc(a)+'">'+esc(a)+'<span class="fx" aria-hidden="true">'+XICON+'</span></button>').join("")+'</div>':
+      '<p class="note">Open any show and tap Follow next to an artist. Their shows get flagged across the calendar.</p>')+'</div>';
+  const stats='<div class="pstats">'+statCell(going.length,"Going")+statCell(next.filter(e=>myStatus(e.id)==="tix").length,"Got tix")+statCell(next.length-going.length,"Interested")+statCell(been.length,"Been to")+'</div>';
+  const nextL='<div class="cup pvup"><div class="cuphead"><span class="kicker">Your next shows</span><span class="meta">'+(next.length?next.length+(next.length===1?" show":" shows"):"")+'</span></div>'+
+    (next.map(e=>'<div class="cuprow'+(e.kind==="fest"?" fest":"")+'">'+whenCol(e)+evTitle(e)+rsvpSelect(e.id)+'</div>').join("")||'<p class="note cupnone">Nothing picked yet. Tap Going? on any show and it lands here.</p>')+'</div>';
+  const beenL=been.length?'<div class="cup pvup"><div class="cuphead"><span class="kicker">Shows you\'ve been to</span><span class="meta">'+been.length+'</span></div>'+
+    been.slice(0,20).map(e=>'<div class="cuprow past'+(e.kind==="fest"?" fest":"")+'">'+whenCol(e)+evTitle(e)+'<span class="pwent">'+(myStatus(e.id)==="tix"?"Had tix":"Went")+'</span></div>').join("")+'</div>':'';
+  el.innerHTML='<div class="fv pv"><div class="fvl">'+head+sound+follow+'</div><div class="fvr">'+stats+nextL+beenL+'</div></div>';
+}
+function renderFriendProfile(f){
+  const plans=(f.plans||[]).map(p=>({p,e:EVMAP.get(p.event_id)})).filter(x=>x.e&&x.e.date&&evUpcoming(x.e)).sort((a,b)=>a.e.date.localeCompare(b.e.date));
+  const both=plans.filter(x=>x.p.status!=="interested"&&myStatus(x.e.id)&&myStatus(x.e.id)!=="interested");
+  const fs=soundsOf(f),ms=soundsOf(prof);const since=f.since?parts(f.since.slice(0,10)):null;
+  const head='<button class="linkbtn pvback" type="button" data-frback>← All friends</button>'+
+    '<div class="frhead pvhead"><span class="kicker">Friend'+(since?" since "+MON[since.m]+" "+since.d:"")+(f.note?" · met at "+esc(f.note):"")+'</span>'+
+    '<div class="cnrow">'+frPic(f,56)+'<h2 class="cname">'+esc(f.name)+'</h2></div></div>';
+  const sound='<div class="frcode"><span class="kicker">'+esc(f.name)+'\'s sound</span>'+
+    (fs.length?'<div class="pchips">'+fs.map(id=>'<span class="pchip'+(ms.includes(id)?" same":"")+'"><span class="sw g-'+id+'"></span>'+esc(gLabel(id))+(ms.includes(id)?'<span class="you2">YOU TOO</span>':'')+'</span>').join("")+'</div>':'<p class="note">'+esc(f.name)+' hasn\'t picked a sound yet.</p>')+
+    '<button class="frx pvrm" type="button" data-unfriend="'+esc(f.id)+'">Remove '+esc(f.name)+'</button></div>';
+  const stats='<div class="pstats">'+statCell(plans.filter(x=>x.p.status!=="interested").length,"Going")+statCell(plans.filter(x=>x.p.status==="tix").length,"Got tix")+statCell(plans.filter(x=>x.p.status==="interested").length,"Interested")+statCell(both.length,"With you")+'</div>';
+  const list='<div class="cup pvup"><div class="cuphead"><span class="kicker">'+esc(f.name)+'\'s next shows</span><span class="meta">'+(plans.length?plans.length+(plans.length===1?" show":" shows"):"")+'</span></div>'+
+    (plans.map(x=>'<div class="cuprow'+(x.e.kind==="fest"?" fest":"")+'">'+whenCol(x.e)+evTitle(x.e,'<span class="pstat">'+(x.p.status==="tix"?"Has tix":x.p.status==="going"?"Going":"Interested")+'</span>')+rsvpSelect(x.e.id)+'</div>').join("")||'<p class="note cupnone">'+esc(f.name)+' hasn\'t picked any shows yet.</p>')+'</div>';
+  return '<div class="fv pv"><div class="fvl">'+head+sound+'</div><div class="fvr">'+stats+list+'</div></div>';
 }
 /* add-a-friend landing: ?friend=CODE */
 const friendCode=(()=>{try{return (new URLSearchParams(location.search).get("friend")||"").trim().toLowerCase();}catch(e){return "";}})();
@@ -1431,8 +1577,9 @@ async function openAddFriend(code){
   if(fr&&fr.friends.some(f=>f.id===p.id)){closeJoin();state.view="friends";render();toast("You're already friends with "+p.name);return;}
   const going=(p.plans||[]).filter(r=>r.status!=="interested").map(r=>EVMAP.get(r.event_id)).filter(e=>e&&evUpcoming(e)).sort((a,b)=>evDate(a).localeCompare(evDate(b))).slice(0,3);
   x.innerHTML='<button class="jclose" type="button" data-jclose>Not now</button><div class="jgrid"><div class="jleft"><span class="kicker">Friend request</span>'+
-    '<div class="frwho"><span class="fav">'+ini(p.name)+'</span><h2 class="cname">'+esc(p.name)+'</h2></div>'+
+    '<div class="frwho">'+frPic(p,72,"big")+'<h2 class="cname">'+esc(p.name)+'</h2></div>'+
     '<span class="who">wants to be friends on BassCalendar. You\'ll see each other\'s plans.</span>'+
+    (soundsOf(p).length?'<span class="who">Into '+esc(soundsOf(p).map(gLabel).join(", ").toLowerCase())+'.</span>':'')+
     (going.length?'<div class="going"><span class="kicker">'+esc(p.name)+'\'s going to</span><b>'+going.map(e=>esc(e.title)+" "+(e.kind==="fest"&&e.end&&e.end!==e.date?range(e.date,e.end):shortDay(e.date))).join(" · ")+'</b></div>':'')+
     '</div><div class="jright"><h2>'+(fme?"Add "+esc(p.name)+"?":"What should "+esc(p.name)+" call you?")+'</h2><form class="cform" id="frAddForm" autocomplete="off">'+
     (fme?'':'<label for="faName">Your name</label><input id="faName" maxlength="30" value="'+esc((me&&me.name)||lastName())+'" required>')+
@@ -1444,7 +1591,7 @@ async function openAddFriend(code){
     if(ni&&!name){$("faErr").textContent=ERRS.name_required;return;}
     btn.disabled=true;btn.textContent="Adding…";
     try{
-      if(!fme){const r=await api("friend_create",{p_name:name});fme={id:r.id,token:r.token};saveFme();keepName(r.name);fr={name:r.name,code:r.code,friends:[]};saveFr();try{localStorage.removeItem(FSYNC);}catch(e){}}
+      if(!fme){const r=await api("friend_create",{p_name:name});fme={id:r.id,token:r.token};saveFme();keepName(r.name);fr={name:r.name,code:r.code,friends:[]};saveFr();try{localStorage.removeItem(FSYNC);localStorage.removeItem(PSYNC);}catch(e){}}
       await api("friend_add",{p_id:fme.id,p_token:fme.token,p_code:p.code,p_note:note||null});
       await refreshFriends();frSyncSoon();
       closeJoin();state.view="friends";try{history.replaceState(null,"",location.pathname+"#friends");}catch(e){}
@@ -1658,12 +1805,12 @@ function renderList(){
 
 function render(){
   if((state.view==="crew"||state.view==="friends")&&!CREW_ON)state.view="month";
-  const isC=state.view==="crew",isFv=state.view==="friends",isP=isC||isFv;
+  const isC=state.view==="crew",isFv=state.view==="friends",isPf=state.view==="me",isP=isC||isFv||isPf;
   const isM=!isP&&(state.view==="month"||PHONE.matches);
   $("monthView").hidden=!isM;$("listView").hidden=isM||isP;
-  $("heroSec").hidden=isP;$("stats").hidden=isP;document.querySelector(".bar").hidden=isP;$("crewView").hidden=!isC;$("frView").hidden=!isFv;
+  $("heroSec").hidden=isP;$("stats").hidden=isP;document.querySelector(".bar").hidden=isP;$("crewView").hidden=!isC;$("frView").hidden=!isFv;$("meView").hidden=!isPf;
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
-  renderCrewNav();renderFrNav();
+  renderCrewNav();renderFrNav();renderMeNav();
   const n=filtered().length;const nf=FESTS.filter(fvis).length;$("countLine").textContent=n+(n===1?" show":" shows")+(nf?" + "+nf+(nf===1?" festival":" festivals"):"");
   const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+((state.crewF||"all")!=="all"?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
   $("fcount").hidden=!active;$("fcount").textContent=active+" on";state._af=active;renderChips();
@@ -1671,6 +1818,7 @@ function render(){
   renderHero();renderStats();renderRail();
   if(isC){renderCrewView();$("festSec").hidden=true;}
   else if(isFv){renderFriendsView();$("festSec").hidden=true;}
+  else if(isPf){renderProfile();$("festSec").hidden=true;}
   else{isM?renderMonth():renderList();renderFests();}
   persist();frSyncSoon();
   FXQ.splice(0).forEach(f=>{try{f();}catch(e){}});
@@ -1679,7 +1827,7 @@ function render(){
 }
 
 /* big type: pull each heading left by its first letter's side bearing so the ink lines up with everything else */
-const INK_SEL="#heroTitle,.hero .lede,.frhead .cname,.jleft > .cname,.mhead h2,.cstart h2,.dayhead h3";
+const INK_SEL="#heroTitle,.hero .lede,.frhead > .cname,.jleft > .cname,.mhead h2,.cstart h2,.dayhead h3";
 let inkCtx=null;
 function inkAlign(){
   try{
@@ -1694,10 +1842,11 @@ function inkAlign(){
   }catch(e){}
 }
 function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
-function setView(v){const was=state.view;state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if((v==="crew"||v==="friends")&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);
+function setView(v){const was=state.view;state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if(PAGES.includes(v)&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);
   if(v===was){render();return;}
   if(v==="crew")later(()=>stagger($("crewView"),".chead,.wday,.cuprow,.mrow,.mostc,.cstart",20));
   if(v==="friends")later(()=>stagger($("frView"),".frhead,.frcode,.frrow,.cuprow,.cstart",20));
+  if(v==="me")later(()=>stagger($("meView"),".frhead,.frcode,.pst,.cuprow",20));
   vt(render);}
 
 document.addEventListener("click",e=>{
@@ -1774,8 +1923,9 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matche
   $(id).addEventListener("touchend",e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)(dx<0?$("next"):$("prev")).click();},{passive:true});
 });
 setRail(false);
-$("navCrew").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==="crew"){setView(state.lastCal||"month");return;}if(state.view!=="friends")state.lastCal=state.view;setView("crew");if(inCrew())refreshCrew();};
-$("navFr").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==="friends"){setView(state.lastCal||"month");return;}if(state.view!=="crew")state.lastCal=state.view;setView("friends");refreshFriends();};
+$("navCrew").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==="crew"){setView(state.lastCal||"month");return;}if(!PAGES.includes(state.view))state.lastCal=state.view;setView("crew");if(inCrew())refreshCrew();};
+$("navFr").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==="friends"){if(state.frSel){state.frSel=null;render();return;}setView(state.lastCal||"month");return;}if(!PAGES.includes(state.view))state.lastCal=state.view;state.frSel=null;setView("friends");refreshFriends();};
+$("navMe").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==="me"){setView(state.lastCal||"month");return;}if(!PAGES.includes(state.view))state.lastCal=state.view;state.pfEdit=false;state.pfPicOpen=false;setView("me");if(fme)refreshFriends();};
 let leaveArm=0;
 document.addEventListener("click",e=>{
   const t=e.target;
@@ -1798,10 +1948,22 @@ document.addEventListener("click",e=>{
     api("crew_set_pic",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_pic:i}).catch(err=>{crew.pic=before;saveCrew();render();toast(errMsg(err));});return;}
   if(t.closest("#frShare")){shareFriend();return;}
   if(t.closest("#frCopy")){copyText(friendUrl(),"Friend link copied");return;}
+  const fs=t.closest("[data-frsel]");if(fs){state.frSel=fs.dataset.frsel;window.scrollTo(0,0);later(()=>stagger($("frView"),".frhead,.frcode,.pst,.cuprow",20));render();return;}
+  if(t.closest("[data-frback]")){state.frSel=null;render();return;}
+  if(t.closest("[data-gofr]")){window.scrollTo(0,0);state.frSel=null;setView("friends");return;}
+  if(t.closest("#pfPic")){state.pfPicOpen=!state.pfPicOpen;if(state.pfPicOpen)later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
+  const pp=t.closest("[data-ppic]");
+  if(pp){prof.pic=+pp.dataset.ppic;state.pfPicOpen=false;saveProf();later(()=>{fx(document.querySelector("#pfPic .cpic"),"fx-pop");fx(document.querySelector("#navMeAv .cpic"),"fx-pop");});render();return;}
+  if(t.closest("#pfEdit")){state.pfEdit=!state.pfEdit;render();if(state.pfEdit){const i=$("pfNameIn");if(i){i.focus();i.select();}}return;}
+  if(t.closest("#pfCancel")){state.pfEdit=false;render();return;}
+  const ps=t.closest("[data-psound]");
+  if(ps){const id=ps.dataset.psound;const cur=soundsOf(prof);prof.sounds=cur.includes(id)?cur.filter(x=>x!==id):[...cur,id];saveProf();
+    later(()=>fx(document.querySelector('[data-psound="'+id+'"]'),"fx-pop"));render();return;}
   const uf=t.closest("[data-unfriend]");
   if(uf){
     const id=uf.dataset.unfriend;const f=fr&&fr.friends.find(x=>x.id===id);if(!f)return;
-    if(!uf.classList.contains("arm")){document.querySelectorAll(".frx.arm").forEach(b=>{b.classList.remove("arm");b.innerHTML=XICON;});uf.classList.add("arm");uf.textContent="Remove?";clearTimeout(uf._t);uf._t=setTimeout(()=>{uf.classList.remove("arm");uf.innerHTML=XICON;},4000);return;}
+    const disarm=b=>{b.classList.remove("arm");b.innerHTML=b.dataset.html||XICON;};
+    if(!uf.classList.contains("arm")){document.querySelectorAll(".frx.arm").forEach(disarm);uf.dataset.html=uf.innerHTML;uf.classList.add("arm");uf.textContent="Remove?";clearTimeout(uf._t);uf._t=setTimeout(()=>disarm(uf),4000);return;}
     const before=JSON.stringify(fr);fr.friends=fr.friends.filter(x=>x.id!==id);saveFr();indexFriends();render();toast("Removed "+f.name);
     api("friend_remove",{p_id:fme.id,p_token:fme.token,p_friend_id:id}).catch(err=>{fr=JSON.parse(before);saveFr();indexFriends();render();toast(errMsg(err));});
     return;
@@ -1816,6 +1978,13 @@ document.addEventListener("click",e=>{
     me=null;crew=null;saveMe();saveCrew();indexCrew();state.crewF="all";render();toast("You left the crew");return;
   }
 },true);
+document.addEventListener("submit",e=>{
+  if(e.target.id!=="pfName")return;
+  e.preventDefault();const nm=$("pfNameIn").value.replace(/\s+/g," ").trim().slice(0,30);
+  if(!nm){toast(ERRS.name_required);return;}
+  if(nm===myName()){state.pfEdit=false;render();return;}
+  renameMe(nm);
+});
 document.addEventListener("submit",async e=>{
   if(e.target.id!=="frCreate")return;
   e.preventDefault();const nm=$("frName").value.trim();const btn=e.target.querySelector(".go");
@@ -1823,7 +1992,7 @@ document.addEventListener("submit",async e=>{
   btn.disabled=true;btn.textContent="Making your code…";
   try{const r=await api("friend_create",{p_name:nm});
     fme={id:r.id,token:r.token};saveFme();keepName(r.name);fr={name:r.name,code:r.code,friends:[]};saveFr();indexFriends();
-    try{localStorage.removeItem(FSYNC);}catch(x){}
+    try{localStorage.removeItem(FSYNC);localStorage.removeItem(PSYNC);}catch(x){}
     render();frSyncSoon();toast("Your friend code is ready");}
   catch(err){btn.disabled=false;btn.textContent="Make my friend code";toast(errMsg(err));}
 });
@@ -1841,9 +2010,10 @@ if(CREW_ON){
   setInterval(()=>{if(document.visibilityState==="visible"){if(me)refreshCrew();if(fme)refreshFriends();}},45000);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){if(me)refreshCrew();if(fme)refreshFriends();}});
 }
-window.addEventListener("hashchange",()=>{if(["#list","#month","#crew","#friends"].includes(location.hash)){state.view=location.hash.slice(1);render();}});
+window.addEventListener("hashchange",()=>{if(["#list","#month","#crew","#friends","#me"].includes(location.hash)){state.view=location.hash.slice(1);render();}});
 if(location.hash==="#crew")state.view="crew";
 if(location.hash==="#friends")state.view="friends";
+if(location.hash==="#me")state.view="me";
 render();
 intro();
 try{document.fonts.ready.then(inkAlign);}catch(e){}

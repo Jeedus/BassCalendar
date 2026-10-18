@@ -180,6 +180,17 @@ begin
   return json_build_object('ok', true);
 end $$;
 
+-- Change your name in the crew (the profile page keeps it the same as your friend name).
+create or replace function public.crew_rename(p_code text, p_member_id uuid, p_token uuid, p_name text) returns json
+language plpgsql volatile security definer set search_path = public as $$
+declare nm text := public.crew_clean_name(p_name, 30);
+begin
+  perform public.crew_check_member(p_code, p_member_id, p_token);
+  if nm is null then raise exception 'name_required' using errcode = 'P0001'; end if;
+  update public.crew_members set name = nm where id = p_member_id;
+  return json_build_object('ok', true, 'name', nm);
+end $$;
+
 create or replace function public.crew_leave(p_code text, p_member_id uuid, p_token uuid) returns json
 language plpgsql volatile security definer set search_path = public as $$
 begin
@@ -194,10 +205,10 @@ end $$;
 revoke all on function public.crew_new_code(), public.crew_clean_name(text, int), public.crew_check_member(text, uuid, uuid) from public, anon, authenticated;
 revoke all on function public.crew_create(text, text), public.crew_join(text, text), public.crew_state(text),
   public.crew_rsvp(text, uuid, uuid, text, text), public.crew_set_free(text, uuid, uuid, date, boolean),
-  public.crew_leave(text, uuid, uuid), public.crew_set_pic(text, uuid, uuid, int) from public;
+  public.crew_leave(text, uuid, uuid), public.crew_set_pic(text, uuid, uuid, int), public.crew_rename(text, uuid, uuid, text) from public;
 grant execute on function public.crew_create(text, text), public.crew_join(text, text), public.crew_state(text),
   public.crew_rsvp(text, uuid, uuid, text, text), public.crew_set_free(text, uuid, uuid, date, boolean),
-  public.crew_leave(text, uuid, uuid), public.crew_set_pic(text, uuid, uuid, int) to anon, authenticated;
+  public.crew_leave(text, uuid, uuid), public.crew_set_pic(text, uuid, uuid, int), public.crew_rename(text, uuid, uuid, text) to anon, authenticated;
 
 -- ---------------------------------------------------------------------------------------------
 -- Friends: people you know outside your crew. Friendship is mutual and starts when someone
@@ -211,6 +222,10 @@ create table if not exists public.fr_people (
   token uuid not null default gen_random_uuid(),
   created_at timestamptz not null default now()
 );
+
+-- Profile: a built-in picture (0-15, -1 means "pick one from the person's id") and the sounds they're into.
+alter table public.fr_people add column if not exists pic smallint not null default -1;
+alter table public.fr_people add column if not exists sounds text[] not null default '{}';
 
 create table if not exists public.fr_links (
   person_id uuid not null references public.fr_people(id) on delete cascade,
@@ -275,7 +290,7 @@ declare p public.fr_people%rowtype;
 begin
   select * into p from public.fr_people where code = lower(btrim(p_code));
   if p.id is null then raise exception 'friend_not_found' using errcode = 'P0001'; end if;
-  return json_build_object('id', p.id, 'code', p.code, 'name', p.name, 'plans', public.friend_plans_json(p.id));
+  return json_build_object('id', p.id, 'code', p.code, 'name', p.name, 'pic', p.pic, 'sounds', p.sounds, 'plans', public.friend_plans_json(p.id));
 end $$;
 
 create or replace function public.friend_add(p_id uuid, p_token uuid, p_code text, p_note text) returns json
@@ -307,8 +322,10 @@ begin
   return json_build_object(
     'name', p.name,
     'code', p.code,
+    'pic', p.pic,
+    'sounds', p.sounds,
     'friends', coalesce((
-      select json_agg(json_build_object('id', f.id, 'name', f.name, 'note', l.note, 'since', l.created_at,
+      select json_agg(json_build_object('id', f.id, 'name', f.name, 'pic', f.pic, 'sounds', f.sounds, 'note', l.note, 'since', l.created_at,
                                         'plans', public.friend_plans_json(f.id)) order by l.created_at)
       from public.fr_links l join public.fr_people f on f.id = l.friend_id
       where l.person_id = p_id), '[]'::json)
@@ -347,10 +364,23 @@ begin
   return json_build_object('ok', true, 'name', nm);
 end $$;
 
+-- Your picture and sounds, as your friends see them. The name is changed with friend_rename.
+create or replace function public.friend_set_profile(p_id uuid, p_token uuid, p_pic int, p_sounds text[]) returns json
+language plpgsql volatile security definer set search_path = public as $$
+declare ss text[];
+begin
+  perform public.friend_check(p_id, p_token);
+  if p_pic is null or p_pic < -1 or p_pic > 15 then raise exception 'bad_pic' using errcode = 'P0001'; end if;
+  select coalesce(array_agg(distinct s), '{}') into ss from unnest(coalesce(p_sounds, '{}')) s where s ~ '^[a-z]{1,20}$';
+  if cardinality(ss) > 12 then raise exception 'bad_sounds' using errcode = 'P0001'; end if;
+  update public.fr_people set pic = p_pic, sounds = ss where id = p_id;
+  return json_build_object('ok', true);
+end $$;
+
 revoke all on function public.friend_check(uuid, uuid), public.friend_plans_json(uuid) from public, anon, authenticated;
 revoke all on function public.friend_create(text), public.friend_lookup(text), public.friend_add(uuid, uuid, text, text),
   public.friend_state(uuid, uuid), public.friend_set_plans(uuid, uuid, json), public.friend_remove(uuid, uuid, uuid),
-  public.friend_rename(uuid, uuid, text) from public;
+  public.friend_rename(uuid, uuid, text), public.friend_set_profile(uuid, uuid, int, text[]) from public;
 grant execute on function public.friend_create(text), public.friend_lookup(text), public.friend_add(uuid, uuid, text, text),
   public.friend_state(uuid, uuid), public.friend_set_plans(uuid, uuid, json), public.friend_remove(uuid, uuid, uuid),
-  public.friend_rename(uuid, uuid, text) to anon, authenticated;
+  public.friend_rename(uuid, uuid, text), public.friend_set_profile(uuid, uuid, int, text[]) to anon, authenticated;
