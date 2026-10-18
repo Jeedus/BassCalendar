@@ -202,7 +202,8 @@ button,input,select{font:inherit;color:inherit}
 .empty b{font-weight:500;font-size:20px;letter-spacing:-.02em}
 @media (max-width:480px){.rowx{grid-template-columns:56px minmax(0,1fr);gap:12px}.date .num{font-size:38px}}
 
-.foot{border-top:1px solid var(--rule-soft);padding-block:0 32px}
+.page{display:flex;flex-direction:column;min-height:calc(100vh - 57px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:calc(100dvh - 57px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+.foot{margin-top:auto;border-top:1px solid var(--rule-soft);padding-block:0 32px}
 .fsrc>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;cursor:pointer}
 .fsrc>summary::-webkit-details-marker{display:none}
 .fsl{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
@@ -310,12 +311,11 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .crewnav{--nb:var(--paper);margin-left:auto;display:flex;align-items:center;gap:10px;padding:0 16px;margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));background:var(--nb);color:var(--ink);font-weight:500;font-size:17px;line-height:1;letter-spacing:-.03em;text-decoration:none}
 .crewnav>span{display:flex;align-items:center}
 .crewnav>span:empty{display:none}
-.crewnav[aria-current="true"]{--nb:var(--ink);color:var(--paper)}
+.crewnav[aria-current="true"]{box-shadow:inset 0 -3px 0 var(--signal)}
 @media (hover:hover){.crewnav:hover{--nb:var(--volt);color:var(--on-volt)}}
 .crewnav .avs .av{width:24px;height:24px;font-size:11px;box-shadow:0 0 0 2px var(--nb),inset 0 0 0 1px rgba(0,0,0,.25)}
 .crewnav .avs .av+.av{margin-left:-7px}
 .crewnav .av.more{background:var(--ink);color:var(--paper)}
-.crewnav[aria-current="true"] .av.more{background:var(--paper);color:var(--ink)}
 @media (hover:hover){.crewnav:hover .av.more{background:var(--on-volt);color:var(--volt)}}
 .av{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;flex:none;font-family:var(--font-sans);font-weight:700;font-size:11px;line-height:1;letter-spacing:0;color:#000000;box-shadow:0 0 0 2px var(--paper),inset 0 0 0 1px rgba(0,0,0,.25)}
 .av.me{box-shadow:0 0 0 2px var(--paper),inset 0 0 0 2px #000000}
@@ -407,6 +407,19 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .wnone{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px dashed var(--rule-soft);font-size:15px;color:var(--ink-soft)}
 .wnone .sug{border:0;background:none;padding:0;color:var(--ink);font:500 15px var(--font-sans);text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .wquiet{font-size:14px;color:var(--ink-meta)}
+.cup{display:flex;flex-direction:column;border-top:1px solid var(--rule);padding-top:10px;margin-top:20px}
+.cuphead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:4px}
+.cuprow{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:center;padding:14px 0;border-bottom:1px solid var(--rule-soft)}
+.cupd{display:flex;flex-direction:column;gap:3px}
+.cupd b{font-size:36px;font-weight:500;line-height:.9;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.cupd span{white-space:nowrap;font-family:var(--font-mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
+.cupt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.cupt .ttl{border:0;background:none;padding:0;color:inherit;font:500 20px var(--font-sans);letter-spacing:-.02em;line-height:1.15;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px}
+@media (hover:hover){.cupt .ttl:hover{text-decoration-color:currentColor}}
+.cupt .wh{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
+.cuprow.fest .cupd b{box-shadow:inset 0 -4px 0 var(--signal);align-self:flex-start;padding-bottom:2px}
+.cupnone{padding-block:12px}
+@media (max-width:640px){.cuprow{grid-template-columns:64px minmax(0,1fr);gap:6px 12px}.cuprow .crewl{grid-column:2}.cupd b{font-size:30px}}
 .walso{font-size:13px;color:var(--ink-meta)}
 .cstart{max-width:620px;display:flex;flex-direction:column;gap:18px;border-top:1px solid var(--rule);padding-top:10px}
 .cstart h2{margin:6px 0 0;font-size:clamp(36px,5vw,56px);font-weight:700;letter-spacing:-.05em;line-height:.95}
@@ -444,6 +457,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 }
 @media (max-width:640px){
   .crewnav{margin-left:auto;padding:0 14px;font-size:16px}
+  .top .wrap{gap:8px}
   .cchips{flex-basis:100%;order:2}
   .cchip{flex:1;height:44px;padding:0 4px;font-size:14px;white-space:nowrap;gap:5px}
   .cchip .n{font-size:11px;padding:1px 4px}
@@ -563,7 +577,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   <div class="wrap" id="hero"></div>
 </section>
 
-<div class="wrap">
+<div class="wrap page">
   <div class="stats" id="stats"></div>
 
   <div class="main collapsed" id="main">
@@ -943,6 +957,17 @@ function renderCrewStart(){
     '<label for="crMe">Your name</label><input id="crMe" maxlength="30" value="'+esc(lastName())+'" required><button class="go" type="submit">Start the crew</button></form>'+
     '<p class="note">Got an invite? Just open the link your friend sent.</p></div>';
 }
+function comingUp(nights){
+  const inWk=e=>e.date&&(e.end||e.date)>=nights[0]&&e.date<=nights[3];
+  const list=[...RS.keys()].map(id=>EVMAP.get(id)).filter(e=>e&&e.date&&evUpcoming(e)&&!inWk(e)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,10);
+  const rows=list.map(e=>{const p=parts(e.date);const fest=e.kind==="fest";
+    const when=fest&&e.end&&e.end!==e.date?MON[p.m]+" "+p.d+"–"+(parts(e.end).m!==p.m?MON[parts(e.end).m]+" ":"")+parts(e.end).d:DOW[dow(e.date)]+" "+MON[p.m];
+    return '<div class="cuprow'+(fest?" fest":"")+'"><span class="cupd"><b>'+p.d+'</b><span>'+when+'</span></span>'+
+      '<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button><span class="wh">'+(fest?"Festival · ":"")+esc(e.where)+'</span></span>'+
+      crewLine(e.id,5)+'</div>';}).join("");
+  return '<div class="cup"><div class="cuphead"><span class="kicker">Coming up with the crew</span><span class="meta">'+(list.length?list.length+(list.length===1?" plan":" plans"):"")+'</span></div>'+
+    (rows||'<p class="note cupnone">Nothing else on the crew\'s calendar yet. Mark a show Going or Interested and it shows up here for everyone.</p>')+'</div>';
+}
 function renderCrewView(){
   const el=$("crewView");
   if(!me){el.innerHTML=renderCrewStart();return;}
@@ -974,7 +999,7 @@ function renderCrewView(){
   }).join("");
   const wk='<div class="wkend"><div class="wkhead"><div><span class="kicker">'+label+' · '+MON[parts(nights[0]).m]+' '+parts(nights[0]).d+'–'+(parts(nights[3]).m!==parts(nights[0]).m?MON[parts(nights[3]).m]+" ":"")+parts(nights[3]).d+'</span><h3>Where\'s everyone at?</h3></div>'+
     '<div class="wkbtns"><button class="btn sq" type="button" id="wkPrev" aria-label="Previous weekend"'+((state.wkOff||0)<=0?" disabled":"")+'>&lt;</button><button class="btn sq" type="button" id="wkNext" aria-label="Next weekend">&gt;</button></div></div>'+
-    '<div class="wdays">'+days+'</div></div>';
+    '<div class="wdays">'+days+'</div>'+comingUp(nights)+'</div>';
   el.innerHTML='<div class="cview">'+head+wk+mem+'</div>';
 }
 function renderCrewNav(){
@@ -1205,7 +1230,7 @@ function render(){
 function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
 function setView(v){const was=state.view;state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if(v==="crew"&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);
   if(v===was){render();return;}
-  if(v==="crew")later(()=>stagger($("crewView"),".chead,.wday,.mrow,.mostc,.cstart",16));
+  if(v==="crew")later(()=>stagger($("crewView"),".chead,.wday,.cuprow,.mrow,.mostc,.cstart",20));
   vt(render);}
 
 document.addEventListener("click",e=>{
