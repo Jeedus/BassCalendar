@@ -671,9 +671,12 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .nfest .frl span{font-family:var(--font-sans);font-size:14px;text-transform:none}
 .nfest .frl .k,.nfest .frl .tx{font-family:var(--font-mono);font-size:11px}
 .ccs{display:inline-flex;gap:3px;flex:none;align-items:flex-start}
-.ev .ccs,.fev .ccs{flex-direction:column;align-items:flex-end}
+/* count boxes: numbers only, outlined. cyan = crew, pink = friends */
+.cc{justify-content:center;min-width:18px;padding:0 4px;background:transparent;border-color:var(--signal);color:var(--signal)}
+.cc.me{background:transparent;border-color:var(--signal);color:var(--signal)}
+.nname .cc,.nfest .cc{min-width:22px;padding:0 5px}
+.fev .cc,.nfest .cc{background:#000000;border-color:#000000;color:var(--signal)}
 .cc.fc{border-color:var(--pink);background:transparent;color:var(--pink)}
-.cc.fc svg{color:var(--pink)}
 .cc.fc.me{background:transparent;border-color:var(--pink);color:var(--pink)}
 .fev .cc.fc,.nfest .cc.fc{background:#000000;border-color:var(--pink);color:var(--pink)}
 .cchip .n.fn{background:transparent;color:var(--pink);box-shadow:inset 0 0 0 1px var(--pink)}
@@ -1121,7 +1124,7 @@ function crewChip(id){const c=crewChip0(id),f=frChip(id);return c&&f?'<span clas
 function crewChip0(id){if(!inCrew()){const st=myStatus(id);if(!st)return "";return '<span class="cc me" role="img" aria-label="You: '+ST[st]+'" title="You: '+ST[st]+'">'+IC(I[st==="tix"?"tixst":st],10)+'</span>';}
   const a=crewOn(id);if(!a.length)return "";const mine=!!myStatus(id);
   const lbl=a.length+(a.length===1?" person":" people")+" from your crew"+(mine?", including you":"");
-  return '<span class="cc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+PERSON+a.length+'</span>';}
+  return '<span class="cc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+a.length+'</span>';}
 function crewLine(id,max){return crewLine0(id,max)+frLine(id,max);}
 function crewLine0(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl" data-ev="'+esc(id)+'">'+avStack(a,max||4)+'<span class="t">'+crewText(a)+'</span></div>';}
 const IC=(d,sz)=>'<svg viewBox="0 0 16 16" width="'+(sz||16)+'" height="'+(sz||16)+'" aria-hidden="true"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
@@ -1281,7 +1284,7 @@ function frText(a){
 }
 function frChip(id){const a=frOn(id);if(!a.length)return "";const mine=!!myStatus(id);
   const lbl=a.length+(a.length===1?" friend has":" friends have")+" plans here"+(mine?", and so do you":"");
-  return '<span class="cc fc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+PERSON+a.length+'</span>';}
+  return '<span class="cc fc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+a.length+'</span>';}
 function frLine(id,max){const a=frOn(id);if(!a.length)return "";
   return '<div class="frl" data-ev="'+esc(id)+'">'+favStack(a,max||4)+'<span class="t"><span class="k">FRIENDS</span>'+frText(a)+'</span></div>';}
 async function refreshFriends(){
