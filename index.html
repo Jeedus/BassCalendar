@@ -652,33 +652,32 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .frnav{margin-right:0}
 .frnav[aria-current="true"]{margin-bottom:-1px;position:relative;z-index:1;box-shadow:inset 0 -1px 0 var(--pink)}
 .fav{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;flex:none;font:700 11px/1 var(--font-sans);letter-spacing:0;color:var(--ink);background:var(--paper);box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--paper)}
-.fav.more{background:var(--pink);color:var(--on-pink)}
+.fav.more{background:var(--paper);color:var(--ink)}
 .favs{display:inline-flex;align-items:center;vertical-align:middle}
 .favs .fav+.fav{margin-left:-4px}
 .crewnav .favs .fav{box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--nb);background:var(--nb)}
 .crewnav .favs .fav+.fav{margin-left:-7px}
-.crewnav .favs .fav.more{background:var(--pink);color:var(--on-pink);box-shadow:0 0 0 2px var(--nb)}
+.crewnav .favs .fav.more{background:var(--nb);color:var(--ink)}
 .frl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .frl .t{min-width:0}
 .frl .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;color:var(--ink-meta);margin-right:6px}
-.frl .tx{font-family:var(--font-mono);font-size:11px;background:var(--pink);color:var(--on-pink);padding:1px 4px;margin-right:2px}
+.frl .tx{font-family:var(--font-mono);font-size:11px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--pink);padding:1px 4px;margin-right:4px}
 .crewl+.frl{margin-top:-2px}
 .nshow .frl{margin-top:2px}
 .hero .frl,.nfest .frl,.wpick.fest .frl{color:var(--on-signal)}
 .hero .frl .k,.nfest .frl .k{color:inherit}
-.hero .fav,.nfest .fav,.wpick.fest .fav{background:var(--pink);color:var(--on-pink);box-shadow:inset 0 0 0 2px #000000,0 0 0 2px var(--signal)}
+.hero .fav,.nfest .fav,.wpick.fest .fav{background:#000000;color:#ffffff;box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--signal)}
+.hero .frl .tx,.nfest .frl .tx,.wpick.fest .frl .tx{background:#000000;color:#ffffff}
 .nfest .frl span{font-family:var(--font-sans);font-size:14px;text-transform:none}
 .nfest .frl .k,.nfest .frl .tx{font-family:var(--font-mono);font-size:11px}
 .ccs{display:inline-flex;gap:3px;flex:none;align-items:flex-start}
 .ev .ccs,.fev .ccs{flex-direction:column;align-items:flex-end}
 .cc.fc{border-color:var(--pink);background:transparent;color:var(--ink)}
 .cc.fc svg{width:13px;color:var(--pink)}
-.cc.fc.me{background:var(--pink);border-color:var(--pink);color:var(--on-pink)}
-.cc.fc.me svg{color:currentColor}
-.fev .cc.fc,.nfest .cc.fc{background:var(--pink);border-color:var(--pink);color:var(--on-pink)}
-.fev .cc.fc svg,.nfest .cc.fc svg{color:currentColor}
+.cc.fc.me{background:transparent;border-color:var(--pink);color:var(--ink)}
+.fev .cc.fc,.nfest .cc.fc{background:#000000;border-color:var(--pink);color:#ffffff}
 .nname .cc.fc svg,.nfest .cc.fc svg{width:14px}
-.cchip .n.fn{background:var(--pink);color:var(--on-pink)}
+.cchip .n.fn{background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--pink)}
 .mcr.fr{color:var(--pink)}
 /* friends page */
 .fv{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px 40px;align-items:start}
@@ -707,11 +706,11 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .frx.arm{width:auto;padding:0 10px;border-color:var(--heat);color:var(--heat);font:500 13px var(--font-sans)}
 .frnone{margin:12px 0 0}
 .frup{margin-top:0}
-.you2{align-self:flex-start;font-family:var(--font-mono);font-size:11px;background:var(--pink);color:var(--on-pink);padding:1px 4px;margin:2px 0;letter-spacing:.02em;white-space:nowrap}
+.you2{align-self:flex-start;font-family:var(--font-mono);font-size:11px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--pink);padding:1px 4px;margin:2px 0;letter-spacing:.02em;white-space:nowrap}
 .joinx.fr .jleft{background:var(--pink);color:var(--on-pink)}
 .joinx.fr .jleft .kicker,.joinx.fr .jleft .going{border-color:var(--on-pink)}
 .frwho{display:flex;align-items:center;gap:16px;min-width:0}
-.frwho .fav{width:72px;height:72px;font-size:32px;background:var(--pink);color:var(--on-pink);box-shadow:inset 0 0 0 3px #000000}
+.frwho .fav{width:72px;height:72px;font-size:32px;background:#000000;color:var(--pink);box-shadow:none}
 .frwho .cname{font-size:clamp(52px,8vw,104px);min-width:0}
 @media (max-width:900px){
   .fv{grid-template-columns:minmax(0,1fr)}
