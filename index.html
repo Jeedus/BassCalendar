@@ -559,7 +559,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .ri{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border:0;border-top:1px solid var(--wash);background:transparent;color:var(--ink);font:500 15px var(--font-sans);text-align:left;cursor:pointer}
 .ri:first-child{border-top:0}
 @media (hover:hover){.ri:hover{background:var(--wash)}}
-.ri .rx{margin-left:auto;font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.02em;opacity:.7}
+.ri .rx{margin-left:auto;font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.02em;opacity:.7}
 .ri-going[aria-checked="true"]{background:var(--signal);color:var(--on-signal);font-weight:700}
 .ri-interested[aria-checked="true"]{background:var(--volt);color:var(--on-volt);font-weight:700}
 .ri-tix[aria-checked="true"]{background:var(--ink);color:var(--paper);font-weight:700}
@@ -630,6 +630,15 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .pm .ip{display:flex}
 .fchip .fx{display:inline-flex}
 .fchip .fx svg{display:block}
+
+/* top bar: focus rings sit inside the bar; the active Crew bar replaces the rule beneath it */
+.top a:focus-visible,.top button:focus-visible{outline-offset:-4px}
+.crewnav{margin-bottom:-1px;position:relative;z-index:1}
+.crewnav[aria-current="true"]{box-shadow:inset 0 -3px 0 var(--signal)}
+.nw{white-space:nowrap}
+@media (max-width:359px){.sbar .sum{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.6;padding-block:8px}}
+@media (min-width:901px) and (max-width:1200px){.wdays{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.wpick .crewl{flex-wrap:wrap;row-gap:6px}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
@@ -1129,7 +1138,7 @@ function renderCrewView(){
     if(!evs.length)body+='<span class="wquiet">No bass shows listed</span>';
     return '<div class="wday'+(picked.length?" hot":"")+'"><h4>'+DOW[dow(k)]+' '+parts(k).d+'<span>'+(evs.length?evs.length+(evs.length===1?" SHOW":" SHOWS"):"NO SHOWS")+'</span></h4>'+body+'</div>';
   }).join("");
-  const wk='<div class="wkend"><div class="wkhead"><div><span class="kicker">'+label+' · '+MON[parts(nights[0]).m]+' '+parts(nights[0]).d+'–'+(parts(nights[3]).m!==parts(nights[0]).m?MON[parts(nights[3]).m]+" ":"")+parts(nights[3]).d+'</span><h3>Where\'s everyone at?</h3></div>'+
+  const wk='<div class="wkend"><div class="wkhead"><div><span class="kicker">'+label+' · <span class="nw">'+MON[parts(nights[0]).m]+' '+parts(nights[0]).d+'–'+(parts(nights[3]).m!==parts(nights[0]).m?MON[parts(nights[3]).m]+" ":"")+parts(nights[3]).d+'</span></span><h3>Where\'s everyone at?</h3></div>'+
     '<div class="wkbtns"><button class="btn sq" type="button" id="wkPrev" aria-label="Previous weekend"'+((state.wkOff||0)<=0?" disabled":"")+'><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="btn sq" type="button" id="wkNext" aria-label="Next weekend"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></div></div>'+
     '<div class="wdays">'+days+'</div>'+comingUp(nights)+'</div>';
   el.innerHTML='<div class="cview">'+head+wk+mem+'</div>';
@@ -1478,7 +1487,7 @@ if(location.hash==="#crew")state.view="crew";
 render();
 intro();
 if(CREW_ON){if(joinCode&&!(me&&me.code===joinCode))openJoin(joinCode);else{if(joinCode){stripJoin();toast("You're already in "+(me.crew_name||"this crew"));}if(me)refreshCrew();}}
-const up=parts(DATA.updated);$("stamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;$("footStamp").textContent="Listings updated "+MON[up.m]+" "+up.d+", "+up.y;
+const up=parts(DATA.updated);$("stamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;$("footStamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;
 }
 (function(){
   const fail=()=>{document.getElementById("hero").innerHTML='<div class="row1 kicker"><span>Offline</span></div><h1 id="heroTitle">No saved copy yet</h1><p class="lede">Open this page once with a connection and it will work offline after that.</p>';};

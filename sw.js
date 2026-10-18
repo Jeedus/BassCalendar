@@ -1,5 +1,5 @@
 // Bass Chicago offline support. Version 2026-10-18T03:56
-const SHELL = "basschi-shell-2026-10-18-icons";
+const SHELL = "basschi-shell-2026-10-18-sweep";
 const DATA = "basschi-data";
 const FONTS = "basschi-fonts";
 const SHELL_FILES = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png", "share.png"];
