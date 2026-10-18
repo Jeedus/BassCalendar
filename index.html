@@ -302,9 +302,15 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
 @media (max-width:640px){.pgrid{grid-template-columns:minmax(0,1fr)}.t2{font-size:17px}}
 
 /* crews */
-.crewnav{display:flex;align-items:center;gap:8px;padding:0 16px;font-weight:500;font-size:17px;letter-spacing:-.03em;text-decoration:none;color:var(--ink)}
-.crewnav[aria-current="true"]{background:var(--ink);color:var(--paper)}
-@media (hover:hover){.crewnav:hover{background:var(--volt);color:var(--on-volt)}}
+.crewnav{--nb:var(--paper);display:flex;align-items:center;gap:10px;padding:0 16px;margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));background:var(--nb);color:var(--ink);font-weight:500;font-size:17px;line-height:1;letter-spacing:-.03em;text-decoration:none}
+.crewnav>span{display:flex;align-items:center}
+.crewnav[aria-current="true"]{--nb:var(--ink);color:var(--paper)}
+@media (hover:hover){.crewnav:hover{--nb:var(--volt);color:var(--on-volt)}}
+.crewnav .avs .av{width:24px;height:24px;font-size:11px;box-shadow:0 0 0 2px var(--nb),inset 0 0 0 1px rgba(0,0,0,.25)}
+.crewnav .avs .av+.av{margin-left:-3px}
+.crewnav .av.more{background:var(--ink);color:var(--paper)}
+.crewnav[aria-current="true"] .av.more{background:var(--paper);color:var(--ink)}
+@media (hover:hover){.crewnav:hover .av.more{background:var(--on-volt);color:var(--volt)}}
 .av{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;flex:none;font-family:var(--font-sans);font-weight:700;font-size:11px;line-height:1;letter-spacing:0;color:#000000;box-shadow:0 0 0 2px var(--paper),inset 0 0 0 1px rgba(0,0,0,.25)}
 .av.me{box-shadow:0 0 0 2px var(--paper),inset 0 0 0 2px #000000}
 .av.more{background:var(--ink);color:var(--paper);font-size:10px}
@@ -888,7 +894,7 @@ function renderCrewView(){
 function renderCrewNav(){
   const n=$("navCrew");n.hidden=!CREW_ON;if(!CREW_ON)return;
   n.setAttribute("aria-current",String(state.view==="crew"));
-  $("navCrewAv").innerHTML=inCrew()?avStack(crew.members,3,"sm"):"";
+  $("navCrewAv").innerHTML=inCrew()?avStack(crew.members,3):"";
 }
 function renderChips(){
   const c=$("cchips");const on=inCrew();c.hidden=!on;if(!on)return;
