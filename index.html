@@ -316,7 +316,7 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
   .search,.select{font-size:16px;height:48px}
 }
 @media (max-width:640px){
-  .top nav a{padding:0 14px;font-size:16px}
+  .top nav,.tabs{display:none}
   .hero .wrap{padding-block:20px 24px;gap:14px}
   .hero h1{font-size:clamp(44px,13vw,72px)}
   .hero .lede{font-size:20px}
@@ -741,7 +741,7 @@ function renderList(){
 }
 
 function render(){
-  const isM=state.view==="month";
+  const isM=state.view==="month"||PHONE.matches;
   $("monthView").hidden=!isM;$("listView").hidden=isM;
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
   $("navMonth").setAttribute("aria-current",isM);$("navList").setAttribute("aria-current",!isM);
