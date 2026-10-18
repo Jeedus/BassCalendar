@@ -76,7 +76,7 @@ button,input,select{font:inherit;color:inherit}
 .hero .lede{margin:0;font-weight:500;font-size:clamp(20px,3vw,30px);line-height:1.2;letter-spacing:-.03em;max-width:28ch;text-wrap:balance}
 .hero .support{margin:0;font-size:16px;max-width:60ch}
 .hero .acts{display:flex;gap:8px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border:1px solid currentColor;background:transparent;font-weight:500;font-size:15px;text-decoration:none;cursor:pointer;border-radius:0}
+.btn{display:inline-flex;align-items:center;gap:0;white-space:pre;min-height:40px;padding:0 16px;border:1px solid currentColor;background:transparent;font-weight:500;font-size:15px;text-decoration:none;cursor:pointer;border-radius:0}
 @media (hover:hover){.hero .btn:hover{background:var(--on-signal);color:var(--signal)}}
 .hero .btn.solid{background:var(--on-signal);color:var(--signal)}
 @media (hover:hover){.hero .btn.solid:hover{background:transparent;color:var(--on-signal)}}
@@ -238,6 +238,26 @@ details.more[open] .c{display:none}
 .phold .note{max-width:36ch}
 .sw.g-fest{background:var(--signal)}
 .wk{display:none}
+.fol{background:var(--volt);color:var(--on-volt);padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.chi{display:inline-block;margin-left:5px;padding:0 4px;border:1px solid currentColor;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.04em;line-height:1.5;vertical-align:.2em;opacity:.85}
+.tag.nw{background:var(--volt);color:var(--on-volt);border-color:var(--volt)}
+.tag.so{background:var(--heat);color:#000000;border-color:var(--heat)}
+.tag.low{border-color:var(--heat);border-width:2px}
+.tag.fw{box-shadow:inset 0 -3px 0 var(--volt)}
+.lrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.listen{display:inline-flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:15px;font-weight:500}
+.listen a{color:var(--ink);text-underline-offset:3px;padding-block:6px}
+.fbtn{min-height:36px;font-size:14px;padding:0 12px}
+.fbtn[aria-pressed="true"]{background:var(--volt);color:var(--on-volt);border-color:var(--volt)}
+.folform{display:flex;gap:8px}
+.folform .search{flex:1;min-width:0}
+.folform .btn{min-height:44px}
+.folchips{display:flex;flex-wrap:wrap;gap:6px}
+.folchips:empty{display:none}
+.fchip{display:inline-flex;gap:8px;align-items:center;min-height:36px;padding:0 10px;border:0;background:var(--volt);color:var(--on-volt);font-weight:500;font-size:14px;cursor:pointer}
+.nsaved.so{background:var(--heat);color:#000000}
+.nsaved.low{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--heat)}
+.nsaved.fw{background:transparent;color:var(--ink);box-shadow:inset 0 -2px 0 var(--volt)}
 .nlist{display:none}
 .nrow{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--rule-soft)}
 .nrow.past{opacity:.5}
@@ -375,7 +395,15 @@ details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;tex
           <label class="tog"><input type="checkbox" id="cityOnly"> Inside city limits only</label>
           <label class="tog"><input type="checkbox" id="showPast"> Include past shows</label>
           <label class="tog"><input type="checkbox" id="showFests" checked> Festivals</label>
+          <label class="tog"><input type="checkbox" id="followOnly"> Only artists I follow</label>
+          <label class="tog"><input type="checkbox" id="newOnly"> New this week</label>
         </div>
+      </div>
+      <div class="block">
+        <div class="kicker"><span>Following</span><span class="tab" id="folCount">0</span></div>
+        <form class="folform" id="folForm" autocomplete="off"><label class="lg" for="folIn" style="position:absolute;left:-9999px">Artist to follow</label><input class="search" id="folIn" type="text" placeholder="Add an artist"><button class="btn" type="submit">Add</button></form>
+        <div class="folchips" id="folChips"></div>
+        <p class="note" id="folNote">Follow artists to highlight their shows and festival sets. Tap Follow on any show, or add a name here.</p>
       </div>
       <div class="block">
         <div class="kicker"><span>Your list</span><span class="tab" id="savedCount">0</span></div>
@@ -480,9 +508,9 @@ function gcal(s){
 /* state */
 const KEY="basschi:v1";
 let saved=new Set();
-let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,ym:null,sel:TODAY};
+let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,ym:null,sel:TODAY};
 try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state)Object.assign(state,o.state,{sel:TODAY,ym:null});}}catch(e){}
-function persist(){try{localStorage.setItem(KEY,JSON.stringify({saved:[...saved],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests}}));}catch(e){}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify({saved:[...saved],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly}}));}catch(e){}}
 const tp=parts(TODAY);
 state.ym = (TODAY<iso(FIRST.y,FIRST.m,1)) ? {...FIRST} : (TODAY>iso(LAST.y,LAST.m,31) ? {...LAST} : {y:tp.y,m:tp.m});
 if(location.hash==="#list")state.view="list"; else if(location.hash==="#month")state.view="month";
@@ -492,8 +520,29 @@ FESTS.forEach(f=>{if(!f.start)return;for(let d=f.start;d<=f.end;d=addDay(d))(byD
 const clash=d=>(byDate[d]||[]).length;
 const openFests=new Set();
 const fArtists=f=>f.lineup==="daily"?f.days.flatMap(d=>d.artists):(f.artists||[]);
+/* discovery: listen links, follows, local tags, new + ticket status */
+const LINKS=DATA.links||{};
+const LOCALS=new Set((DATA.locals||[]).map(a=>a.toLowerCase()));
+let follows=new Map();
+try{const fl=JSON.parse(localStorage.getItem(KEY+":follows")||"[]");if(Array.isArray(fl))fl.forEach(a=>follows.set(String(a).toLowerCase(),String(a)));}catch(e){}
+function saveFollows(){try{localStorage.setItem(KEY+":follows",JSON.stringify([...follows.values()]));}catch(e){}}
+const isF=a=>follows.has(String(a).toLowerCase());
+const showArtists=s=>[s.title].concat(s.support);
+const followHit=s=>showArtists(s).some(isF);
+const isNew=s=>!!s.added&&daysBetween(s.added,TODAY)>=0&&daysBetween(s.added,TODAY)<=7;
+const chi=a=>LOCALS.has(String(a).toLowerCase())?'<span class="chi" title="Chicago artist">CHI</span>':'';
+const nm=a=>'<span'+(isF(a)?' class="fol"':'')+'>'+esc(a)+'</span>'+chi(a);
+const supportHtml=s=>s.support.length?'<p class="rsup">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'</p>':'';
+function listenRow(a){const L=LINKS[a]||{};const q=encodeURIComponent(a);const on=isF(a);
+  return '<div class="lrow"><span class="listen"><span class="kicker">Listen</span>'+
+    '<a href="'+esc(L.sc||"https://soundcloud.com/search?q="+q)+'" target="_blank" rel="noopener">SoundCloud</a>'+
+    '<a href="'+esc(L.sp||"https://open.spotify.com/search/"+q)+'" target="_blank" rel="noopener">Spotify</a></span>'+
+    '<button class="btn fbtn" type="button" data-follow="'+esc(a)+'" aria-pressed="'+on+'">'+(on?"Following":"Follow")+'<span class="lg"> '+esc(a)+'</span></button></div>';}
+const statusTags=s=>(s.status==="sold-out"?'<span class="tag so">Sold out</span>':s.status==="low"?'<span class="tag low">Low tickets</span>':'')+(isNew(s)?'<span class="tag nw">New</span>':'')+(followHit(s)?'<span class="tag fw">Following</span>':'');
+const miniTags=s=>(isNew(s)?'<span class="nsaved">New</span>':'')+(s.status==="sold-out"?'<span class="nsaved so">Sold out</span>':s.status==="low"?'<span class="nsaved low">Low tix</span>':'');
 function fvis(f){
-  if(!state.fests||state.venue)return false;
+  if(!state.fests||state.venue||state.newOnly)return false;
+  if(state.followOnly&&!fArtists(f).some(isF))return false;
   if(state.savedOnly&&!saved.has(f.id))return false;
   if(state.cityOnly&&f.city!=="Chicago")return false;
   if(!state.showPast&&f.end&&f.end<TODAY)return false;
@@ -512,7 +561,7 @@ function festPoster(f,onDay){
     const when=e<0?"Ended":n<=0?"Happening now":n===1?"Tomorrow":"In "+n+" days";
     band='<div class="pband on"><span>'+range(f.start,f.end)+" · "+esc(f.place)+", "+esc(f.city)+" "+esc(f.st)+'</span><span>'+when+'</span></div>';
   } else band='<div class="pband"><span>Dates TBA · '+esc(f.place)+", "+esc(f.city)+" "+esc(f.st)+'</span><span>'+(f.last?"Last time: "+esc(f.last):"")+'</span></div>';
-  const names=(arr,cls)=>arr.length?'<p class="'+cls+'">'+arr.map(a=>'<span'+(hit(a)?' class="hit"':'')+'>'+esc(a)+'</span>').join('<i aria-hidden="true"> · </i>')+'</p>':'';
+  const names=(arr,cls)=>arr.length?'<p class="'+cls+'">'+arr.map(a=>{const c=[hit(a)?"hit":"",isF(a)?"fol":""].join(" ").trim();return '<span'+(c?' class="'+c+'"':'')+'>'+esc(a)+'</span>'+chi(a);}).join('<i aria-hidden="true"> · </i>')+'</p>':'';
   const tiers=(arr,head,mid,key,label)=>{
     const h=arr.slice(0,head),m=arr.slice(head,head+mid),r=arr.slice(head+mid);
     const openMore=openFests.has(key)||r.some(hit);
@@ -545,6 +594,8 @@ function visible(s){
   if(state.savedOnly&&!saved.has(s.id))return false;
   if(state.cityOnly&&s.city!=="Chicago")return false;
   if(!state.showPast&&s.date<TODAY)return false;
+  if(state.followOnly&&!followHit(s))return false;
+  if(state.newOnly&&!isNew(s))return false;
   if(state.q){const q=state.q.toLowerCase();const hay=(s.title+" "+(s.tag||"")+" "+s.venue+" "+s.city+" "+s.support.join(" ")).toLowerCase();if(!hay.includes(q))return false;}
   return true;
 }
@@ -563,7 +614,7 @@ function renderHero(){
    '<div class="row1 kicker"><span>'+(saved.has(s.id)?"Your next saved show":"Next up")+' · '+when+'</span><span>'+esc(gLabel(s.genre))+'</span></div>'+
    '<h1 id="heroTitle">'+esc(s.title)+'</h1>'+
    '<p class="lede">'+esc(longDate(s.date))+' at '+esc(s.venue)+(s.doors?', doors '+fmtTime(s.doors):'')+(s.tag?'. '+esc(s.tag):'')+'</p>'+
-   (s.support.length?'<p class="support">With '+esc(s.support.join(", "))+(s.more?', plus '+esc(s.more):'')+'.'+(others>0?' '+others+' other bass '+(others>1?'shows':'show')+' the same night.':'')+'</p>':(others>0?'<p class="support">'+others+' other bass '+(others>1?'shows':'show')+' the same night.</p>':''))+
+   (s.support.length?'<p class="support">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'.'+(others>0?' '+others+' other bass '+(others>1?'shows':'show')+' the same night.':'')+'</p>':(others>0?'<p class="support">'+others+' other bass '+(others>1?'shows':'show')+' the same night.</p>':''))+
    '<div class="acts"><button class="btn solid save" type="button" data-save="'+s.id+'" aria-pressed="'+saved.has(s.id)+'">'+(saved.has(s.id)?"Saved":"Save")+'</button>'+
    '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener"><span class="lg">Add to Google </span>Calendar</a>'+
    '<a class="btn" href="'+esc(s.url)+'" target="_blank" rel="noopener">Tickets<span class="lg"> &amp; info</span></a></div>';
@@ -588,7 +639,10 @@ function renderRail(){
     return '<button class="chip" type="button" data-genre="'+g.id+'" aria-pressed="'+on+'"><span class="sw g-'+g.id+'"></span><span>'+g.label+'</span><span class="n">'+n+'</span></button>';}).join("");
   const venues=[...new Set(SHOWS.map(s=>s.venue))].sort();
   $("venue").innerHTML='<option value="">All venues</option>'+venues.map(v=>{const c=SHOWS.find(s=>s.venue===v).city;return '<option value="'+esc(v)+'"'+(v===state.venue?" selected":"")+'>'+esc(v)+(c!=="Chicago"?" ("+c+")":"")+'</option>';}).join("");
-  $("savedOnly").checked=state.savedOnly;$("cityOnly").checked=state.cityOnly;$("showPast").checked=state.showPast;$("showFests").checked=state.fests;
+  $("savedOnly").checked=state.savedOnly;$("cityOnly").checked=state.cityOnly;$("showPast").checked=state.showPast;$("showFests").checked=state.fests;$("followOnly").checked=state.followOnly;$("newOnly").checked=state.newOnly;
+  $("folCount").textContent=follows.size;
+  $("folChips").innerHTML=[...follows.values()].sort((a,b)=>a.localeCompare(b)).map(a=>'<button class="fchip" type="button" data-unfollow="'+esc(a)+'" aria-label="Unfollow '+esc(a)+'">'+esc(a)+'<span aria-hidden="true">×</span></button>').join("");
+  $("folNote").hidden=follows.size>0;
   $("savedCount").textContent=saved.size;
   $("savedNote").textContent=saved.size?saved.size+(saved.size===1?" show":" shows")+" saved in this browser.":"Tap Save on any show. Your picks stay in this browser.";
 }
@@ -601,10 +655,10 @@ function row(s,opts){
    '<div class="date"><span class="kicker">'+DOW[dow(s.date)]+'</span><span class="num">'+p.d+'</span><span class="meta">'+MON[p.m]+'</span></div>'+
    '<div class="rbody"><div class="tags"><span class="genre kicker"><span class="sw g-'+s.genre+'"></span>'+esc(gLabel(s.genre))+'</span>'+
    (r==="Tonight"||r==="Tomorrow"?'<span class="tag hot">'+r+'</span>':(r!=="Past"&&opts.rel?'<span class="tag">'+r+'</span>':''))+
-   (n>1?'<span class="tag clash">'+n+' shows this night</span>':'')+(s.flag?'<span class="tag warn">Unconfirmed</span>':'')+'</div>'+
-   '<h3 class="rtitle">'+esc(s.title)+(s.tag?' <span style="color:var(--ink-muted)">'+esc(s.tag)+'</span>':'')+'</h3>'+
-   (s.support.length?'<p class="rsup">With '+esc(s.support.join(", "))+(s.more?', plus '+esc(s.more):'')+'</p>':'')+
-   '<div class="rmeta">'+meta.join("")+'</div>'+
+   (n>1?'<span class="tag clash">'+n+' shows this night</span>':'')+(s.flag?'<span class="tag warn">Unconfirmed</span>':'')+statusTags(s)+'</div>'+
+   '<h3 class="rtitle">'+nm(s.title)+(s.tag?' <span style="color:var(--ink-muted)">'+esc(s.tag)+'</span>':'')+'</h3>'+
+   supportHtml(s)+
+   '<div class="rmeta">'+meta.join("")+'</div>'+listenRow(s.title)+
    (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+
    '<div class="racts"><button class="btn save" type="button" data-save="'+s.id+'" aria-pressed="'+saved.has(s.id)+'">'+(saved.has(s.id)?"Saved":"Save")+'</button>'+
    '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener"><span class="lg">Add to Google </span>Calendar</a>'+
@@ -618,9 +672,9 @@ function nightShow(s){
   const meta=[esc(s.venue)+(s.city!=="Chicago"?", "+esc(s.city):""),s.doors?fmtTime(s.doors):"Time TBA"];
   if(s.price)meta.push(esc(s.price));if(s.age)meta.push(esc(s.age));
   return '<details class="nshow" data-show="'+s.id+'"'+(openShows.has(s.id)?" open":"")+'><summary>'+
-    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)?'<span class="nsaved">Saved</span>':'')+'</span></span>'+
+    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+nm(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)?'<span class="nsaved">Saved</span>':'')+miniTags(s)+(followHit(s)&&!isF(s.title)?'<span class="nsaved fw">Following</span>':'')+'</span></span>'+
     '<span class="nmeta">'+meta.join(" · ")+'</span></summary><div class="nbody">'+
-    (s.support.length?'<p class="rsup">With '+esc(s.support.join(", "))+(s.more?', plus '+esc(s.more):'')+'</p>':'')+
+    supportHtml(s)+listenRow(s.title)+
     (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+
     '<div class="racts"><button class="btn save" type="button" data-save="'+s.id+'" aria-pressed="'+saved.has(s.id)+'">'+(saved.has(s.id)?"Saved":"Save")+'</button>'+
     '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener">Calendar</a>'+
@@ -689,7 +743,7 @@ function render(){
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
   $("navMonth").setAttribute("aria-current",isM);$("navList").setAttribute("aria-current",!isM);
   const n=filtered().length;const nf=FESTS.filter(fvis).length;$("countLine").textContent=n+(n===1?" show":" shows")+(nf?" + "+nf+(nf===1?" festival":" festivals"):"");
-  const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+(state.savedOnly?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1);
+  const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+(state.savedOnly?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
   $("fcount").hidden=!active;$("fcount").textContent=active+" on";
   $("sheetDone").textContent="Show "+(n+nf)+" results";
   renderHero();renderStats();renderRail();
@@ -726,8 +780,19 @@ $("savedOnly").onchange=e=>{state.savedOnly=e.target.checked;render();};
 $("cityOnly").onchange=e=>{state.cityOnly=e.target.checked;render();};
 $("showPast").onchange=e=>{state.showPast=e.target.checked;render();};
 $("showFests").onchange=e=>{state.fests=e.target.checked;render();};
+$("followOnly").onchange=e=>{state.followOnly=e.target.checked;render();};
+$("newOnly").onchange=e=>{state.newOnly=e.target.checked;render();};
+$("folForm").addEventListener("submit",e=>{e.preventDefault();const v=$("folIn").value.trim();if(!v)return;
+  const known=SHOWS.flatMap(showArtists).concat(FESTS.flatMap(fArtists)).find(a=>a.toLowerCase()===v.toLowerCase());
+  const name=known||v;follows.set(name.toLowerCase(),name);saveFollows();$("folIn").value="";render();toast("Following "+name);});
+document.addEventListener("click",e=>{
+  const f=e.target.closest("[data-follow]");
+  if(f){const a=f.dataset.follow;if(isF(a)){follows.delete(a.toLowerCase());toast("Unfollowed "+a);}else{follows.set(a.toLowerCase(),a);toast("Following "+a);}saveFollows();render();return;}
+  const u=e.target.closest("[data-unfollow]");
+  if(u){follows.delete(u.dataset.unfollow.toLowerCase());saveFollows();render();toast("Unfollowed "+u.dataset.unfollow);}
+});
 $("allGenres").onclick=()=>{state.genres=GENRES.map(g=>g.id);render();};
-$("reset").onclick=()=>{Object.assign(state,{genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true});$("q").value="";render();toast("Filters cleared");};
+$("reset").onclick=()=>{Object.assign(state,{genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false});$("q").value="";render();toast("Filters cleared");};
 $("copySaved").onclick=()=>{
   const shows=SHOWS.filter(s=>saved.has(s.id)).map(s=>({k:s.date,t:longDate(s.date)+": "+s.title+(s.tag?" ("+s.tag+")":"")+" @ "+s.venue+(s.doors?", doors "+fmtTime(s.doors):"")+"\n  "+s.url}));
   const fests=FESTS.filter(f=>saved.has(f.id)).map(f=>({k:f.start||f.sortKey,t:(f.start?range(f.start,f.end):"Dates TBA")+": "+f.name+" "+f.edition+" @ "+f.place+", "+f.city+", "+f.st+"\n  "+f.url}));
