@@ -673,10 +673,9 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .ccs{display:inline-flex;gap:3px;flex:none;align-items:flex-start}
 .ev .ccs,.fev .ccs{flex-direction:column;align-items:flex-end}
 .cc.fc{border-color:var(--pink);background:transparent;color:var(--ink)}
-.cc.fc svg{width:13px;color:var(--pink)}
+.cc.fc svg{color:var(--pink)}
 .cc.fc.me{background:transparent;border-color:var(--pink);color:var(--ink)}
 .fev .cc.fc,.nfest .cc.fc{background:#000000;border-color:var(--pink);color:#ffffff}
-.nname .cc.fc svg,.nfest .cc.fc svg{width:14px}
 .cchip .n.fn{background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--pink)}
 .mcr.fr{color:var(--pink)}
 /* friends page */
@@ -1269,7 +1268,6 @@ function indexFriends(){
 indexFriends();
 const hasFriends=()=>CREW_ON&&!!fme&&!!fr&&fr.friends.length>0;
 const frOn=id=>hasFriends()?(FRS.get(id)||[]):[];
-const PEOPLE='<svg viewBox="0 0 14 10" aria-hidden="true"><circle cx="4.5" cy="3" r="2" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M.8 9.2c.6-2 2-3 3.7-3s3.1 1 3.7 3" fill="none" stroke="currentColor" stroke-width="1.4"></path><circle cx="10" cy="3.2" r="1.7" fill="none" stroke="currentColor" stroke-width="1.3"></circle><path d="M9.2 6.3c1.9-.3 3.4.7 4 2.9" fill="none" stroke="currentColor" stroke-width="1.3"></path></svg>';
 const XICON='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>';
 const fav=f=>'<span class="fav" title="'+esc(f.name)+'">'+ini(f.name)+'</span>';
 function favStack(list,max){max=max||4;const fs=list.map(x=>x.f||x);
@@ -1283,7 +1281,7 @@ function frText(a){
 }
 function frChip(id){const a=frOn(id);if(!a.length)return "";const mine=!!myStatus(id);
   const lbl=a.length+(a.length===1?" friend has":" friends have")+" plans here"+(mine?", and so do you":"");
-  return '<span class="cc fc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+PEOPLE+a.length+'</span>';}
+  return '<span class="cc fc'+(mine?" me":"")+'" role="img" aria-label="'+lbl+'" title="'+lbl+'">'+PERSON+a.length+'</span>';}
 function frLine(id,max){const a=frOn(id);if(!a.length)return "";
   return '<div class="frl" data-ev="'+esc(id)+'">'+favStack(a,max||4)+'<span class="t"><span class="k">FRIENDS</span>'+frText(a)+'</span></div>';}
 async function refreshFriends(){
