@@ -1,0 +1,24 @@
+name: Weekly digest
+
+on:
+  schedule:
+    # Mondays 15:00 UTC = 10 AM Chicago during daylight time, 9 AM in winter
+    - cron: "0 15 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Post this week's shows
+        run: node .github/scripts/digest.mjs
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GROUPME_BOT_ID: ${{ secrets.GROUPME_BOT_ID }}
