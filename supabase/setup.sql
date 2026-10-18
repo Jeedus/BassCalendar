@@ -37,6 +37,9 @@ create table if not exists public.crew_free (
   primary key (member_id, night)
 );
 
+-- Crew picture: one of the built-in pictures (0-5). -1 means "pick one from the invite code".
+alter table public.crews add column if not exists pic smallint not null default -1;
+
 -- Lock the tables: no direct reads or writes from the website.
 alter table public.crews enable row level security;
 alter table public.crew_members enable row level security;
@@ -122,6 +125,7 @@ begin
   return json_build_object(
     'code', c.code,
     'name', c.name,
+    'pic', c.pic,
     'members', coalesce((
       select json_agg(json_build_object('id', m.id, 'name', m.name, 'color', m.color, 'joined_at', m.joined_at) order by m.joined_at)
       from public.crew_members m where m.crew_id = c.id and m.left_at is null), '[]'::json),
@@ -166,6 +170,16 @@ begin
   return json_build_object('ok', true);
 end $$;
 
+create or replace function public.crew_set_pic(p_code text, p_member_id uuid, p_token uuid, p_pic int) returns json
+language plpgsql volatile security definer set search_path = public as $$
+declare cid uuid;
+begin
+  cid := public.crew_check_member(p_code, p_member_id, p_token);
+  if p_pic is null or p_pic < 0 or p_pic > 15 then raise exception 'bad_pic' using errcode = 'P0001'; end if;
+  update public.crews set pic = p_pic where id = cid;
+  return json_build_object('ok', true);
+end $$;
+
 create or replace function public.crew_leave(p_code text, p_member_id uuid, p_token uuid) returns json
 language plpgsql volatile security definer set search_path = public as $$
 begin
@@ -180,10 +194,10 @@ end $$;
 revoke all on function public.crew_new_code(), public.crew_clean_name(text, int), public.crew_check_member(text, uuid, uuid) from public, anon, authenticated;
 revoke all on function public.crew_create(text, text), public.crew_join(text, text), public.crew_state(text),
   public.crew_rsvp(text, uuid, uuid, text, text), public.crew_set_free(text, uuid, uuid, date, boolean),
-  public.crew_leave(text, uuid, uuid) from public;
+  public.crew_leave(text, uuid, uuid), public.crew_set_pic(text, uuid, uuid, int) from public;
 grant execute on function public.crew_create(text, text), public.crew_join(text, text), public.crew_state(text),
   public.crew_rsvp(text, uuid, uuid, text, text), public.crew_set_free(text, uuid, uuid, date, boolean),
-  public.crew_leave(text, uuid, uuid) to anon, authenticated;
+  public.crew_leave(text, uuid, uuid), public.crew_set_pic(text, uuid, uuid, int) to anon, authenticated;
 
 -- ---------------------------------------------------------------------------------------------
 -- Friends: people you know outside your crew. Friendship is mutual and starts when someone

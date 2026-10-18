@@ -663,6 +663,22 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .mhead h2{white-space:nowrap}
 @media (max-width:360px){.mhead h2{font-size:22px}.step .fbtn{margin-right:6px}}
 @media (max-width:640px){.bar{display:none}}
+
+/* crew picture */
+.cpic{display:inline-grid;place-items:center;flex:none;box-shadow:inset 0 0 0 1px var(--rule-soft);overflow:hidden}
+.cpic svg{width:100%;height:100%;display:block}
+.crewnav .cpic{box-shadow:0 0 0 1px var(--rule-soft)}
+.cnrow{justify-content:flex-start;align-items:center}
+.cnrow .cname{flex:1}
+.cpicbtn{padding:0;border:0;background:none;cursor:pointer;flex:none;display:flex;border-radius:0}
+.cpicbtn[aria-expanded="true"] .cpic{box-shadow:inset 0 0 0 2px var(--ink)}
+@media (hover:hover){.cpicbtn:hover .cpic{box-shadow:inset 0 0 0 2px var(--ink)}}
+.picrow{display:flex;flex-wrap:wrap;gap:8px}
+.picpick{padding:0;border:0;background:none;cursor:pointer;display:flex;border-radius:0}
+.picpick[aria-pressed="true"] .cpic{box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 4px var(--paper)}
+@media (hover:hover){.picpick:not([aria-pressed="true"]):hover .cpic{box-shadow:inset 0 0 0 2px var(--ink)}}
+.jleft .cpic.big{box-shadow:0 0 0 2px #000000}
+@media (max-width:640px){.cnrow .cpic{width:48px!important;height:48px!important}}
 /* friends: pink is friends the way cyan is crew */
 .top .wrap>.crewnav+.crewnav{margin-left:0}
 .top .wrap:has(>.frnav:not([hidden])){column-gap:0}
@@ -1095,6 +1111,18 @@ let me=null,crew=null,RS=new Map();
 try{me=JSON.parse(localStorage.getItem(CKEY)||"null");}catch(e){}
 try{const c=JSON.parse(localStorage.getItem(CKEY+":state")||"null");if(c&&me&&c.code===me.code)crew=c;}catch(e){}
 const AV=["#19c6d6","#d6f45a","#ffffff","#3292ff","#ff4b5c","#d1ddd3","#597e87"];
+/* crew picture: six built-in tiles; a new crew gets one picked from its invite code */
+const CREW_PICS=[
+ {n:"Sub",bg:"#19c6d6",d:'<circle cx="24" cy="24" r="17" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="10" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="3.5" fill="#000"/>'},
+ {n:"Wave",bg:"#000000",d:'<path d="M4 24c3.3-12 6.7-12 10 0s6.7 12 10 0 6.7-12 10 0 6.7 12 10 0" fill="none" stroke="#d6f45a" stroke-width="3.5" stroke-linecap="square"/>'},
+ {n:"Levels",bg:"#d6f45a",d:'<path d="M9 40V26M17 40V12M25 40V20M33 40V8M41 40V28" stroke="#000" stroke-width="5"/>'},
+ {n:"Wobble",bg:"#3292ff",d:'<path d="M4 31l7-14 7 14 7-14 7 14 7-14 5 10" fill="none" stroke="#000" stroke-width="3.5" stroke-linejoin="miter"/>'},
+ {n:"Drop",bg:"#ff4b5c",d:'<path d="M12 10l12 12 12-12M12 22l12 12 12-12" fill="none" stroke="#000" stroke-width="4"/><path d="M8 40h32" stroke="#000" stroke-width="4"/>'},
+ {n:"Stack",bg:"#d1ddd3",d:'<path d="M8 8h14v14H8zM26 26h14v14H26z" fill="#000"/><path d="M26 8h14v14H26zM8 26h14v14H8z" fill="none" stroke="#000" stroke-width="3"/>'},
+];
+function crewPicIdx(c){if(!c)return 0;if(typeof c.pic==="number"&&c.pic>=0&&c.pic<CREW_PICS.length)return c.pic;let h=0;for(const ch of String(c.code||""))h=(h*31+ch.charCodeAt(0))>>>0;return h%CREW_PICS.length;}
+function picTile(i,size,cls){const p=CREW_PICS[i];return '<span class="cpic'+(cls?" "+cls:"")+'" style="width:'+size+'px;height:'+size+'px;background:'+p.bg+'" role="img" aria-label="'+p.n+' crew picture"><svg viewBox="0 0 48 48" aria-hidden="true">'+p.d+'</svg></span>';}
+const crewPic=(c,size,cls)=>picTile(crewPicIdx(c),size,cls);
 const saveMe=()=>{try{me?localStorage.setItem(CKEY,JSON.stringify(me)):localStorage.removeItem(CKEY);}catch(e){}};
 const saveCrew=()=>{try{crew?localStorage.setItem(CKEY+":state",JSON.stringify(crew)):localStorage.removeItem(CKEY+":state");}catch(e){}};
 const lastName=()=>{try{return localStorage.getItem(CKEY+":name")||"";}catch(e){return "";}};
@@ -1251,8 +1279,9 @@ function renderCrewView(){
   if(!me){el.innerHTML=renderCrewStart();return;}
   if(!crew){el.innerHTML='<div class="cstart"><span class="kicker">Crews</span><h2>'+esc(me.crew_name||"Your crew")+'</h2><p>Loading the crew\'s plans…</p></div>';return;}
   const members=crew.members;
-  const head='<div class="chead"><span class="kicker">Your crew · '+members.length+(members.length===1?" person":" people")+'</span><div class="cnrow"><h2 class="cname">'+esc(crew.name)+'</h2>'+
+  const head='<div class="chead"><span class="kicker">Your crew · '+members.length+(members.length===1?" person":" people")+'</span><div class="cnrow"><button class="cpicbtn" type="button" id="crPic" aria-expanded="'+(!!state.picOpen)+'" aria-label="Change the crew picture" title="Change the crew picture">'+crewPic(crew,56)+'</button><h2 class="cname">'+esc(crew.name)+'</h2>'+
     '<button class="inv" type="button" id="crShare" aria-label="'+(navigator.share?"Share invite link":"Copy invite link")+'" title="'+(navigator.share?"Share invite link":"Copy invite link")+'">'+INVITE_ICON+'</button></div>'+
+    (state.picOpen?'<div class="picrow" role="group" aria-label="Crew picture">'+CREW_PICS.map((p,i)=>'<button type="button" class="picpick" data-pic="'+i+'" aria-pressed="'+(crewPicIdx(crew)===i)+'" aria-label="'+p.n+'">'+picTile(i,44)+'</button>').join("")+'</div>':'')+
     (members.length<2?'<p class="note">Tap the invite button to send friends the link. They\'ll show up here as they join.</p>':'')+'</div>';
   const rows=members.map(m=>{const p=nextPlan(m);const meM=members.find(isMe);const fresh=!isMe(m)&&m.joined_at&&(Date.now()-Date.parse(m.joined_at))<3*864e5&&(!meM||Date.parse(m.joined_at)>Date.parse(meM.joined_at));
     const sub=p.next?"Next: "+esc(p.next.e.title)+", "+shortDay(p.next.e.date)+(p.next.r.status==="tix"?" · has tix":""):"No shows picked yet";
@@ -1427,7 +1456,7 @@ async function openAddFriend(code){
 function renderCrewNav(){
   const n=$("navCrew");n.hidden=!CREW_ON;if(!CREW_ON)return;
   n.setAttribute("aria-current",String(state.view==="crew"));
-  $("navCrewAv").innerHTML=inCrew()?avStack(crew.members,crew.members.length>3?2:3):"";
+  $("navCrewAv").innerHTML=inCrew()?crewPic(crew,24):"";
 }
 function renderChips(){
   const c=$("cchips");const on=inCrew(),fo=hasFriends();
@@ -1463,7 +1492,7 @@ async function openJoin(code){
   const names=c.members.map(m=>m.name);
   const switching=me&&me.code!==c.code;
   x.innerHTML='<button class="jclose" type="button" data-jclose>Not now</button><div class="jgrid"><div class="jleft"><span class="kicker">Crew invite</span>'+
-    '<span class="who">'+(c.members.length?esc(c.members[0].name)+" invited you to":"You're invited to")+'</span><h2 class="cname">'+esc(c.name)+'</h2>'+
+    '<span class="who">'+(c.members.length?esc(c.members[0].name)+" invited you to":"You're invited to")+'</span><div class="frwho">'+crewPic(c,72,"big")+'<h2 class="cname">'+esc(c.name)+'</h2></div>'+
     (c.members.length?'<div class="crewl">'+avStack(c.members,5,"big")+'<span class="t">'+esc(names.length<=4?names.slice(0,-1).join(", ")+(names.length>1?" and ":"")+names[names.length-1]:names.slice(0,3).join(", ")+" and "+(names.length-3)+" more")+'</span></div>':'')+
     (goingIds.length?'<div class="going"><span class="kicker">Already going</span><b>'+goingIds.map(e=>esc(e.title)+" "+shortDay(e.date)).join(" · ")+'</b></div>':'')+
     '</div><div class="jright"><h2>What should the crew call you?</h2><form class="cform" id="joinForm" autocomplete="off"><label for="jnName">Your name</label><input id="jnName" maxlength="30" value="'+esc((me&&me.name)||lastName())+'" required><button class="go" type="submit">Join the crew</button><span class="jerr" id="jnErr" role="alert"></span></form>'+
@@ -1650,7 +1679,7 @@ function render(){
 }
 
 /* big type: pull each heading left by its first letter's side bearing so the ink lines up with everything else */
-const INK_SEL="#heroTitle,.hero .lede,.cname,.mhead h2,.cstart h2,.dayhead h3";
+const INK_SEL="#heroTitle,.hero .lede,.frhead .cname,.jleft > .cname,.mhead h2,.cstart h2,.dayhead h3";
 let inkCtx=null;
 function inkAlign(){
   try{
@@ -1762,6 +1791,11 @@ document.addEventListener("click",e=>{
   const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
   if(t.closest("[data-jclose]")){const gf=t.closest("[data-gofriends]");closeJoin();if(gf){state.view="friends";render();}return;}
   if(t.closest("#crShare")){shareInvite();return;}
+  if(t.closest("#crPic")){state.picOpen=!state.picOpen;if(state.picOpen)later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
+  const pk=t.closest("[data-pic]");
+  if(pk&&inCrew()){const i=+pk.dataset.pic;const before=crew.pic;crew.pic=i;state.picOpen=false;saveCrew();render();
+    later(()=>fx(document.querySelector("#crPic .cpic"),"fx-pop"));
+    api("crew_set_pic",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_pic:i}).catch(err=>{crew.pic=before;saveCrew();render();toast(errMsg(err));});return;}
   if(t.closest("#frShare")){shareFriend();return;}
   if(t.closest("#frCopy")){copyText(friendUrl(),"Friend link copied");return;}
   const uf=t.closest("[data-unfriend]");
