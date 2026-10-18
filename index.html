@@ -326,7 +326,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .av.me{box-shadow:0 0 0 2px var(--paper),inset 0 0 0 2px #000000}
 .av.more{background:var(--ink);color:var(--paper);font-size:10px}
 .avs{display:inline-flex;align-items:center;vertical-align:middle}
-.avs .av+.av{margin-left:-7px}
+.avs .av+.av{margin-left:-4px}
 .avs.sm .av{width:18px;height:18px;font-size:9px}
 .avs.sm .av+.av{margin-left:-5px}
 .avs.big .av{width:36px;height:36px;font-size:14px}
@@ -391,7 +391,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .ytag.nw{background:var(--volt);color:var(--on-volt);padding:1px 4px}
 .most{display:flex;flex-direction:column;gap:8px}
 .mostc{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:var(--signal);color:var(--on-signal);border:0;text-align:left;cursor:pointer;font:inherit}
-.mostc b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em}
+.mostc b{display:block;font-family:var(--font-sans);font-size:20px;font-weight:700;letter-spacing:-.02em;text-transform:none}
 .mostc span{font-family:var(--font-mono);font-size:11px;text-transform:uppercase}
 .mostc .of{font-family:var(--font-sans);font-size:28px;font-weight:700;letter-spacing:-.04em;text-transform:none}
 .wkhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
@@ -621,6 +621,29 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   .racts .btn{justify-content:center}
   .lg{display:none}
 }
+
+/* control system: one height, one border, one hover */
+:root{--ctl:36px}
+@media (max-width:640px){:root{--ctl:40px}}
+.step,.wkbtns{display:flex;gap:0}
+.step button,.wkbtns .sq{width:var(--ctl);height:var(--ctl);min-height:0;display:grid;place-items:center;padding:0;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);cursor:pointer}
+.step button+button,.wkbtns .sq+.sq{border-left:0}
+.step button:disabled,.wkbtns .sq:disabled{color:var(--rule-soft);cursor:default}
+.step button svg,.wkbtns .sq svg{display:block}
+@media (hover:hover){.step button:hover:not(:disabled),.wkbtns .sq:hover:not(:disabled),.inv:hover,.ib:hover,.cchip:not([aria-pressed="true"]):hover,.tabs button:not([aria-selected="true"]):hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}}
+.cchip{height:var(--ctl)}
+.tabs{border-color:var(--rule-soft)}
+.tabs button{height:calc(var(--ctl) - 2px);padding:0 18px;display:inline-flex;align-items:center}
+.tabs button+button{border-left-color:var(--rule-soft)}
+.inv{width:var(--ctl);height:var(--ctl);margin-top:4px;border-color:var(--rule-soft)}
+.inv svg{width:20px;height:20px}
+.rst{height:var(--ctl)}
+.ib{width:var(--ctl);height:var(--ctl)}
+.racts .btn,.hero .acts .btn,.folform .btn,.fbtn{min-height:var(--ctl)}
+@media (hover:hover){.crewnav:hover{--nb:var(--mist);color:var(--ink)}}
+.mhead{align-items:flex-end}
+.racts,.hero .acts{max-width:420px}
+@media (max-width:640px){.racts,.hero .acts{max-width:none}.bar #countLine{display:none}}
 </style>
 </head>
 <body>
@@ -696,8 +719,8 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
         <div class="mhead">
           <div><span class="meta wk" id="wkLabel"></span><h2 id="mTitle">October 2026</h2></div>
           <div class="step">
-            <button id="prev" type="button" aria-label="Previous month">&lt;</button>
-            <button id="next" type="button" aria-label="Next month">&gt;</button>
+            <button id="prev" type="button" aria-label="Previous month"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button id="next" type="button" aria-label="Next month"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
           </div>
         </div>
         <div class="mini" id="mini" aria-label="Jump to a night"></div>
@@ -1099,7 +1122,7 @@ function renderCrewView(){
     return '<div class="wday'+(picked.length?" hot":"")+'"><h4>'+DOW[dow(k)]+' '+parts(k).d+'<span>'+(evs.length?evs.length+(evs.length===1?" SHOW":" SHOWS"):"NO SHOWS")+'</span></h4>'+body+'</div>';
   }).join("");
   const wk='<div class="wkend"><div class="wkhead"><div><span class="kicker">'+label+' · '+MON[parts(nights[0]).m]+' '+parts(nights[0]).d+'–'+(parts(nights[3]).m!==parts(nights[0]).m?MON[parts(nights[3]).m]+" ":"")+parts(nights[3]).d+'</span><h3>Where\'s everyone at?</h3></div>'+
-    '<div class="wkbtns"><button class="btn sq" type="button" id="wkPrev" aria-label="Previous weekend"'+((state.wkOff||0)<=0?" disabled":"")+'>&lt;</button><button class="btn sq" type="button" id="wkNext" aria-label="Next weekend">&gt;</button></div></div>'+
+    '<div class="wkbtns"><button class="btn sq" type="button" id="wkPrev" aria-label="Previous weekend"'+((state.wkOff||0)<=0?" disabled":"")+'><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><button class="btn sq" type="button" id="wkNext" aria-label="Next weekend"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></div></div>'+
     '<div class="wdays">'+days+'</div>'+comingUp(nights)+'</div>';
   el.innerHTML='<div class="cview">'+head+wk+mem+'</div>';
 }
