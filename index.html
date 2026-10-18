@@ -300,6 +300,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 /* crews */
 .crewnav{--nb:var(--paper);margin-left:auto;display:flex;align-items:center;gap:10px;padding:0 16px;margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));background:var(--nb);color:var(--ink);font-weight:500;font-size:17px;line-height:1;letter-spacing:-.03em;text-decoration:none}
 .crewnav>span{display:flex;align-items:center}
+.crewnav>span:empty{display:none}
 .crewnav[aria-current="true"]{--nb:var(--ink);color:var(--paper)}
 @media (hover:hover){.crewnav:hover{--nb:var(--volt);color:var(--on-volt)}}
 .crewnav .avs .av{width:24px;height:24px;font-size:11px;box-shadow:0 0 0 2px var(--nb),inset 0 0 0 1px rgba(0,0,0,.25)}
