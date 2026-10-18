@@ -238,7 +238,30 @@ details.more[open] .c{display:none}
 .phold .note{max-width:36ch}
 .sw.g-fest{background:var(--signal)}
 .wk{display:none}
-.wstrip{display:none}
+.nlist{display:none}
+.nrow{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--rule-soft)}
+.nrow.past{opacity:.5}
+.nd{display:flex;flex-direction:column;gap:2px;align-self:start}
+.nd .n{font-size:40px;font-weight:500;letter-spacing:-.05em;line-height:.95;font-variant-numeric:tabular-nums}
+.nd .k{font-family:var(--font-mono);font-size:12px;color:var(--ink-meta);text-transform:uppercase;letter-spacing:.02em}
+.nrow.today .nd{border-top:3px solid var(--signal);padding-top:6px}
+.nrow.today .nd .k.t{color:var(--ink)}
+.nd .x{margin-top:6px;align-self:flex-start;font-family:var(--font-mono);font-size:11px;background:var(--ink);color:var(--paper);padding:2px 5px}
+.nev{display:flex;flex-direction:column;gap:12px;min-width:0}
+details.nshow>summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+details.nshow>summary::-webkit-details-marker{display:none}
+.nname{display:grid;grid-template-columns:11px minmax(0,1fr);gap:8px;align-items:start;font-size:21px;font-weight:500;letter-spacing:-.02em;line-height:1.15}
+.nname .sw{width:11px;height:11px;margin-top:.3em}
+.nname .tg{color:var(--ink-muted)}
+.nsaved{display:inline-block;margin-left:6px;padding:1px 5px;background:var(--volt);color:var(--on-volt);font-family:var(--font-mono);font-size:11px;letter-spacing:0;vertical-align:middle;text-transform:uppercase}
+.nmeta{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;color:var(--ink-soft);padding-left:19px;line-height:1.4}
+details.nshow .nbody{padding:10px 0 4px 19px;display:grid;gap:10px}
+details.nshow[open]>summary .nname>span:last-child{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.nfest{display:block;padding:10px 12px;background:var(--signal);color:var(--on-signal);text-decoration:none}
+.nfest b{display:block;font-size:19px;font-weight:700;letter-spacing:-.02em}
+.nfest span{font-family:var(--font-mono);font-size:11px;text-transform:uppercase}
+.ngap{padding:9px 0 9px 78px;border-bottom:1px dashed var(--rule-soft);font-family:var(--font-mono);font-size:12px;text-transform:uppercase;color:var(--ink-meta)}
+.poster{scroll-margin-top:calc(72px + env(safe-area-inset-top,0px))}
 .wd{height:100px;border:1px solid var(--rule-soft);background:transparent;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 0 0;position:relative;overflow:hidden;cursor:pointer}
 .wd .l{font-family:var(--font-mono);font-size:12px;color:var(--ink-meta)}
 .wd .n{font-family:var(--font-mono);font-size:21px;font-variant-numeric:tabular-nums}
@@ -298,7 +321,8 @@ details.more[open] .c{display:none}
   .cell .x{display:none}
   .dots{justify-content:center}
   .grid{display:none}
-  .wstrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+  .daypanel{display:none}
+  .nlist{display:block}
   .wk{display:block;margin-bottom:4px}
   .rowx{padding:16px 0}
   .rtitle{font-size:22px}
@@ -380,11 +404,13 @@ details.more[open] .c{display:none}
             <button id="next" type="button" aria-label="Next month">&gt;</button>
           </div>
         </div>
-        <div class="wstrip" id="wstrip" aria-label="Week"></div>
+        <div class="nlist" id="nlist"></div>
         <div class="grid" id="grid" role="grid" aria-labelledby="mTitle"></div>
-        <div style="height:24px"></div>
-        <div class="dayhead"><h3 id="dayTitle">Tonight</h3><span class="meta" id="dayMeta"></span></div>
-        <div class="rows" id="dayRows"></div>
+        <div class="daypanel">
+          <div style="height:24px"></div>
+          <div class="dayhead"><h3 id="dayTitle">Tonight</h3><span class="meta" id="dayMeta"></span></div>
+          <div class="rows" id="dayRows"></div>
+        </div>
       </div>
       <div id="listView" hidden></div>
       <section class="festsec" id="festSec" aria-label="Festivals"></section>
@@ -498,7 +524,7 @@ function festPoster(f,onDay){
   if(f.lineup==="daily")body='<div class="pdays">'+f.days.map(d=>tiers(d.artists,d.head||0,d.mid||0,f.id+"|"+d.date,DOWL[dow(d.date)]+", "+MON[parts(d.date).m]+" "+parts(d.date).d+(d.date===onDay?" · this night":""))).join("")+'</div>';
   else if(f.lineup==="full")body=tiers(f.artists,f.head||0,f.mid||0,f.id+"|all",null);
   else body='<div class="phold"><span class="kicker">'+(f.start?"Lineup not announced":"Dates and lineup TBA")+'</span><span class="note">'+esc(f.note||"Artists show up here as soon as the festival posts them.")+'</span></div>';
-  return '<article class="poster'+(lined||onDay?" wide":"")+'" data-fest="'+f.id+'">'+band+'<div class="pbody"><h3 class="ptitle">'+esc(f.name)+'</h3>'+
+  return '<article class="poster'+(lined||onDay?" wide":"")+'" data-fest="'+f.id+'"'+(onDay?'':' id="fest-'+f.id+'"')+'>'+band+'<div class="pbody"><h3 class="ptitle">'+esc(f.name)+'</h3>'+
     (lined&&f.note?'<p class="rsup">'+esc(f.note)+'</p>':'')+body+
     '<div class="racts"><button class="btn save" type="button" data-save="'+f.id+'" aria-pressed="'+saved.has(f.id)+'">'+(saved.has(f.id)?"Saved":"Save")+'</button>'+
     (f.start?'<a class="btn" href="'+esc(fgcal(f))+'" target="_blank" rel="noopener"><span class="lg">Add to Google </span>Calendar</a>':'')+
@@ -587,16 +613,44 @@ function row(s,opts){
 
 function addDays(s,n){const p=parts(s);const d=new Date(Date.UTC(p.y,p.m,p.d+n));return iso(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());}
 const PHONE=matchMedia("(max-width:640px)");
+const openShows=new Set();
+function nightShow(s){
+  const meta=[esc(s.venue)+(s.city!=="Chicago"?", "+esc(s.city):""),s.doors?fmtTime(s.doors):"Time TBA"];
+  if(s.price)meta.push(esc(s.price));if(s.age)meta.push(esc(s.age));
+  return '<details class="nshow" data-show="'+s.id+'"'+(openShows.has(s.id)?" open":"")+'><summary>'+
+    '<span class="nname"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+(s.tag?' <span class="tg">'+esc(s.tag)+'</span>':'')+(saved.has(s.id)?'<span class="nsaved">Saved</span>':'')+'</span></span>'+
+    '<span class="nmeta">'+meta.join(" · ")+'</span></summary><div class="nbody">'+
+    (s.support.length?'<p class="rsup">With '+esc(s.support.join(", "))+(s.more?', plus '+esc(s.more):'')+'</p>':'')+
+    (s.flag?'<p class="flag">'+esc(s.flag)+'</p>':'')+
+    '<div class="racts"><button class="btn save" type="button" data-save="'+s.id+'" aria-pressed="'+saved.has(s.id)+'">'+(saved.has(s.id)?"Saved":"Save")+'</button>'+
+    '<a class="btn" href="'+esc(gcal(s))+'" target="_blank" rel="noopener">Calendar</a>'+
+    '<a class="btn" href="'+esc(s.url)+'" target="_blank" rel="noopener">Tickets</a></div></div></details>';
+}
+function renderNights(y,m,days,vmap){
+  const mStart=iso(y,m,1),mEnd=iso(y,m,days);
+  let start=mStart;if(!state.showPast&&TODAY>start)start=TODAY;
+  let h="",gap=[],nShows=0;const fSeen=new Set();
+  const flush=()=>{if(!gap.length)return;const a=gap[0],b=gap[gap.length-1];
+    h+='<div class="ngap">'+(a===b?DOW[dow(a)]+" "+parts(a).d:DOW[dow(a)]+" "+parts(a).d+" to "+DOW[dow(b)]+" "+parts(b).d)+' · nothing booked</div>';gap=[];};
+  if(start<=mEnd)for(let k=start;k<=mEnd;k=addDays(k,1)){
+    const ev=vmap[k]||[];const fe=festsOn(k);const tot=ev.length+fe.length;
+    if(!tot){gap.push(k);continue;}
+    flush();nShows+=ev.length;fe.forEach(f=>fSeen.add(f.id));
+    const today=k===TODAY;
+    h+='<div class="nrow'+(today?" today":"")+(k<TODAY?" past":"")+'"><div class="nd">'+(today?'<span class="k t">Tonight</span>':'')+
+      '<span class="n">'+parts(k).d+'</span><span class="k">'+DOW[dow(k)]+'</span>'+(tot>1?'<span class="x">×'+tot+'</span>':'')+'</div><div class="nev">'+
+      fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><b>'+esc(f.name)+'</b><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span></a>').join("")+
+      ev.map(nightShow).join("")+'</div></div>';
+  }
+  flush();
+  const nf=fSeen.size;
+  $("wkLabel").textContent=nShows+(nShows===1?" show":" shows")+(nf?" + "+nf+(nf===1?" fest":" fests"):"")+(start>mStart?" left":"");
+  $("nlist").innerHTML=(nShows||nf)?h:'<div class="empty"><b>No bass shows listed for '+MONTHS[m]+' yet.</b><span class="note">New dates get added as they\'re announced. Try the next month, or loosen the filters.</span></div>';
+}
 function renderMonth(){
-  const phone=PHONE.matches;
-  if(phone){const sp=parts(state.sel);state.ym={y:sp.y,m:sp.m};}
   const {y,m}=state.ym;
-  const ws=addDays(state.sel,-dow(state.sel));
   $("mTitle").textContent=MONTHS[m]+" "+y;
-  $("wkLabel").textContent="Week of "+MON[parts(ws).m]+" "+parts(ws).d;
-  if(phone){const lastDay=iso(LAST.y,LAST.m,new Date(Date.UTC(LAST.y,LAST.m+1,0)).getUTCDate());
-    $("prev").disabled=addDays(ws,-1)<iso(FIRST.y,FIRST.m,1);$("next").disabled=addDays(ws,7)>lastDay;}
-  else{$("prev").disabled=(y===FIRST.y&&m===FIRST.m);$("next").disabled=(y===LAST.y&&m===LAST.m);}
+  $("prev").disabled=(y===FIRST.y&&m===FIRST.m);$("next").disabled=(y===LAST.y&&m===LAST.m);
   const first=new Date(Date.UTC(y,m,1)).getUTCDay();const days=new Date(Date.UTC(y,m+1,0)).getUTCDate();
   const vis=filtered();const vmap={};vis.forEach(s=>(vmap[s.date]=vmap[s.date]||[]).push(s));
   let h=DOW.map(d=>'<div class="dow" role="columnheader"><span class="dl">'+d+'</span><span class="ds">'+d[0]+'</span></div>').join("");
@@ -610,13 +664,7 @@ function renderMonth(){
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   $("grid").innerHTML=h;
-  let w="";
-  for(let i=0;i<7;i++){const k=addDays(ws,i);const ev=vmap[k]||[];const fe=festsOn(k);const tot=ev.length+fe.length;
-    const cls=["wd"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel)cls.push("sel");
-    w+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'" aria-pressed="'+(k===state.sel)+'">'+
-      '<span class="l">'+DOW[i][0]+'</span><span class="n">'+parts(k).d+'</span><span class="dt">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span>'+
-      (fe.length?'<span class="fb"></span>':'')+'</button>';}
-  $("wstrip").innerHTML=w;
+  renderNights(y,m,days,vmap);
   // day panel
   const sel=state.sel;const inMonth=parts(sel).y===y&&parts(sel).m===m;
   const list=inMonth?(vmap[sel]||[]):vis.filter(s=>{const p=parts(s.date);return p.y===y&&p.m===m;});
@@ -670,8 +718,8 @@ function pageWeek(n){
   for(let i=0;i<7;i++){const k=addDays(ws,i);if(k>=TODAY&&(vis.some(s=>s.date===k)||festsOn(k).length)){pick=k;break;}}
   state.sel=pick;render();
 }
-$("prev").onclick=()=>{if(PHONE.matches){pageWeek(-7);return;}let {y,m}=state.ym;m--;if(m<0){m=11;y--;}state.ym={y,m};render();};
-$("next").onclick=()=>{if(PHONE.matches){pageWeek(7);return;}let {y,m}=state.ym;m++;if(m>11){m=0;y++;}state.ym={y,m};render();};
+$("prev").onclick=()=>{let {y,m}=state.ym;m--;if(m<0){m=11;y--;}state.ym={y,m};render();};
+$("next").onclick=()=>{let {y,m}=state.ym;m++;if(m>11){m=0;y++;}state.ym={y,m};render();};
 try{PHONE.addEventListener("change",()=>render());}catch(e){}
 $("q").addEventListener("input",e=>{state.q=e.target.value.trim();render();});
 $("venue").onchange=e=>{state.venue=e.target.value;render();};
@@ -707,7 +755,8 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matche
   document.querySelectorAll('details.more[data-more="'+id+'"]').forEach(x=>{if(x!==d&&x.open!==d.open)x.open=d.open;});},true);
 let sx=0,sy=0;
 $("grid").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
-["grid","wstrip"].forEach(id=>{
+document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.nshow"))return;if(d.open)openShows.add(d.dataset.show);else openShows.delete(d.dataset.show);},true);
+["grid","nlist"].forEach(id=>{
   $(id).addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
   $(id).addEventListener("touchend",e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)(dx<0?$("next"):$("prev")).click();},{passive:true});
 });
