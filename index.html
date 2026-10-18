@@ -68,10 +68,6 @@ button,input,select{font:inherit;color:inherit}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--paper);border-bottom:1px solid var(--rule)}
 .top .wrap{display:flex;align-items:stretch;height:56px;gap:16px}
 .brand{background:var(--ink);color:var(--paper);font-weight:700;font-size:18px;letter-spacing:-.03em;display:flex;align-items:center;padding:0 16px;margin-left:-16px;text-decoration:none}
-.top nav{display:flex;align-items:stretch;margin-left:auto}
-.top nav a{display:flex;align-items:center;padding:0 16px;font-weight:500;font-size:17px;letter-spacing:-.03em;text-decoration:none}
-@media (hover:hover){.top nav a:hover{background:var(--volt);color:var(--on-volt)}}
-.top nav a[aria-current="true"]{background:var(--ink);color:var(--paper)}
 .top .stamp{display:flex;align-items:center}
 @media (max-width:640px){.top .stamp{display:none}}
 
@@ -302,7 +298,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 @media (max-width:640px){.pgrid{grid-template-columns:minmax(0,1fr)}.t2{font-size:17px}}
 
 /* crews */
-.crewnav{--nb:var(--paper);display:flex;align-items:center;gap:10px;padding:0 16px;margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));background:var(--nb);color:var(--ink);font-weight:500;font-size:17px;line-height:1;letter-spacing:-.03em;text-decoration:none}
+.crewnav{--nb:var(--paper);margin-left:auto;display:flex;align-items:center;gap:10px;padding:0 16px;margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));background:var(--nb);color:var(--ink);font-weight:500;font-size:17px;line-height:1;letter-spacing:-.03em;text-decoration:none}
 .crewnav>span{display:flex;align-items:center}
 .crewnav[aria-current="true"]{--nb:var(--ink);color:var(--paper)}
 @media (hover:hover){.crewnav:hover{--nb:var(--volt);color:var(--on-volt)}}
@@ -450,7 +446,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 
 /* motion: one opening sequence, directional slides, small pops on taps. Off for reduced motion. */
 :root{--ease-out:cubic-bezier(.22,1,.36,1);--ease-spring:cubic-bezier(.34,1.56,.64,1)}
-.btn,.rb,.cchip,.fbt,.chip,.ftoggle,.tabs button,.step button,.top nav a,.crewnav,.cell,.mostc,.cform .go,.wpick,.nfest{transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .22s ease,transform .14s ease}
+.btn,.rb,.cchip,.fbt,.chip,.ftoggle,.tabs button,.step button,.crewnav,.cell,.mostc,.cform .go,.wpick,.nfest{transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .22s ease,transform .14s ease}
 .eq{display:inline-flex;align-items:flex-end;gap:2px;height:11px;margin-right:9px;vertical-align:-1px}
 .eq i{width:3px;height:100%;background:currentColor;transform-origin:bottom;transform:scaleY(.45)}
 .nfest .crewl span{font-family:var(--font-sans);font-size:14px;text-transform:none}
@@ -506,7 +502,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   .search,.select{font-size:16px;height:48px}
 }
 @media (max-width:640px){
-  .top nav,.tabs{display:none}
+  .tabs{display:none}
   .hero .wrap{padding-block:20px 24px;gap:14px}
   .hero h1{font-size:clamp(44px,13vw,72px)}
   .hero .lede{font-size:20px}
@@ -552,10 +548,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   <div class="wrap">
     <a class="brand" href="#month">BassCalendar</a>
     <span class="stamp meta" id="stamp"></span>
-    <nav aria-label="Views">
-      <a href="#month" id="navMonth">Month</a>
-      <a href="#list" id="navList">List</a>
-    </nav>
     <a href="#crew" class="crewnav" id="navCrew" hidden><span>Crew</span><span id="navCrewAv"></span></a>
   </div>
 </header>
@@ -1192,7 +1184,6 @@ function render(){
   $("monthView").hidden=!isM;$("listView").hidden=isM||isC;
   $("heroSec").hidden=isC;$("stats").hidden=isC;document.querySelector(".bar").hidden=isC;$("crewView").hidden=!isC;
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
-  $("navMonth").setAttribute("aria-current",isM);$("navList").setAttribute("aria-current",!isM&&!isC);
   renderCrewNav();renderChips();
   const n=filtered().length;const nf=FESTS.filter(fvis).length;$("countLine").textContent=n+(n===1?" show":" shows")+(nf?" + "+nf+(nf===1?" festival":" festivals"):"");
   const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+(state.savedOnly?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
@@ -1221,7 +1212,6 @@ document.addEventListener("click",e=>{
     state.sel=k;const sp=parts(state.sel);state.ym={y:sp.y,m:sp.m};render();const t=document.querySelector(".dayhead");if(d.classList.contains("cell")&&window.innerWidth<900)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});return;}
 });
 $("tabMonth").onclick=()=>setView("month");$("tabList").onclick=()=>setView("list");
-$("navMonth").onclick=e=>{e.preventDefault();setView("month");};$("navList").onclick=e=>{e.preventDefault();setView("list");};
 document.querySelector(".brand").onclick=e=>{e.preventDefault();state.ym={y:tp.y,m:tp.m};state.sel=TODAY;setView("month");window.scrollTo(0,0);};
 function pageWeek(n){
   const nw=addDays(state.sel,n);const ws=addDays(nw,-dow(nw));const vis=filtered();let pick=nw;
@@ -1284,7 +1274,7 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matche
   $(id).addEventListener("touchend",e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)(dx<0?$("next"):$("prev")).click();},{passive:true});
 });
 setRail(false);
-$("navCrew").onclick=e=>{e.preventDefault();setView("crew");window.scrollTo(0,0);if(inCrew())refreshCrew();};
+$("navCrew").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==="crew"){setView(state.lastCal||"month");return;}state.lastCal=state.view;setView("crew");if(inCrew())refreshCrew();};
 let leaveArm=0;
 document.addEventListener("click",e=>{
   const t=e.target;
