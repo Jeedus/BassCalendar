@@ -1060,8 +1060,7 @@ function renderCrewStart(){
     '<p class="note">Got an invite? Just open the link your friend sent.</p></div>';
 }
 function comingUp(nights){
-  const inWk=e=>e.date&&(e.end||e.date)>=nights[0]&&e.date<=nights[3];
-  const list=[...RS.keys()].map(id=>EVMAP.get(id)).filter(e=>e&&e.date&&evUpcoming(e)&&!inWk(e)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,10);
+  const list=[...RS.keys()].map(id=>EVMAP.get(id)).filter(e=>e&&e.date&&evUpcoming(e)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,12);
   const rows=list.map(e=>{const p=parts(e.date);const fest=e.kind==="fest";
     const when=fest&&e.end&&e.end!==e.date?MON[p.m]+" "+p.d+"–"+(parts(e.end).m!==p.m?MON[parts(e.end).m]+" ":"")+parts(e.end).d:DOW[dow(e.date)]+" "+MON[p.m];
     return '<div class="cuprow'+(fest?" fest":"")+'"><span class="cupd"><b>'+p.d+'</b><span>'+when+'</span></span>'+
