@@ -411,8 +411,14 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 @media (hover:hover){.wpick .ttl:hover{text-decoration-color:currentColor}}
 .wpick .wh{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;opacity:.8}
 .wpick .av{box-shadow:0 0 0 2px var(--mist),inset 0 0 0 1px rgba(0,0,0,.25)}
-.wnone{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px dashed var(--rule-soft);font-size:15px;color:var(--ink-soft)}
-.wnone .sug{border:0;background:none;padding:0;color:var(--ink);font:500 15px var(--font-sans);text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.wnone{display:flex;flex-direction:column;border:1px solid var(--rule-soft);min-width:0}
+.wnk{padding:10px 12px 0;font-family:var(--font-mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
+.wsug{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 12px 12px}
+.wsug+.wsug{border-top:1px solid var(--wash)}
+.wsug .ttl{border:0;background:none;padding:0;color:var(--ink);font:500 19px var(--font-sans);letter-spacing:-.02em;line-height:1.15;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px}
+@media (hover:hover){.wsug .ttl:hover{text-decoration-color:currentColor}}
+.wsug .wh{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
+.wsug .rsel{margin-top:6px}
 .wquiet{font-size:14px;color:var(--ink-meta)}
 .cup{display:flex;flex-direction:column;border-top:1px solid var(--rule);padding-top:10px;margin-top:20px}
 .cuphead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:4px}
@@ -1148,7 +1154,7 @@ function renderCrewView(){
     const rest=evs.filter(e=>!crewOn(e.id).length);
     const dn=DOWL[dow(k)];
     let body=picked.map((x,i)=>'<div class="wpick'+(x.e.kind==="fest"?" fest":i===0?" top":"")+'"><button class="ttl" type="button" data-goto="'+esc(x.e.id)+'">'+esc(x.e.title)+'</button><span class="wh">'+esc(x.e.where)+'</span><div class="crewl" data-ev="'+esc(x.e.id)+'">'+avStack(x.a,5)+'<span class="t">'+crewText(x.a)+'</span></div></div>').join("");
-    if(!picked.length&&evs.length)body+='<div class="wnone"><span>Nobody\'s picked '+dn+' yet</span>'+rest.slice(0,2).map(e=>'<button class="sug" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+', '+esc(e.where)+'?</button>').join("")+'</div>';
+    if(!picked.length&&evs.length)body+='<div class="wnone"><span class="wnk">No plans yet</span>'+rest.slice(0,3).map(e=>'<div class="wsug"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button><span class="wh">'+esc(e.where)+'</span>'+rsvpSelect(e.id)+'</div>').join("")+'</div>';
     else if(picked.length&&rest.length)body+='<span class="walso">Also: '+rest.map(e=>esc(e.title)).join(", ")+'</span>';
     return '<div class="wday'+(picked.length?" hot":"")+'"><h4>'+DOW[dow(k)]+' '+parts(k).d+'<span>'+(evs.length?evs.length+(evs.length===1?" SHOW":" SHOWS"):"NO SHOWS")+'</span></h4>'+body+'</div>';
   }).join("");
