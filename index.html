@@ -630,8 +630,7 @@ function renderNights(y,m,days,vmap){
   const mStart=iso(y,m,1),mEnd=iso(y,m,days);
   let start=mStart;if(!state.showPast&&TODAY>start)start=TODAY;
   let h="",gap=[],nShows=0;const fSeen=new Set();
-  const flush=()=>{if(!gap.length)return;const a=gap[0],b=gap[gap.length-1];
-    h+='<div class="ngap">'+(a===b?DOW[dow(a)]+" "+parts(a).d:DOW[dow(a)]+" "+parts(a).d+" to "+DOW[dow(b)]+" "+parts(b).d)+' · nothing booked</div>';gap=[];};
+  const flush=()=>{gap=[];};
   if(start<=mEnd)for(let k=start;k<=mEnd;k=addDays(k,1)){
     const ev=vmap[k]||[];const fe=festsOn(k);const tot=ev.length+fe.length;
     if(!tot){gap.push(k);continue;}
