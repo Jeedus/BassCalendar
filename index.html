@@ -241,8 +241,6 @@ details.more[open] .c{display:none}
 .fol{background:var(--volt);color:var(--on-volt);padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .chi{display:inline-block;margin-left:5px;padding:0 4px;border:1px solid currentColor;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.04em;line-height:1.5;vertical-align:.2em;opacity:.85}
 .tag.nw{background:var(--volt);color:var(--on-volt);border-color:var(--volt)}
-.tag.so{background:var(--heat);color:#000000;border-color:var(--heat)}
-.tag.low{border-color:var(--heat);border-width:2px}
 .tag.fw{box-shadow:inset 0 -3px 0 var(--volt)}
 .lrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
 .listen{display:inline-flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:15px;font-weight:500}
@@ -255,8 +253,6 @@ details.more[open] .c{display:none}
 .folchips{display:flex;flex-wrap:wrap;gap:6px}
 .folchips:empty{display:none}
 .fchip{display:inline-flex;gap:8px;align-items:center;min-height:36px;padding:0 10px;border:0;background:var(--volt);color:var(--on-volt);font-weight:500;font-size:14px;cursor:pointer}
-.nsaved.so{background:var(--heat);color:#000000}
-.nsaved.low{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--heat)}
 .nsaved.fw{background:transparent;color:var(--ink);box-shadow:inset 0 -2px 0 var(--volt)}
 .nlist{display:none}
 .nrow{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--rule-soft)}
@@ -538,8 +534,8 @@ function listenRow(a){const L=LINKS[a]||{};const q=encodeURIComponent(a);const o
     '<a href="'+esc(L.sc||"https://soundcloud.com/search?q="+q)+'" target="_blank" rel="noopener">SoundCloud</a>'+
     '<a href="'+esc(L.sp||"https://open.spotify.com/search/"+q)+'" target="_blank" rel="noopener">Spotify</a></span>'+
     '<button class="btn fbtn" type="button" data-follow="'+esc(a)+'" aria-pressed="'+on+'">'+(on?"Following":"Follow")+'<span class="lg"> '+esc(a)+'</span></button></div>';}
-const statusTags=s=>(s.status==="sold-out"?'<span class="tag so">Sold out</span>':s.status==="low"?'<span class="tag low">Low tickets</span>':'')+(isNew(s)?'<span class="tag nw">New</span>':'')+(followHit(s)?'<span class="tag fw">Following</span>':'');
-const miniTags=s=>(isNew(s)?'<span class="nsaved">New</span>':'')+(s.status==="sold-out"?'<span class="nsaved so">Sold out</span>':s.status==="low"?'<span class="nsaved low">Low tix</span>':'');
+const statusTags=s=>(isNew(s)?'<span class="tag nw">New</span>':'')+(followHit(s)?'<span class="tag fw">Following</span>':'');
+const miniTags=s=>isNew(s)?'<span class="nsaved">New</span>':'';
 function fvis(f){
   if(!state.fests||state.venue||state.newOnly)return false;
   if(state.followOnly&&!fArtists(f).some(isF))return false;
