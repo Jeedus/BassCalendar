@@ -184,3 +184,159 @@ revoke all on function public.crew_create(text, text), public.crew_join(text, te
 grant execute on function public.crew_create(text, text), public.crew_join(text, text), public.crew_state(text),
   public.crew_rsvp(text, uuid, uuid, text, text), public.crew_set_free(text, uuid, uuid, date, boolean),
   public.crew_leave(text, uuid, uuid) to anon, authenticated;
+
+-- ---------------------------------------------------------------------------------------------
+-- Friends: people you know outside your crew. Friendship is mutual and starts when someone
+-- opens your friend link (or scans your QR code) and taps Add. Friends see each other's plans.
+-- Same rules as crews: the website can only call the friend_* functions, never the tables.
+
+create table if not exists public.fr_people (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,
+  name text not null check (char_length(name) between 1 and 30),
+  token uuid not null default gen_random_uuid(),
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.fr_links (
+  person_id uuid not null references public.fr_people(id) on delete cascade,
+  friend_id uuid not null references public.fr_people(id) on delete cascade,
+  note text check (note is null or char_length(note) <= 40),
+  created_at timestamptz not null default now(),
+  primary key (person_id, friend_id),
+  check (person_id <> friend_id)
+);
+create index if not exists fr_links_friend_idx on public.fr_links (friend_id);
+
+create table if not exists public.fr_plans (
+  person_id uuid not null references public.fr_people(id) on delete cascade,
+  event_id text not null check (char_length(event_id) between 1 and 80),
+  status text not null check (status in ('going', 'interested', 'tix')),
+  updated_at timestamptz not null default now(),
+  primary key (person_id, event_id)
+);
+
+alter table public.fr_people enable row level security;
+alter table public.fr_links enable row level security;
+alter table public.fr_plans enable row level security;
+revoke all on public.fr_people, public.fr_links, public.fr_plans from anon, authenticated;
+
+create or replace function public.friend_check(p_id uuid, p_token uuid) returns void
+language plpgsql stable set search_path = public as $$
+begin
+  if not exists (select 1 from public.fr_people where id = p_id and token = p_token) then
+    raise exception 'not_a_person' using errcode = 'P0001';
+  end if;
+end $$;
+
+create or replace function public.friend_plans_json(p_person uuid) returns json
+language sql stable set search_path = public as $$
+  select coalesce(json_agg(json_build_object('event_id', event_id, 'status', status)), '[]'::json)
+  from public.fr_plans where person_id = p_person
+$$;
+
+create or replace function public.friend_create(p_name text) returns json
+language plpgsql volatile security definer set search_path = public as $$
+declare
+  nm text := public.crew_clean_name(p_name, 30);
+  pid uuid; pcode text; ptoken uuid; tries int := 0;
+begin
+  if nm is null then raise exception 'name_required' using errcode = 'P0001'; end if;
+  loop
+    tries := tries + 1;
+    begin
+      insert into public.fr_people (code, name) values (public.crew_new_code(), nm) returning id, code, token into pid, pcode, ptoken;
+      exit;
+    exception when unique_violation then
+      if tries > 5 then raise; end if;
+    end;
+  end loop;
+  return json_build_object('id', pid, 'token', ptoken, 'code', pcode, 'name', nm);
+end $$;
+
+-- What someone sees after opening a friend link: just the name and that person's plans.
+create or replace function public.friend_lookup(p_code text) returns json
+language plpgsql stable security definer set search_path = public as $$
+declare p public.fr_people%rowtype;
+begin
+  select * into p from public.fr_people where code = lower(btrim(p_code));
+  if p.id is null then raise exception 'friend_not_found' using errcode = 'P0001'; end if;
+  return json_build_object('id', p.id, 'code', p.code, 'name', p.name, 'plans', public.friend_plans_json(p.id));
+end $$;
+
+create or replace function public.friend_add(p_id uuid, p_token uuid, p_code text, p_note text) returns json
+language plpgsql volatile security definer set search_path = public as $$
+declare
+  other public.fr_people%rowtype;
+  nt text := public.crew_clean_name(p_note, 40);
+  n int;
+begin
+  perform public.friend_check(p_id, p_token);
+  select * into other from public.fr_people where code = lower(btrim(p_code));
+  if other.id is null then raise exception 'friend_not_found' using errcode = 'P0001'; end if;
+  if other.id = p_id then raise exception 'own_code' using errcode = 'P0001'; end if;
+  select count(*) into n from public.fr_links where person_id = p_id;
+  if n >= 300 then raise exception 'too_many_friends' using errcode = 'P0001'; end if;
+  insert into public.fr_links (person_id, friend_id, note) values (p_id, other.id, nt)
+    on conflict (person_id, friend_id) do update set note = coalesce(excluded.note, public.fr_links.note);
+  insert into public.fr_links (person_id, friend_id, note) values (other.id, p_id, nt)
+    on conflict (person_id, friend_id) do nothing;
+  return json_build_object('id', other.id, 'name', other.name);
+end $$;
+
+create or replace function public.friend_state(p_id uuid, p_token uuid) returns json
+language plpgsql stable security definer set search_path = public as $$
+declare p public.fr_people%rowtype;
+begin
+  perform public.friend_check(p_id, p_token);
+  select * into p from public.fr_people where id = p_id;
+  return json_build_object(
+    'name', p.name,
+    'code', p.code,
+    'friends', coalesce((
+      select json_agg(json_build_object('id', f.id, 'name', f.name, 'note', l.note, 'since', l.created_at,
+                                        'plans', public.friend_plans_json(f.id)) order by l.created_at)
+      from public.fr_links l join public.fr_people f on f.id = l.friend_id
+      where l.person_id = p_id), '[]'::json)
+  );
+end $$;
+
+-- Replace all of your plans at once: p_plans is {"event-id": "going", ...}
+create or replace function public.friend_set_plans(p_id uuid, p_token uuid, p_plans json) returns json
+language plpgsql volatile security definer set search_path = public as $$
+begin
+  perform public.friend_check(p_id, p_token);
+  if p_plans is null or json_typeof(p_plans) <> 'object' then raise exception 'bad_plans' using errcode = 'P0001'; end if;
+  if (select count(*) from json_each_text(p_plans)) > 400 then raise exception 'bad_plans' using errcode = 'P0001'; end if;
+  delete from public.fr_plans where person_id = p_id;
+  insert into public.fr_plans (person_id, event_id, status)
+    select p_id, key, value from json_each_text(p_plans)
+    where char_length(key) between 1 and 80 and value in ('going', 'interested', 'tix');
+  return json_build_object('ok', true);
+end $$;
+
+create or replace function public.friend_remove(p_id uuid, p_token uuid, p_friend_id uuid) returns json
+language plpgsql volatile security definer set search_path = public as $$
+begin
+  perform public.friend_check(p_id, p_token);
+  delete from public.fr_links where (person_id = p_id and friend_id = p_friend_id) or (person_id = p_friend_id and friend_id = p_id);
+  return json_build_object('ok', true);
+end $$;
+
+create or replace function public.friend_rename(p_id uuid, p_token uuid, p_name text) returns json
+language plpgsql volatile security definer set search_path = public as $$
+declare nm text := public.crew_clean_name(p_name, 30);
+begin
+  perform public.friend_check(p_id, p_token);
+  if nm is null then raise exception 'name_required' using errcode = 'P0001'; end if;
+  update public.fr_people set name = nm where id = p_id;
+  return json_build_object('ok', true, 'name', nm);
+end $$;
+
+revoke all on function public.friend_check(uuid, uuid), public.friend_plans_json(uuid) from public, anon, authenticated;
+revoke all on function public.friend_create(text), public.friend_lookup(text), public.friend_add(uuid, uuid, text, text),
+  public.friend_state(uuid, uuid), public.friend_set_plans(uuid, uuid, json), public.friend_remove(uuid, uuid, uuid),
+  public.friend_rename(uuid, uuid, text) from public;
+grant execute on function public.friend_create(text), public.friend_lookup(text), public.friend_add(uuid, uuid, text, text),
+  public.friend_state(uuid, uuid), public.friend_set_plans(uuid, uuid, json), public.friend_remove(uuid, uuid, uuid),
+  public.friend_rename(uuid, uuid, text) to anon, authenticated;

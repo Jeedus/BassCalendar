@@ -1,8 +1,8 @@
-// Bass Chicago offline support. Version 2026-10-18T03:56
-const SHELL = "basschi-shell-2026-10-18-opennight";
+// Bass Chicago offline support. Version 2026-10-18T23:30
+const SHELL = "basschi-shell-2026-10-18-friends";
 const DATA = "basschi-data";
 const FONTS = "basschi-fonts";
-const SHELL_FILES = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png", "share.png"];
+const SHELL_FILES = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png", "share.png", "qr.js"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(SHELL).then(c => c.addAll(SHELL_FILES)).then(() => self.skipWaiting()));
 });
