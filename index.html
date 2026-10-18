@@ -645,6 +645,24 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 @media (min-width:901px) and (max-width:1200px){.wdays{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .wpick .crewl{flex-wrap:wrap;row-gap:6px}
 
+
+/* one filter button: bar on desktop, next to the month arrows on phone */
+.fbtn{position:relative;height:var(--ctl);display:inline-flex;align-items:center;gap:8px;padding:0 12px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);cursor:pointer;border-radius:0}
+.fbtn svg{width:14px;height:12px;flex:none}
+.fbtn[aria-expanded="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media (hover:hover){.fbtn:not([aria-expanded="true"]):hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}}
+.fbn{position:absolute;top:-7px;right:-7px;min-width:16px;height:16px;padding:0 4px;display:grid;place-items:center;background:var(--volt);color:var(--on-volt);font:500 11px/1 var(--font-mono)}
+.fbtn .fbn[hidden]{display:none}
+.step .fbtn{width:var(--ctl);padding:0;justify-content:center;margin-right:8px}
+.step .fbtn+button{border-left:1px solid var(--rule-soft)}
+.step .fbtn[aria-expanded="true"]{border-color:var(--ink)}
+.rail .cchips{gap:6px}
+.rail .cchip{padding:0 10px;font-size:14px}
+.cchip .n{background:transparent;color:var(--signal);box-shadow:inset 0 0 0 1px var(--signal)}
+@media (min-width:641px){.step .fbtn{display:none}}
+.mhead h2{white-space:nowrap}
+@media (max-width:360px){.mhead h2{font-size:22px}.step .fbtn{margin-right:6px}}
+@media (max-width:640px){.bar{display:none}}
 /* friends: pink is friends the way cyan is crew */
 .top .wrap>.crewnav+.crewnav{margin-left:0}
 .top .wrap:has(>.frnav:not([hidden])){column-gap:0}
@@ -775,6 +793,10 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
     <aside class="rail" id="rail" aria-label="Filters" hidden>
       <div class="sheethead"><span class="kicker">Filters</span><button class="btn" id="sheetDone" type="button">Show results</button></div>
       <div class="block">
+        <div class="kicker">Whose plans</div>
+        <div class="cchips" id="cchips" role="group" aria-label="Whose plans"></div>
+      </div>
+      <div class="block">
         <label class="kicker" for="q">Search</label>
         <input class="search" id="q" type="search" placeholder="Artist, venue, support act" autocomplete="off">
       </div>
@@ -789,7 +811,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
       <div class="block">
         <div class="kicker">Show</div>
         <div class="toggles">
-          <label class="tog"><input type="checkbox" id="savedOnly"> My plans only</label>
+          <input type="checkbox" id="savedOnly" hidden>
           <label class="tog"><input type="checkbox" id="cityOnly"> Inside city limits only</label>
           <label class="tog"><input type="checkbox" id="showPast"> Include past shows</label>
           <label class="tog"><input type="checkbox" id="showFests" checked> Festivals</label>
@@ -820,13 +842,14 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
           <button role="tab" id="tabMonth" aria-selected="true" type="button">Month</button>
           <button role="tab" id="tabList" aria-selected="false" type="button">List</button>
         </div>
-        <div class="cchips" id="cchips" role="group" aria-label="Whose plans" hidden></div>
+        <button class="fbtn" id="fbtnBar" type="button" data-ftog aria-controls="rail" aria-expanded="false"><span>Filters</span><svg viewBox="0 0 14 12" aria-hidden="true"><path d="M1 2h12M3.5 6h7M5.5 10h3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg><span class="fbn" hidden></span></button>
         <span class="meta" id="countLine"></span>
       </div>
       <div id="monthView">
         <div class="mhead">
           <div><span class="meta wk" id="wkLabel"></span><h2 id="mTitle">October 2026</h2></div>
           <div class="step">
+            <button class="fbtn" id="fbtnHead" type="button" data-ftog aria-controls="rail" aria-expanded="false" aria-label="Filters"><svg viewBox="0 0 14 12" aria-hidden="true"><path d="M1 2h12M3.5 6h7M5.5 10h3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg><span class="fbn" hidden></span></button>
             <button id="prev" type="button" aria-label="Previous month"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
             <button id="next" type="button" aria-label="Next month"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
           </div>
@@ -921,6 +944,7 @@ try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array
 try{const pl=JSON.parse(localStorage.getItem(KEY+":plans")||"null");if(pl&&typeof pl==="object")plans=pl;}catch(e){}
 if(saved.size&&!Object.keys(plans).length){saved.forEach(id=>{plans[id]="interested";});}
 saved=new Set();
+if(state.savedOnly){state.savedOnly=false;state.crewF="mine";}
 function persist(){try{localStorage.setItem(KEY+":plans",JSON.stringify(plans));}catch(e){}try{localStorage.setItem(KEY,JSON.stringify({saved:[],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly,crewF:state.crewF}}));}catch(e){}}
 const tp=parts(TODAY);
 state.ym = (TODAY<iso(FIRST.y,FIRST.m,1)) ? {...FIRST} : (TODAY>iso(LAST.y,LAST.m,31) ? {...LAST} : {y:tp.y,m:tp.m});
@@ -1141,7 +1165,7 @@ const icoLink=(href,label,icon)=>'<a class="ib" href="'+esc(href)+'" target="_bl
 const saveBtn=(id,cls)=>rsvpSelect(id);const oldSaveBtn=(id,cls)=>'<button class="btn save'+(cls?" "+cls:"")+'" type="button" data-save="'+id+'" aria-pressed="'+saved.has(id)+'">'+(saved.has(id)?"Saved":"Save")+'</button>';
 function crewPass(id){
   const f=state.crewF||"all";
-  if(f==="all"||(!inCrew()&&!hasFriends()))return true;
+  if(f==="all")return true;
   if(f==="crew")return !inCrew()||crewOn(id).length>0;
   if(f==="friends")return !hasFriends()||frOn(id).length>0;
   return !!myStatus(id);
@@ -1406,15 +1430,15 @@ function renderCrewNav(){
   $("navCrewAv").innerHTML=inCrew()?avStack(crew.members,crew.members.length>3?2:3):"";
 }
 function renderChips(){
-  const c=$("cchips");const on=inCrew(),fo=hasFriends();c.hidden=false;
+  const c=$("cchips");const on=inCrew(),fo=hasFriends();
   if((state.crewF==="crew"&&!on)||(state.crewF==="friends"&&!fo))state.crewF="all";
-  const allOn=(state.crewF||"all")==="all"||(!on&&!fo);const open=!$("rail").hidden;const af=state._af||0;
-  const allChip='<button class="cchip call" type="button" data-cf="all" aria-pressed="'+allOn+'" aria-expanded="'+open+'" aria-controls="rail" aria-label="All shows. '+(allOn?(open?"Close":"Open")+" filters":"Show all shows")+(af?". "+af+" filters on":"")+'">All shows'+(af?'<span class="fcn">'+af+'</span>':'')+'<span class="fic" aria-hidden="true"><svg viewBox="0 0 14 12"><path d="M1 2h12M3.5 6h7M5.5 10h3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg></span></button>';
-  if(!on&&!fo){c.innerHTML=allChip;return;}
-  const nCrew=SHOWS.filter(s=>s.date>=TODAY&&crewOn(s.id).length).length+FESTS.filter(f=>evUpcoming(EVMAP.get(f.id))&&crewOn(f.id).length).length;
-  const b=(v,l,extra)=>'<button class="cchip" type="button" data-cf="'+v+'" aria-pressed="'+((state.crewF||"all")===v)+'">'+l+(extra||"")+'</button>';
-  const nFr=SHOWS.filter(s=>s.date>=TODAY&&frOn(s.id).length).length+FESTS.filter(f=>evUpcoming(EVMAP.get(f.id))&&frOn(f.id).length).length;
-  c.innerHTML=allChip+(on?b("crew","Crew's going",nCrew?'<span class="n">'+nCrew+'</span>':''):'')+(fo?b("friends","Friends",nFr?'<span class="n fn">'+nFr+'</span>':''):'')+b("mine","Mine");
+  const cur=state.crewF||"all";const open=!$("rail").hidden;const af=state._af||0;
+  const b=(v,l,extra)=>'<button class="cchip" type="button" data-cf="'+v+'" aria-pressed="'+(cur===v)+'">'+l+(extra||"")+'</button>';
+  const cnt=fn=>SHOWS.filter(s=>s.date>=TODAY&&fn(s.id).length).length+FESTS.filter(f=>evUpcoming(EVMAP.get(f.id))&&fn(f.id).length).length;
+  const nCrew=on?cnt(crewOn):0,nFr=fo?cnt(frOn):0;
+  c.innerHTML=b("all","All shows")+(on?b("crew","Crew's going",nCrew?'<span class="n">'+nCrew+'</span>':''):'')+(fo?b("friends","Friends",nFr?'<span class="n fn">'+nFr+'</span>':''):'')+b("mine","Mine");
+  document.querySelectorAll("[data-ftog]").forEach(x=>{x.setAttribute("aria-expanded",String(open));x.setAttribute("aria-label",(open?"Close":"Open")+" filters"+(af?", "+af+" on":""));
+    const n=x.querySelector(".fbn");n.hidden=!af;n.textContent=af;});
 }
 function gotoEvent(id){
   const e=EVMAP.get(id);if(!e)return;
@@ -1612,7 +1636,7 @@ function render(){
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
   renderCrewNav();renderFrNav();
   const n=filtered().length;const nf=FESTS.filter(fvis).length;$("countLine").textContent=n+(n===1?" show":" shows")+(nf?" + "+nf+(nf===1?" festival":" festivals"):"");
-  const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+(state.savedOnly?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
+  const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+((state.crewF||"all")!=="all"?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
   $("fcount").hidden=!active;$("fcount").textContent=active+" on";state._af=active;renderChips();
   $("sheetDone").textContent="Show "+(n+nf)+" results";
   renderHero();renderStats();renderRail();
@@ -1668,7 +1692,7 @@ document.addEventListener("click",e=>{
   if(u){follows.delete(u.dataset.unfollow.toLowerCase());saveFollows();render();toast("Unfollowed "+u.dataset.unfollow);}
 });
 $("allGenres").onclick=()=>{state.genres=GENRES.map(g=>g.id);render();};
-$("reset").onclick=()=>{Object.assign(state,{genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false});$("q").value="";render();toast("Filters cleared");};
+$("reset").onclick=()=>{Object.assign(state,{crewF:"all",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false});$("q").value="";render();toast("Filters cleared");};
 $("copySaved").onclick=()=>{
   const lab=id=>" ["+ST[myStatus(id)]+"]";
   const shows=SHOWS.filter(s=>hasPlan(s.id)).map(s=>({k:s.date,t:longDate(s.date)+": "+s.title+lab(s.id)+(s.tag?" ("+s.tag+")":"")+" @ "+s.venue+(s.doors?", doors "+fmtTime(s.doors):"")+"\n  "+s.url}));
@@ -1716,7 +1740,8 @@ document.addEventListener("click",e=>{
   if(!t.closest(".rmenu"))closeMenus();
   const mn=t.closest("[data-mini]");if(mn){if(!mn.disabled)jumpNight(mn.dataset.mini);return;}
   const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();setRsvp(rb.dataset.rsvp,rb.dataset.st);return;}
-  const cf=t.closest("[data-cf]");if(cf&&cf.dataset.cf==="all"&&((!inCrew()&&!hasFriends())||(state.crewF||"all")==="all")){setRail($("rail").hidden);return;}
+  if(t.closest("[data-ftog]")){setRail($("rail").hidden);return;}
+  const cf=t.closest("[data-cf]");
   if(cf){if(cf.dataset.cf!==state.crewF)later(()=>{stagger($("nlist"),".nrow",8);if(!PHONE.matches)fx($("grid"),"fx-drop");});state.crewF=cf.dataset.cf;render();return;}
   const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
   if(t.closest("[data-jclose]")){const gf=t.closest("[data-gofriends]");closeJoin();if(gf){state.view="friends";render();}return;}
