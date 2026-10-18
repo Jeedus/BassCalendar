@@ -508,6 +508,42 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 }
 @media (prefers-reduced-motion:no-preference) and (max-width:900px){.rail:not([hidden]){animation:sheetup .4s var(--ease-out)}}
 
+/* phone mini month + pinned week strip */
+.mini,.wkpin{display:none}
+@media (max-width:640px){
+  .mini{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding:6px 0 12px;border-bottom:2px solid var(--rule)}
+  .mini .mdw{text-align:center;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--ink-meta);padding:4px 0}
+  .mc,.wt{position:relative;border:0;border-radius:0;background:transparent;color:var(--ink-meta);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;font-family:var(--font-mono);font-weight:500;font-variant-numeric:tabular-nums;line-height:1;cursor:pointer;overflow:hidden;transition:background-color .18s ease,color .18s ease}
+  .mc{height:46px;gap:5px;font-size:15px}
+  .mc.has,.wt.has{color:var(--ink)}
+  .mc.has>span:first-child,.wt.has b{font-weight:700}
+  .mc:disabled,.wt:disabled{cursor:default}
+  .mc.past{opacity:.4}
+  .mc.today{box-shadow:inset 0 0 0 1px var(--ink)}
+  .mc.on,.wt.on{background:var(--ink);color:var(--paper)}
+  .md{display:flex;gap:3px;height:5px;justify-content:center}
+  .md .sw{width:5px;height:5px}
+  .mc.on .sw.g-dubstep,.wt.on .sw.g-dubstep{background:var(--paper)}
+  .mcr{position:absolute;top:3px;right:3px;width:9px;height:9px;color:var(--signal);display:flex}
+  .mcr svg{width:100%;height:100%}
+  .mc.on .mcr,.wt.on .mcr{color:var(--paper)}
+  .mc.fest::after,.wt.fest::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--signal)}
+  .wt.fest::after{height:4px}
+  .wkpin{display:block;position:fixed;left:0;right:0;top:calc(57px + env(safe-area-inset-top,0px));z-index:8;background:var(--paper);border-bottom:1px solid var(--rule);
+    padding:8px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));box-shadow:0 10px 18px -14px rgba(0,0,0,.8);
+    transform:translateY(-130%);visibility:hidden;transition:transform .3s var(--ease-out,ease),visibility 0s linear .3s}
+  .wkpin.on{transform:none;visibility:visible;transition:transform .3s var(--ease-out,ease)}
+  .wph{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px;font-family:var(--font-mono);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.02em}
+  .wpg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+  .wt{height:56px;gap:4px;font-size:11px;box-shadow:inset 0 0 0 1px var(--rule-soft)}
+  .wt b{font-size:18px;font-weight:500}
+  .wt.on{box-shadow:none}
+  .wt.today:not(.on){box-shadow:inset 0 0 0 1px var(--rule-soft),inset 0 3px 0 var(--signal)}
+  .wt.out{opacity:.3}
+  .nrow{scroll-margin-top:calc(166px + env(safe-area-inset-top,0px))}
+}
+@media (prefers-reduced-motion:reduce){.wkpin,.wkpin.on{transition:none}}
+
 /* phone + tablet */
 .sheethead{display:none}
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:29}
@@ -565,6 +601,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 </head>
 <body>
 
+<div class="wkpin" id="wkpin" aria-hidden="true"></div>
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#month">BassCalendar</a>
@@ -640,6 +677,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
             <button id="next" type="button" aria-label="Next month">&gt;</button>
           </div>
         </div>
+        <div class="mini" id="mini" aria-label="Jump to a night"></div>
         <div class="nlist" id="nlist"></div>
         <div class="grid" id="grid" role="grid" aria-labelledby="mTitle"></div>
         <div class="daypanel">
@@ -815,7 +853,7 @@ function fx(el,cls){
   el.addEventListener("animationend",h);
 }
 function stagger(root,sel,max){if(!root||RM.matches)return;[...root.querySelectorAll(sel)].slice(0,max||14).forEach((el,i)=>{el.style.setProperty("--i",i);fx(el,"fx-rise");});}
-function slide(dir){later(()=>{["grid","nlist",""].forEach(id=>{if(id)fx($(id),dir>0?"fx-next":"fx-prev");});if(!PHONE.matches)stagger($("dayRows"),":scope>*",6);});}
+function slide(dir){later(()=>{["grid","nlist","mini"].forEach(id=>{if(id)fx($(id),dir>0?"fx-next":"fx-prev");});if(!PHONE.matches)stagger($("dayRows"),":scope>*",6);});}
 function vt(go){if(RM.matches||!document.startViewTransition){go();return;}try{document.startViewTransition(go);}catch(e){go();}}
 function intro(){
   if(RM.matches)return;
@@ -833,6 +871,53 @@ function intro(){
     requestAnimationFrame(tick);
   });
 }
+
+/* ---------- phone mini month + pinned week ---------- */
+const PERSON_FILL='<svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="3" r="2" fill="currentColor"></circle><path d="M1 9.6c.6-2.2 2.1-3.3 4-3.3s3.4 1.1 4 3.3z" fill="currentColor"></path></svg>';
+let MINI={y:0,m:0,vmap:{}},pinDay=null,pinRaf=0;
+function dayInfo(k){const ev=MINI.vmap[k]||[];const fe=festsOn(k);
+  return {ev,fe,tot:ev.length+fe.length,crew:inCrew()&&(ev.some(s=>crewOn(s.id).length)||fe.some(f=>crewOn(f.id).length))};}
+const listed=(k,inf)=>inf.tot>0&&(state.showPast||k>=TODAY)&&!!document.getElementById("n-"+k);
+function dayBits(inf){return '<span class="md">'+inf.ev.slice(0,3).map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span>'+(inf.crew?'<span class="mcr">'+PERSON_FILL+'</span>':'');}
+function renderMini(y,m,days,vmap){
+  MINI={y,m,vmap};
+  const first=new Date(Date.UTC(y,m,1)).getUTCDay();
+  let h=DOW.map(d=>'<span class="mdw" aria-hidden="true">'+d[0]+'</span>').join("");
+  for(let i=0;i<first;i++)h+='<span aria-hidden="true"></span>';
+  for(let d=1;d<=days;d++){const k=iso(y,m,d);const inf=dayInfo(k);const ok=listed(k,inf);
+    h+='<button type="button" class="mc'+(inf.tot?" has":"")+(k<TODAY?" past":"")+(k===TODAY?" today":"")+(inf.fe.length?" fest":"")+'" data-mini="'+k+'"'+(ok?"":" disabled")+
+      ' aria-label="'+esc(longDate(k))+(inf.tot?", "+inf.tot+(inf.tot===1?" event":" events"):", nothing listed")+(inf.crew?", crew plans":"")+'"><span>'+d+'</span>'+dayBits(inf)+'</button>';}
+  $("mini").innerHTML=h;pinDay=null;
+}
+function renderPin(k){
+  const ws=addDays(k,-dow(k));let h="";
+  for(let i=0;i<7;i++){const d=addDays(ws,i);const p=parts(d);const inM=p.y===MINI.y&&p.m===MINI.m;const inf=inM?dayInfo(d):{ev:[],fe:[],tot:0,crew:false};const ok=inM&&listed(d,inf);
+    h+='<button type="button" class="wt'+(inf.tot?" has":"")+(d===k?" on":"")+(d===TODAY?" today":"")+(inf.fe.length?" fest":"")+(inM?"":" out")+'" data-mini="'+d+'"'+(ok?"":" disabled")+
+      ' aria-label="'+esc(longDate(d))+'"><span>'+DOW[i][0]+'</span><b>'+p.d+'</b>'+dayBits(inf)+'</button>';}
+  const we=addDays(ws,6),a=parts(ws),b=parts(we);
+  $("wkpin").innerHTML='<div class="wph"><span>'+MON[a.m]+" "+a.d+"–"+(a.m!==b.m?MON[b.m]+" ":"")+b.d+" · "+DOW[dow(k)]+" "+parts(k).d+'</span><span class="meta">'+MONTHS[MINI.m]+'</span></div><div class="wpg">'+h+'</div>';
+}
+function pinUpdate(force){
+  const pin=$("wkpin");if(!pin)return;
+  const live=PHONE.matches&&state.view!=="crew"&&!$("monthView").hidden&&$("rail").hidden;
+  if(!live){pin.classList.remove("on");pin.setAttribute("aria-hidden","true");return;}
+  const hb=document.querySelector(".top").getBoundingClientRect().bottom;
+  const rows=[...document.querySelectorAll("#nlist .nrow")];
+  let act=null;for(const r of rows){if(r.getBoundingClientRect().bottom>hb+96){act=r.dataset.night;break;}}
+  if(!act&&rows.length)act=rows[rows.length-1].dataset.night;
+  if(act&&(act!==pinDay||force)){pinDay=act;renderPin(act);
+    document.querySelectorAll("#mini .mc.on").forEach(x=>x.classList.remove("on"));
+    const c=document.querySelector('#mini .mc[data-mini="'+act+'"]');if(c)c.classList.add("on");}
+  const lb=$("nlist").getBoundingClientRect();
+  const on=!!act&&$("mini").getBoundingClientRect().bottom<hb&&lb.bottom>hb+140;
+  pin.classList.toggle("on",on);pin.setAttribute("aria-hidden",String(!on));
+}
+function jumpNight(k){
+  const r=document.getElementById("n-"+k);if(!r)return;
+  r.scrollIntoView({block:"start",behavior:RM.matches?"auto":"smooth"});fx(r,"fx-ring");
+}
+window.addEventListener("scroll",()=>{if(pinRaf)return;pinRaf=requestAnimationFrame(()=>{pinRaf=0;pinUpdate();});},{passive:true});
+window.addEventListener("resize",()=>pinUpdate(true));
 
 /* ---------- crews ---------- */
 const CREW_API={url:"https://wcogiewqdkrnqfbrdioe.supabase.co",key:"sb_publishable_-ElK1lWcLDUcuRqGUixpiA_6xefgxZs"};
@@ -1161,7 +1246,7 @@ function renderNights(y,m,days,vmap){
     if(!tot){gap.push(k);continue;}
     flush();nShows+=ev.length;fe.forEach(f=>fSeen.add(f.id));
     const today=k===TODAY;
-    h+='<div class="nrow'+(today?" today":"")+(k<TODAY?" past":"")+'"><div class="nd">'+(today?'<span class="k t">Tonight</span>':'')+
+    h+='<div class="nrow'+(today?" today":"")+(k<TODAY?" past":"")+'" id="n-'+k+'" data-night="'+k+'"><div class="nd">'+(today?'<span class="k t">Tonight</span>':'')+
       '<span class="n">'+parts(k).d+'</span><span class="k">'+DOW[dow(k)]+'</span>'+'</div><div class="nev">'+
       fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><div class="nft"><b>'+esc(f.name)+'</b>'+crewChip(f.id)+'</div><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span></a>').join("")+
       ev.map(nightShow).join("")+'</div></div>';
@@ -1188,7 +1273,7 @@ function renderMonth(){
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   $("grid").innerHTML=h;
-  renderNights(y,m,days,vmap);
+  renderNights(y,m,days,vmap);renderMini(y,m,days,vmap);
   // day panel
   const sel=state.sel;const inMonth=parts(sel).y===y&&parts(sel).m===m;
   const list=inMonth?(vmap[sel]||[]):vis.filter(s=>{const p=parts(s.date);return p.y===y&&p.m===m;});
@@ -1225,6 +1310,7 @@ function render(){
   else{isM?renderMonth():renderList();renderFests();}
   persist();
   FXQ.splice(0).forEach(f=>{try{f();}catch(e){}});
+  try{pinUpdate(true);}catch(e){}
 }
 
 function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
@@ -1309,6 +1395,7 @@ $("navCrew").onclick=e=>{e.preventDefault();window.scrollTo(0,0);if(state.view==
 let leaveArm=0;
 document.addEventListener("click",e=>{
   const t=e.target;
+  const mn=t.closest("[data-mini]");if(mn){if(!mn.disabled)jumpNight(mn.dataset.mini);return;}
   const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();setRsvp(rb.dataset.rsvp,rb.dataset.st);return;}
   const cf=t.closest("[data-cf]");if(cf){if(cf.dataset.cf!==state.crewF)later(()=>{stagger($("nlist"),".nrow",8);if(!PHONE.matches)fx($("grid"),"fx-drop");});state.crewF=cf.dataset.cf;render();return;}
   const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
