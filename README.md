@@ -1,4 +1,4 @@
-# Bass Chicago
+# BassCalendar
 
 Dubstep, riddim, melodic bass and drum & bass shows around Chicago, plus Midwest bass festivals with their lineups.
 

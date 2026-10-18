@@ -1,6 +1,6 @@
 {
-  "name": "Bass Chicago",
-  "short_name": "Bass Chi",
+  "name": "BassCalendar",
+  "short_name": "BassCalendar",
   "description": "Chicago bass music shows and Midwest festivals, updated daily.",
   "start_url": "./",
   "scope": "./",
