@@ -142,7 +142,6 @@ button,input,select{font:inherit;color:inherit}
 .ftoggle{display:inline-flex;align-items:center;gap:10px;height:42px;padding:0 16px;border:1px solid var(--rule);background:transparent;font-weight:500;font-size:15px;cursor:pointer;border-radius:0}
 @media (hover:hover){.ftoggle:hover{background:var(--volt);color:var(--on-volt)}}
 .ftoggle[aria-expanded="true"]{background:var(--ink);color:var(--paper)}
-.ftoggle .pm{font-family:var(--font-mono);font-size:16px;width:10px;text-align:center}
 .ftoggle .fc{font-family:var(--font-mono);font-size:12px;background:var(--volt);color:var(--on-volt);padding:2px 6px;text-transform:uppercase}
 .mhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:2px solid var(--rule);padding-bottom:10px}
 .mhead h2{margin:0;font-weight:500;font-size:clamp(28px,4vw,40px);letter-spacing:-.04em;line-height:1.05}
@@ -212,7 +211,6 @@ button,input,select{font:inherit;color:inherit}
 .fsrc>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;cursor:pointer}
 .fsrc>summary::-webkit-details-marker{display:none}
 .fsl{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-meta)}
-.fsl .pm{width:10px;text-align:center;font-size:15px}
 @media (hover:hover){.fsrc>summary:hover .fsl{color:var(--ink)}}
 .fsrc[open] .fsl{color:var(--ink)}
 .fbody{display:grid;gap:12px;padding-bottom:8px}
@@ -622,6 +620,16 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   .lg{display:none}
 }
 
+
+.pm{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px}
+.pm svg{display:block}
+.pm .im{display:none}
+.fsrc[open] .pm .ip,.ftoggle[aria-expanded="true"] .pm .ip{display:none}
+.fsrc[open] .pm .im,.ftoggle[aria-expanded="true"] .pm .im{display:flex}
+.pm .ip,.pm .im{align-items:center}
+.pm .ip{display:flex}
+.fchip .fx{display:inline-flex}
+.fchip .fx svg{display:block}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
@@ -707,7 +715,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 
     <section class="content" aria-label="Calendar">
       <div class="bar">
-        <button class="ftoggle" id="ftoggle" type="button" hidden aria-expanded="false" aria-controls="rail"><span>Filters</span><span class="fc" id="fcount" hidden></span><span class="pm" aria-hidden="true">+</span></button>
+        <button class="ftoggle" id="ftoggle" type="button" hidden aria-expanded="false" aria-controls="rail"><span>Filters</span><span class="fc" id="fcount" hidden></span><span class="pm" aria-hidden="true"><span class="ip"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span class="im"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M3 8h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span></span></button>
         <div class="tabs" role="tablist" aria-label="View">
           <button role="tab" id="tabMonth" aria-selected="true" type="button">Month</button>
           <button role="tab" id="tabList" aria-selected="false" type="button">List</button>
@@ -740,7 +748,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 
   <footer class="foot">
     <details class="fsrc">
-      <summary><span class="meta" id="footStamp">Updated daily</span><span class="fsl">Sources<span class="pm" aria-hidden="true">+</span></span></summary>
+      <summary><span class="meta" id="footStamp">Updated daily</span><span class="fsl">Sources<span class="pm" aria-hidden="true"><span class="ip"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span class="im"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M3 8h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span></span></span></summary>
       <div class="fbody">
         <ul class="srcs"><li>Radius</li><li>Concord Music Hall</li><li>Ramova Theatre</li><li>JamBase</li><li>Songkick</li><li>Concerts50</li><li>Concertfix</li><li>Discotech</li><li>EDM.com</li><li>The Daily Frequency</li><li>Insomniac</li><li>Festival sites</li></ul>
         <p>Set times move around, so check the ticket link before you head out. Small nights that only post a week out, like Proper Drum &amp; Bass and Bassline, aren't listed.</p>
@@ -1234,7 +1242,7 @@ function renderRail(){
   $("venue").innerHTML='<option value="">All venues</option>'+venues.map(v=>{const c=SHOWS.find(s=>s.venue===v).city;return '<option value="'+esc(v)+'"'+(v===state.venue?" selected":"")+'>'+esc(v)+(c!=="Chicago"?" ("+c+")":"")+'</option>';}).join("");
   $("savedOnly").checked=state.savedOnly;$("cityOnly").checked=state.cityOnly;$("showPast").checked=state.showPast;$("showFests").checked=state.fests;$("followOnly").checked=state.followOnly;$("newOnly").checked=state.newOnly;
   $("folCount").textContent=follows.size;
-  $("folChips").innerHTML=[...follows.values()].sort((a,b)=>a.localeCompare(b)).map(a=>'<button class="fchip" type="button" data-unfollow="'+esc(a)+'" aria-label="Unfollow '+esc(a)+'">'+esc(a)+'<span aria-hidden="true">×</span></button>').join("");
+  $("folChips").innerHTML=[...follows.values()].sort((a,b)=>a.localeCompare(b)).map(a=>'<button class="fchip" type="button" data-unfollow="'+esc(a)+'" aria-label="Unfollow '+esc(a)+'">'+esc(a)+'<span class="fx" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span></button>').join("");
   $("folNote").hidden=follows.size>0;
   $("savedCount").textContent=saved.size;
   $("savedNote").textContent=saved.size?saved.size+(saved.size===1?" show":" shows")+" saved in this browser.":"Tap Save on any show. Your picks stay in this browser.";
@@ -1403,7 +1411,7 @@ $("copySaved").onclick=()=>{
 const mq=matchMedia("(max-width:900px)");
 function setRail(open){
   $("main").classList.toggle("collapsed",!open);$("rail").hidden=!open;
-  $("ftoggle").setAttribute("aria-expanded",String(open));$("ftoggle").querySelector(".pm").textContent=open?"\u2212":"+";
+  $("ftoggle").setAttribute("aria-expanded",String(open));
   const sheet=open&&mq.matches;$("scrim").hidden=!sheet;document.documentElement.style.overflow=sheet?"hidden":"";
   if(sheet)$("rail").scrollTop=0;
   try{renderChips();}catch(e){}
@@ -1471,7 +1479,6 @@ render();
 intro();
 if(CREW_ON){if(joinCode&&!(me&&me.code===joinCode))openJoin(joinCode);else{if(joinCode){stripJoin();toast("You're already in "+(me.crew_name||"this crew"));}if(me)refreshCrew();}}
 const up=parts(DATA.updated);$("stamp").textContent="Updated "+MON[up.m]+" "+up.d+", "+up.y;$("footStamp").textContent="Listings updated "+MON[up.m]+" "+up.d+", "+up.y;
-document.addEventListener("toggle",e=>{if(e.target.classList&&e.target.classList.contains("fsrc"))e.target.querySelector(".pm").textContent=e.target.open?"\u2212":"+";},true);
 }
 (function(){
   const fail=()=>{document.getElementById("hero").innerHTML='<div class="row1 kicker"><span>Offline</span></div><h1 id="heroTitle">No saved copy yet</h1><p class="lede">Open this page once with a connection and it will work offline after that.</p>';};
