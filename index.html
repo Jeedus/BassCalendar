@@ -1139,7 +1139,7 @@ function renderNights(y,m,days,vmap){
     flush();nShows+=ev.length;fe.forEach(f=>fSeen.add(f.id));
     const today=k===TODAY;
     h+='<div class="nrow'+(today?" today":"")+(k<TODAY?" past":"")+'"><div class="nd">'+(today?'<span class="k t">Tonight</span>':'')+
-      '<span class="n">'+parts(k).d+'</span><span class="k">'+DOW[dow(k)]+'</span>'+(tot>1?'<span class="x">×'+tot+'</span>':'')+'</div><div class="nev">'+
+      '<span class="n">'+parts(k).d+'</span><span class="k">'+DOW[dow(k)]+'</span>'+'</div><div class="nev">'+
       fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><div class="nft"><b>'+esc(f.name)+'</b>'+crewChip(f.id)+'</div><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span></a>').join("")+
       ev.map(nightShow).join("")+'</div></div>';
   }
@@ -1159,7 +1159,7 @@ function renderMonth(){
   for(let d=1;d<=days;d++){const k=iso(y,m,d);const ev=vmap[k]||[];const fe=festsOn(k);const tot=ev.length+fe.length;
     const cls=["cell"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel)cls.push("sel");
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
-      '<span class="d"><span>'+d+'</span>'+(tot>1?'<span class="x">×'+tot+'</span>':'')+'</span>'+
+      '<span class="d"><span>'+d+'</span>'+'</span>'+
       fe.map(f=>'<span class="fev"><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
       ev.map(s=>'<span class="ev'+(!inCrew()&&saved.has(s.id)?" saved":"")+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
