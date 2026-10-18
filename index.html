@@ -1150,7 +1150,6 @@ function renderCrewView(){
     let body=picked.map((x,i)=>'<div class="wpick'+(x.e.kind==="fest"?" fest":i===0?" top":"")+'"><button class="ttl" type="button" data-goto="'+esc(x.e.id)+'">'+esc(x.e.title)+'</button><span class="wh">'+esc(x.e.where)+'</span><div class="crewl" data-ev="'+esc(x.e.id)+'">'+avStack(x.a,5)+'<span class="t">'+crewText(x.a)+'</span></div></div>').join("");
     if(!picked.length&&evs.length)body+='<div class="wnone"><span>Nobody\'s picked '+dn+' yet</span>'+rest.slice(0,2).map(e=>'<button class="sug" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+', '+esc(e.where)+'?</button>').join("")+'</div>';
     else if(picked.length&&rest.length)body+='<span class="walso">Also: '+rest.map(e=>esc(e.title)).join(", ")+'</span>';
-    if(!evs.length)body+='<span class="wquiet">No bass shows listed</span>';
     return '<div class="wday'+(picked.length?" hot":"")+'"><h4>'+DOW[dow(k)]+' '+parts(k).d+'<span>'+(evs.length?evs.length+(evs.length===1?" SHOW":" SHOWS"):"NO SHOWS")+'</span></h4>'+body+'</div>';
   }).join("");
   const wk='<div class="wkend"><div class="wkhead"><div><span class="kicker">'+label+' · <span class="nw">'+MON[parts(nights[0]).m]+' '+parts(nights[0]).d+'–'+(parts(nights[3]).m!==parts(nights[0]).m?MON[parts(nights[3]).m]+" ":"")+parts(nights[3]).d+'</span></span><h3>Where\'s everyone at?</h3></div>'+
