@@ -1,5 +1,5 @@
 {
- "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. Don't add shows headlined by anyone in skip; they aren't bass music. Pick each show's genre from its headliner's entry in artists.json (what they generally play); if that night is clearly a different kind of set, go by the set instead. If the headliner isn't in artists.json yet, look them up and add them. Acts marked not_bass there shouldn't headline a show here.",
+ "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. Don't add shows headlined by anyone in skip; they aren't bass music. A show's genre is always its headliner's genre in artists.json (what they're known for). If the headliner isn't in artists.json yet, look them up and add them. Acts marked not_bass there shouldn't headline a show here.",
  "updated": "2026-10-19",
  "checked": "2026-10-18",
  "links": {},
@@ -145,7 +145,7 @@
    "support": [],
    "venue": "Alhambra Palace",
    "city": "Chicago",
-   "genre": "adj",
+   "genre": "uk",
    "url": "https://www.jambase.com/show/skream-alhambra-palace-20261030"
   },
   {
@@ -156,7 +156,7 @@
    "support": [],
    "venue": "BaseCamp Pub",
    "city": "Lisle",
-   "genre": "adj",
+   "genre": "house",
    "url": "https://www.jambase.com/show/feed-me-basecamp-pub-20261031"
   },
   {
@@ -212,7 +212,7 @@
    "venue": "Bourbon on Division",
    "addr": "2050 W Division St",
    "city": "Chicago",
-   "genre": "dubstep",
+   "genre": "riddim",
    "age": "21+",
    "url": "https://app.discotech.me/events/38251961-hurtbox-at-bourbon-on-division"
   },

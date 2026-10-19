@@ -43,8 +43,8 @@
   --fest-tint:rgba(25,198,214,.16);
   --slate:#597e87; --sage:#d1ddd3; --blue:#3292ff; --heat:#ff4b5c;
   /* genre colors: kept clear of cyan (festivals/crew), pink (friends) and volt (accents) */
-  --g-dubstep:var(--ink); --g-riddim:#ff2e4d; --g-melodic:#8f4dff; --g-dnb:#ff8a00; --g-uk:#12a150; --g-wonky:#2457ff; --g-adj:#9aa0a6;
-  --on-g-dubstep:var(--paper); --on-g-riddim:#000; --on-g-melodic:#fff; --on-g-dnb:#000; --on-g-uk:#000; --on-g-wonky:#fff; --on-g-adj:#000;
+  --g-dubstep:var(--ink); --g-riddim:#ff2e4d; --g-melodic:#8f4dff; --g-dnb:#ff8a00; --g-uk:#12a150; --g-wonky:#2457ff; --g-house:#a8622c; --g-adj:#9aa0a6;
+  --on-g-dubstep:var(--paper); --on-g-riddim:#000; --on-g-melodic:#fff; --on-g-dnb:#000; --on-g-uk:#000; --on-g-wonky:#fff; --on-g-house:#fff; --on-g-adj:#000;
   --focus:#000000;
   --font-sans:"Geist","Helvetica Neue",Arial,sans-serif;
   --font-mono:"Geist Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
@@ -53,12 +53,12 @@
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
   --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark;
-  --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000}}
+  --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-house:#d08a4f; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000; --on-g-house:#000}}
 :root[data-theme="dark"]{
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
   --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark;
-  --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000}
+  --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-house:#d08a4f; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000; --on-g-house:#000}
 
 *{box-sizing:border-box}
 /* month slide moves the grid/list 40px sideways; clip it so phones don't zoom out to fit the overflow */
@@ -132,8 +132,9 @@ button,input,select{font:inherit;color:inherit}
 [data-g=dnb],.g-dnb{--gc:var(--g-dnb);--on-gc:var(--on-g-dnb)}
 [data-g=uk],.g-uk{--gc:var(--g-uk);--on-gc:var(--on-g-uk)}
 [data-g=wonky],.g-wonky{--gc:var(--g-wonky);--on-gc:var(--on-g-wonky)}
+[data-g=house],.g-house{--gc:var(--g-house);--on-gc:var(--on-g-house)}
 [data-g=adj],.g-adj{--gc:var(--g-adj);--on-gc:var(--on-g-adj)}
-.sw:is(.g-dubstep,.g-riddim,.g-melodic,.g-dnb,.g-uk,.g-wonky,.g-adj){background:var(--gc)}
+.sw:is(.g-dubstep,.g-riddim,.g-melodic,.g-dnb,.g-uk,.g-wonky,.g-house,.g-adj){background:var(--gc)}
 .select{width:100%;height:44px;border:1px solid var(--rule);background:var(--paper);padding:0 10px;border-radius:0}
 .toggles{display:grid;gap:8px}
 .tog{display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer}
@@ -1065,6 +1066,7 @@ const GENRES = [
   {id:"dnb",     label:"Drum & bass"},
   {id:"uk",      label:"UK dubstep"},
   {id:"wonky",   label:"Wonky & experimental"},
+  {id:"house",   label:"Bass house"},
   {id:"adj",     label:"Bass-adjacent"}
 ];
 const SHOWS = DATA.shows;
@@ -1112,12 +1114,15 @@ function gcal(s){
 const KEY="basschi:v1";
 let saved=new Set();let plans={};
 let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY};
-try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state)Object.assign(state,o.state,{sel:TODAY,ym:null});}}catch(e){}
+try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state){Object.assign(state,o.state,{sel:TODAY,ym:null});
+  /* a genre added since these filters were saved starts switched on */
+  const known=o.state.gknown||["dubstep","riddim","melodic","dnb","uk","wonky","adj"];delete state.gknown;
+  if(Array.isArray(state.genres))GENRES.forEach(g=>{if(!known.includes(g.id)&&!state.genres.includes(g.id))state.genres.push(g.id);});}}}catch(e){}
 try{const pl=JSON.parse(localStorage.getItem(KEY+":plans")||"null");if(pl&&typeof pl==="object")plans=pl;}catch(e){}
 if(saved.size&&!Object.keys(plans).length){saved.forEach(id=>{plans[id]="interested";});}
 saved=new Set();
 if(state.savedOnly){state.savedOnly=false;state.crewF="mine";}
-function persist(){try{localStorage.setItem(KEY+":plans",JSON.stringify(plans));}catch(e){}try{localStorage.setItem(KEY,JSON.stringify({saved:[],state:{view:state.view,genres:state.genres,venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly,crewF:state.crewF}}));}catch(e){}}
+function persist(){try{localStorage.setItem(KEY+":plans",JSON.stringify(plans));}catch(e){}try{localStorage.setItem(KEY,JSON.stringify({saved:[],state:{view:state.view,genres:state.genres,gknown:GENRES.map(g=>g.id),venue:state.venue,savedOnly:state.savedOnly,cityOnly:state.cityOnly,showPast:state.showPast,fests:state.fests,followOnly:state.followOnly,newOnly:state.newOnly,crewF:state.crewF}}));}catch(e){}}
 const tp=parts(TODAY);
 state.ym = (TODAY<iso(FIRST.y,FIRST.m,1)) ? {...FIRST} : (TODAY>iso(LAST.y,LAST.m,31) ? {...LAST} : {y:tp.y,m:tp.m});
 if(location.hash==="#list")state.view="list"; else if(location.hash==="#month")state.view="month";

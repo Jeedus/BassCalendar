@@ -19,13 +19,13 @@
     "dubstep": [
       "Excision", "Subtronics", "Zeds Dead", "NGHTMRE", "Virtual Riot", "Flux Pavilion", "Zomboy",
       "Doctor P", "Getter", "Space Laces", "ATLiens", "Tape B", "Black Tiger Sex Machine", "Ray Volpe",
-      "Barely Alive", "FuntCase", "Eptic", "Rusko", "Moody Good", "Deathpact", "Kai Wachi", "Dirt Monkey",
+      "Barely Alive", "FuntCase", "Eptic", "Rusko", "Moody Good", "Deathpact", "Dirt Monkey",
       "MUST DIE!", "ALLEYCVT", "Kompany", "Gunpoint", "Flozone", "Dennett", "Crankdat", "Smoakland",
       "Ganja White Night", "Levity", "Hairitage"
     ],
     "riddim": [
       "Sullivan King", "SVDDEN DEATH", "VOYD", "Wooli", "Level Up", "INFEKT", "Jessica Audiffred", "LAYZ",
-      "Marauda", "Hol!", "Calcium", "Code: Pandorum", "Syzy", "PEEKABOO", "Wreckno", "The Resistance"
+      "Marauda", "Hol!", "Calcium", "Code: Pandorum", "Syzy", "PEEKABOO", "Wreckno", "The Resistance", "Kai Wachi"
     ],
     "melodic": [
       "ILLENIUM", "Seven Lions", "SLANDER", "Adventure Club", "Krewella", "Grabbitz", "Whethan",
@@ -44,8 +44,11 @@
       "Zingara", "Ahee", "Daily Bread", "Champagne Drip", "Detox Unit", "Super Future", "EAZYBAKED",
       "Jade Cicada", "Opiuo", "Machinedrum", "Rezz", "LSDream"
     ],
+    "house": [
+      "Malaa", "Nostalgix", "Taiki Nulight"
+    ],
     "adj": [
-      "Apashe", "Jon Casey", "TroyBoi", "Nostalgix", "Taiki Nulight", "Big Gigantic", "GRiZ", "Malaa"
+      "Apashe", "Jon Casey", "TroyBoi", "Big Gigantic", "GRiZ"
     ]
   }
 }

@@ -1,5 +1,5 @@
 {
- "_about": "What each artist generally plays, as one of the site's genre ids, so new shows get the right genre. Researched October 2026 from artist bios, Beatport, festival and label pages (source per artist where one was used). 'confidence' is only set when it isn't high; low means the act couldn't be identified and the genre is a guess from the bill they're on. not_bass marks acts that aren't bass music. A show's genre normally comes from its headliner here, unless that night is clearly a different kind of set.",
+ "_about": "What each artist generally plays, as one of the site's genre ids, so new shows get the right genre. Researched October 2026 from artist bios, Beatport, festival and label pages (source per artist where one was used). 'confidence' is only set when it isn't high; low means the act couldn't be identified and the genre is a guess from the bill they're on. not_bass marks acts that aren't bass music. A show's genre is its headliner's genre here.",
  "genres": {
   "dubstep": "US/mainstream dubstep, brostep, heavy dubstep, tearout, trap-dubstep",
   "riddim": "riddim, deathstep, metal-heavy dubstep",
@@ -7,7 +7,8 @@
   "dnb": "drum & bass, jungle, neurofunk, liquid, halftime",
   "uk": "UK/deep dubstep, 140, original UK sound",
   "wonky": "wonky, experimental and psychedelic bass, glitch-hop, hip-hop-leaning bass",
-  "adj": "bass-adjacent: bass house, festival trap, livetronica, midtempo, breakcore"
+  "house": "bass house, UK-garage-leaning house with heavy bass",
+  "adj": "bass-adjacent: festival trap, livetronica, midtempo, breakcore, orchestral bass"
  },
  "artists": {
   "1991": {
@@ -258,7 +259,7 @@
    "style": "heavy dubstep"
   },
   "ERO808": {
-   "genre": "adj",
+   "genre": "house",
    "style": "bass house / UKG / Latin bass with vocals (Deadbeats)",
    "confidence": "medium",
    "source": "https://edr.altervista.org/ero808-releases-tantalizing-new-ep-a-necessary-evil/"
@@ -268,7 +269,7 @@
    "style": "heavy dubstep / brostep"
   },
   "Feed Me": {
-   "genre": "adj",
+   "genre": "house",
    "style": "bass house"
   },
   "Fieldz": {
@@ -370,7 +371,7 @@
    "confidence": "medium"
   },
   "Hurtbox": {
-   "genre": "dubstep",
+   "genre": "riddim",
    "style": "riddim / heavy dubstep (French)",
    "confidence": "medium",
    "source": "https://www.frontstagefestivals.com/artist/hurtbox"
@@ -437,7 +438,7 @@
    "confidence": "medium"
   },
   "Kai Wachi": {
-   "genre": "dubstep",
+   "genre": "riddim",
    "style": "dark metal-influenced heavy dubstep / deathstep",
    "confidence": "medium"
   },
@@ -517,7 +518,7 @@
    "confidence": "medium"
   },
   "Malaa": {
-   "genre": "adj",
+   "genre": "house",
    "style": "bass house"
   },
   "Marah": {
@@ -610,7 +611,7 @@
    "confidence": "low"
   },
   "Nostalgix": {
-   "genre": "adj",
+   "genre": "house",
    "style": "bass house / UKG-tinged house"
   },
   "Of The Trees": {
@@ -709,7 +710,7 @@
   },
   "Skream": {
    "genre": "uk",
-   "style": "original UK dubstep; lately mostly house/techno/disco sets, so check what each show is",
+   "style": "original UK dubstep",
    "confidence": "medium",
    "source": "https://songkick.com/artists/35434-skream/calendar"
   },
@@ -786,7 +787,7 @@
    "source": "https://fuxwithit.com/2021/10/21/premiere-syzy-medium-rare-milk/"
   },
   "Taiki Nulight": {
-   "genre": "adj",
+   "genre": "house",
    "style": "bass house / UK garage"
   },
   "Tape B": {
