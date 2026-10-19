@@ -56,6 +56,8 @@
   --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark}
 
 *{box-sizing:border-box}
+/* month slide moves the grid/list 40px sideways; clip it so phones don't zoom out to fit the overflow */
+#monthView{overflow-x:clip}
 body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:16px;line-height:1.4;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
 a{color:inherit}
