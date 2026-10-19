@@ -822,12 +822,12 @@ button.pchip{cursor:pointer}
 .nfest .pp{height:22px}
 .fev .cc,.nfest .cc{background:transparent;border-color:var(--signal);color:var(--ink)}
 @media (max-width:640px){.fev{background:var(--signal);box-shadow:none;padding:0}}
-/* follow from the name: a small square at the name's upper right, shown on hover */
+/* follow from the name: a bold + or − over the name's last letter, shown on hover; a page-colored halo keeps it readable */
 .art{position:relative}
-.artf{position:absolute;top:-.5em;right:-.75em;z-index:3;width:16px;height:16px;display:grid;place-items:center;padding:0;border:0;border-radius:0;background:var(--volt);color:var(--on-volt);cursor:pointer;opacity:0;pointer-events:none;transform:scale(.6);transition:opacity .12s ease,transform .16s var(--ease-spring,ease)}
-.artf.on{background:var(--ink);color:var(--paper)}
-.artf svg{width:12px;height:12px;display:block}
-.artf path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:square}
+.artf{position:absolute;top:-.32em;right:-.22em;z-index:3;width:max(13px,.5em);height:max(13px,.5em);display:grid;place-items:center;padding:0;border:0;border-radius:0;background:transparent;color:var(--ink);cursor:pointer;opacity:0;pointer-events:none;transform:scale(.6);transition:opacity .12s ease,transform .16s var(--ease-spring,ease)}
+.artf svg{width:100%;height:100%;display:block;overflow:visible}
+.artf path{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:square}
+.artf path.halo{stroke:var(--paper);stroke-width:7}
 @media (hover:hover){.art:hover>.artf{opacity:1;pointer-events:auto;transform:none}.lrow [data-follow]{display:none}}
 .artf:focus-visible{opacity:1;pointer-events:auto;transform:none;outline:2px solid var(--focus);outline-offset:1px}
 @media (hover:none){.artf{display:none}}
@@ -1052,9 +1052,9 @@ const showArtists=s=>[s.title].concat(s.support);
 const followHit=s=>showArtists(s).some(isF);
 const isNew=s=>!!s.added&&daysBetween(s.added,TODAY)>=0&&daysBetween(s.added,TODAY)<=7;
 const chi=a=>LOCALS.has(String(a).toLowerCase())?'<span class="chi" title="Chicago artist">CHI</span>':'';
-/* an artist's name: hovering shows a small + (follow) or − (unfollow) at its upper right */
+/* an artist's name: hovering shows a bold + (follow) or − (unfollow) over its last letter */
 const artName=(a,cls)=>{const on=isF(a);const l=(on?"Unfollow ":"Follow ")+esc(a);
-  return '<span class="art'+(on?" fol":"")+(cls?" "+cls:"")+'">'+esc(a)+'<button type="button" class="artf'+(on?" on":"")+'" data-follow="'+esc(a)+'" aria-label="'+l+'" title="'+l+'"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="'+(on?"M3.5 8h9":"M8 3.5v9M3.5 8h9")+'"></path></svg></button></span>'+chi(a);};
+  return '<span class="art'+(on?" fol":"")+(cls?" "+cls:"")+'">'+esc(a)+'<button type="button" class="artf'+(on?" on":"")+'" data-follow="'+esc(a)+'" aria-label="'+l+'" title="'+l+'"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="halo" d="'+(on?"M3.5 8h9":"M8 3.5v9M3.5 8h9")+'"></path><path d="'+(on?"M3.5 8h9":"M8 3.5v9M3.5 8h9")+'"></path></svg></button></span>'+chi(a);};
 const nm=a=>artName(a);
 const supportHtml=s=>s.support.length?'<p class="rsup">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'</p>':'';
 function listenRow(a){const L=LINKS[a]||{};const q=encodeURIComponent(a);const on=isF(a);
