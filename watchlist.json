@@ -1,0 +1,50 @@
+{
+  "_about": "Bass artists the daily updater checks for Chicago-area dates, on top of the venue and listing sites. Mostly built from recent North American bass festival lineups (sources below), plus a few well-known bass acts that tour the US regularly. Groups use the same genre ids as data.json. Each run checks 15 names in a rotating window so the whole list is covered about every 8 days. Add or remove names freely; keep each name spelled the way the artist bills it.",
+  "sources": [
+    "https://edmidentity.com/2025/05/30/lost-lands-2025-lineup/",
+    "https://edm.com/events/lost-lands-daily-lineup-2026-excision/",
+    "https://edmidentity.com/2025/04/11/bass-canyon-2025-lineup-phase-one",
+    "https://edm.com/events/bass-canyon-lineup-2026/",
+    "https://edmidentity.com/2025/07/17/wakaan-music-festival-2025-lineup/",
+    "https://edmidentity.com/2026/08/19/wakaan-music-festival-2026-lineup/",
+    "https://edmmaniac.com/electric-forest-2025-lineup",
+    "https://electronicmidwest.com/news/electric-forest-announces-2026-lineup/",
+    "https://edmidentity.com/2025/04/30/six-artists-edc-las-vegas-wasteland/",
+    "https://www.edmtunes.com/2026/02/edc-las-vegas-2026-unveils-massive-30th-anniversary-lineup/amp/",
+    "https://shambhalamusicfestival.com/blog/shambhala-music-festival-2025-lineup",
+    "https://edmmaniac.com/subtronics-cyclops-rocks-v-lineup-2025",
+    "https://www.beatportal.com/articles/1485123-worship-to-bring-drum-and-bass-to-arenas-in-2026-north-american-tour"
+  ],
+  "artists": {
+    "dubstep": [
+      "Excision", "Subtronics", "Zeds Dead", "NGHTMRE", "Virtual Riot", "Flux Pavilion", "Zomboy", "Doctor P",
+      "Getter", "Space Laces", "ATLiens", "Tape B", "Black Tiger Sex Machine", "Ray Volpe", "Barely Alive",
+      "FuntCase", "Eptic", "Rusko", "Moody Good", "Deathpact", "Kai Wachi", "Dirt Monkey", "MUST DIE!"
+    ],
+    "riddim": [
+      "Sullivan King", "SVDDEN DEATH", "VOYD", "Wooli", "Level Up", "INFEKT", "Jessica Audiffred", "LAYZ",
+      "Marauda", "Kompany", "Hol!", "Calcium", "Code: Pandorum", "Mport", "Basstripper", "Syzy", "VEIL",
+      "Gunpoint", "Flozone", "Dennett", "Skellytn", "PEEKABOO", "Wreckno", "The Resistance"
+    ],
+    "melodic": [
+      "ILLENIUM", "Seven Lions", "SLANDER", "Adventure Club", "Krewella", "Crankdat", "Grabbitz", "Whethan",
+      "Said The Sky", "Dabin"
+    ],
+    "dnb": [
+      "Andy C", "Sub Focus", "Dimension", "Culture Shock", "1991", "WORSHIP", "Wilkinson", "Hedex", "Netsky",
+      "Hybrid Minds", "Kings Of The Rollers", "Delta Heavy", "Mefjus", "Sigma", "Kanine", "Sota", "Muzz",
+      "Camo & Krooked", "Metrik", "A Little Sound"
+    ],
+    "uk": [
+      "Skream", "Caspa", "Truth", "Distinct Motive", "Hamdi", "Flowdan", "Jantsen", "Nikita"
+    ],
+    "wonky": [
+      "Liquid Stranger", "Of The Trees", "Mersiv", "Zingara", "Ahee", "Daily Bread", "Champagne Drip",
+      "Detox Unit", "The Widdler", "Super Future", "EAZYBAKED", "Smoakland", "Ganja White Night", "Jade Cicada",
+      "Opiuo", "Ivy Lab", "Machinedrum", "Levity", "Apashe", "Rezz", "LSDream", "Jon Casey", "Hairitage"
+    ],
+    "adj": [
+      "TroyBoi", "Nostalgix", "Taiki Nulight", "ALLEYCVT", "Big Gigantic", "GRiZ", "Malaa", "Lil Texas"
+    ]
+  }
+}

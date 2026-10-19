@@ -21,3 +21,7 @@ Friends are people outside your crew. Each person gets a friend code (shown as a
 ## Profile
 
 The **You** tab is your profile: your picture (one of eight built-in tiles), your name, the sounds you're into, the artists you follow, and your shows, upcoming and past. It works without a crew or friend code and lives on this device. With a friend code, your friends see your picture and sound, and tapping a friend opens their profile. Changing your name updates it for your friends and your crew. This needs the `pic`/`sounds` columns, `friend_set_profile` and `crew_rename` from `supabase/setup.sql`.
+
+## Watchlist
+
+`watchlist.json` lists popular bass artists, grouped by sound, mostly taken from recent Lost Lands, Bass Canyon, WAKAAN, Electric Forest, EDC and Shambhala lineups. The daily updater checks 15 of them each day (rotating through the list, so everyone is covered about every 8 days) for Chicago-area tour dates, alongside the venue and listing sites. Add or remove names any time; the site itself doesn't read this file.
