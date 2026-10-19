@@ -866,12 +866,16 @@ button.pchip{cursor:pointer}
   .bnav button{position:relative;height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0;border:0;border-radius:0;background:none;color:var(--ink-meta);font:500 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.02em;cursor:pointer}
   .bnav button[hidden]{display:none}
   .bnav button[aria-current="true"]{color:var(--ink)}
-  .bnav button[aria-current="true"]::before{content:"";position:absolute;left:18%;right:18%;top:-1px;height:3px;background:var(--bc,var(--ink))}
+  .bmk{position:absolute;top:-1px;left:0;height:4px;width:25%;background:var(--ink);transition:transform .4s cubic-bezier(.34,1.56,.64,1),width .3s ease,background-color .3s ease;pointer-events:none}
+  .bnav .bi{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+  .bnav button[aria-current="true"] .bi{transform:translateY(-2px)}
+  .bnav button{transition:color .2s ease}
   .bnav button:focus-visible{outline:2px solid var(--focus);outline-offset:-4px}
   .bnav .bi{width:24px;height:24px;display:grid;place-items:center}
   .bnav .bi svg{width:22px;height:22px}
   .bnav .bi .cpic{width:22px;height:22px;box-shadow:none}
   .bnav button:active .bi{transform:scale(.92)}
+  @media (prefers-reduced-motion:reduce){.bmk,.bnav .bi,.bnav button{transition:none}}
   .bnav{view-transition-name:bnav}
   body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
   .toast{bottom:calc(74px + env(safe-area-inset-bottom,0px))}
@@ -1617,12 +1621,20 @@ async function renameMe(nm){
 const BN_CAL='<svg viewBox="0 0 22 22" aria-hidden="true"><path d="M3.5 5.5h15v13h-15zM3.5 9.5h15M7.5 3v4M14.5 3v4" fill="none" stroke="currentColor" stroke-width="1.7"></path></svg>';
 const BN_FR='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="8" cy="7.5" r="3" fill="none" stroke="currentColor" stroke-width="1.7"></circle><path d="M2.5 18.5c.7-3.3 2.8-5 5.5-5s4.8 1.7 5.5 5" fill="none" stroke="currentColor" stroke-width="1.7"></path><circle cx="15.5" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M15.5 13.2c2.2 0 3.7 1.5 4.2 4.3" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>';
 const BN_CREW='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="6.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"></circle><circle cx="5" cy="9" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"></circle><circle cx="17" cy="9" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M6.5 18.5c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6M1.5 17.5c.4-2 1.6-3.2 3.3-3.4M20.5 17.5c-.4-2-1.6-3.2-3.3-3.4" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>';
+/* the bar is built once so its marker can slide from tab to tab instead of being redrawn */
+const BN_TABS=[["cal","Calendar","var(--ink)"],["friends","Friends","var(--pink)"],["crew","Crew","var(--signal)"],["me","You","var(--volt)"]];
+function placeMk(btn){const m=$("bnav").querySelector(".bmk");if(!m||!btn||!btn.offsetWidth)return;
+  m.style.width=btn.offsetWidth+"px";m.style.transform="translateX("+btn.offsetLeft+"px)";m.style.background=btn.style.getPropertyValue("--bc");}
 function renderBNav(){
-  const v=state.view,cal=!PAGES.includes(v);
-  const b=(k,label,icon,cur,color,hide)=>'<button type="button" data-bnav="'+k+'" aria-current="'+cur+'" style="--bc:'+color+'"'+(hide?" hidden":"")+'><span class="bi">'+icon+'</span>'+label+'</button>';
-  $("bnav").innerHTML=b("cal","Calendar",BN_CAL,cal,"var(--ink)")+b("friends","Friends",BN_FR,v==="friends","var(--pink)",!CREW_ON)+
-    b("crew","Crew",inCrew()?crewPic(crew,22):BN_CREW,v==="crew","var(--signal)",!CREW_ON)+b("me","You",myPic(22),v==="me","var(--volt)");
+  const nav=$("bnav"),v=state.view,cal=!PAGES.includes(v);
+  if(!nav.firstChild)nav.innerHTML='<span class="bmk" aria-hidden="true"></span>'+BN_TABS.map(([k,l,c])=>'<button type="button" data-bnav="'+k+'" style="--bc:'+c+'"><span class="bi"></span>'+l+'</button>').join("");
+  const icon={cal:BN_CAL,friends:BN_FR,crew:inCrew()?crewPic(crew,22):BN_CREW,me:myPic(22)};
+  let cur=null;
+  nav.querySelectorAll("[data-bnav]").forEach(b=>{const k=b.dataset.bnav,on=k==="cal"?cal:v===k;b.setAttribute("aria-current",String(on));if(on)cur=b;
+    b.hidden=(k==="friends"||k==="crew")&&!CREW_ON;const bi=b.firstChild;if(bi._h!==icon[k]){bi._h=icon[k];bi.innerHTML=icon[k];}});
+  placeMk(cur);
 }
+window.addEventListener("resize",()=>placeMk($("bnav").querySelector('[aria-current="true"]')));
 function goSection(k){
   if(k==="cal"){if(PAGES.includes(state.view))setView(state.lastCal||"month");else window.scrollTo(0,0);return;}
   if(state.view===k){window.scrollTo(0,0);if(k==="friends"&&state.frSel){state.frSel=null;render();}return;}
@@ -1633,7 +1645,9 @@ function goSection(k){
   if(k==="crew"&&inCrew())refreshCrew();
   if((k==="friends"||k==="me")&&fme)refreshFriends();
 }
-document.addEventListener("click",e=>{const b=e.target.closest("[data-bnav]");if(b)goSection(b.dataset.bnav);});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-bnav]");if(!b)return;
+  /* the marker answers the tap right away; the page follows after its closing animation */
+  b.parentNode.querySelectorAll("[data-bnav]").forEach(x=>x.setAttribute("aria-current",String(x===b)));placeMk(b);goSection(b.dataset.bnav);});
 function renderMeNav(){
   const n=$("navMe");n.setAttribute("aria-current",String(state.view==="me"));
   $("navMeAv").innerHTML=myPic(24);
