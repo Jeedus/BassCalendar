@@ -837,6 +837,23 @@ button.pchip{cursor:pointer}
 .hero>.wrap{position:relative}
 .lava{--signal:#000000;--on-signal:#19c6d6;position:absolute;inset:0;z-index:2;pointer-events:none;background:var(--signal);color:var(--on-signal);clip-path:inset(0 0 0 100%);-webkit-clip-path:inset(0 0 0 100%)}
 .lava .rmenu{display:none!important}
+/* phones: the main sections sit in a bar at the bottom, in thumb reach. The top bar keeps the name only */
+.bnav{display:none}
+@media (max-width:640px){
+  .top .crewnav{display:none}
+  .bnav{position:fixed;left:0;right:0;bottom:0;z-index:28;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--paper);border-top:1px solid var(--rule);padding:0 max(4px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(4px,env(safe-area-inset-left,0px))}
+  .bnav button{position:relative;height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0;border:0;border-radius:0;background:none;color:var(--ink-meta);font:500 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.02em;cursor:pointer}
+  .bnav button[hidden]{display:none}
+  .bnav button[aria-current="true"]{color:var(--ink)}
+  .bnav button[aria-current="true"]::before{content:"";position:absolute;left:18%;right:18%;top:-1px;height:3px;background:var(--bc,var(--ink))}
+  .bnav button:focus-visible{outline:2px solid var(--focus);outline-offset:-4px}
+  .bnav .bi{width:24px;height:24px;display:grid;place-items:center}
+  .bnav .bi svg{width:22px;height:22px}
+  .bnav .bi .cpic{width:22px;height:22px;box-shadow:none}
+  .bnav button:active .bi{transform:scale(.92)}
+  body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
@@ -975,6 +992,7 @@ button.pchip{cursor:pointer}
 </div>
 <div class="scrim" id="scrim" hidden></div>
 <div class="joinx" id="joinx" role="dialog" aria-modal="true" aria-label="Join a crew" hidden></div>
+<nav class="bnav" id="bnav" aria-label="Sections"></nav>
 <div class="toast" id="toast" hidden></div>
 
 <script>
@@ -1561,6 +1579,28 @@ async function renameMe(nm){
   if(bad.length===jobs.length)keepName(old.last);
   render();toast(errMsg(bad[0].reason));
 }
+/* bottom bar on phones: Calendar, Friends, Crew, You */
+const BN_CAL='<svg viewBox="0 0 22 22" aria-hidden="true"><path d="M3.5 5.5h15v13h-15zM3.5 9.5h15M7.5 3v4M14.5 3v4" fill="none" stroke="currentColor" stroke-width="1.7"></path></svg>';
+const BN_FR='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="8" cy="7.5" r="3" fill="none" stroke="currentColor" stroke-width="1.7"></circle><path d="M2.5 18.5c.7-3.3 2.8-5 5.5-5s4.8 1.7 5.5 5" fill="none" stroke="currentColor" stroke-width="1.7"></path><circle cx="15.5" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M15.5 13.2c2.2 0 3.7 1.5 4.2 4.3" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>';
+const BN_CREW='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="6.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"></circle><circle cx="5" cy="9" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"></circle><circle cx="17" cy="9" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M6.5 18.5c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6M1.5 17.5c.4-2 1.6-3.2 3.3-3.4M20.5 17.5c-.4-2-1.6-3.2-3.3-3.4" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>';
+function renderBNav(){
+  const v=state.view,cal=!PAGES.includes(v);
+  const b=(k,label,icon,cur,color,hide)=>'<button type="button" data-bnav="'+k+'" aria-current="'+cur+'" style="--bc:'+color+'"'+(hide?" hidden":"")+'><span class="bi">'+icon+'</span>'+label+'</button>';
+  $("bnav").innerHTML=b("cal","Calendar",BN_CAL,cal,"var(--ink)")+b("friends","Friends",BN_FR,v==="friends","var(--pink)",!CREW_ON)+
+    b("crew","Crew",inCrew()?crewPic(crew,22):BN_CREW,v==="crew","var(--signal)",!CREW_ON)+b("me","You",myPic(22),v==="me","var(--volt)");
+}
+function goSection(k){
+  window.scrollTo(0,0);
+  if(k==="cal"){if(PAGES.includes(state.view))setView(state.lastCal||"month");return;}
+  if(state.view===k){if(k==="friends"&&state.frSel){state.frSel=null;render();}return;}
+  if(!PAGES.includes(state.view))state.lastCal=state.view;
+  if(k==="friends")state.frSel=null;
+  if(k==="me"){state.pfEdit=false;state.pfPicOpen=false;}
+  setView(k);
+  if(k==="crew"&&inCrew())refreshCrew();
+  if((k==="friends"||k==="me")&&fme)refreshFriends();
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-bnav]");if(b)goSection(b.dataset.bnav);});
 function renderMeNav(){
   const n=$("navMe");n.setAttribute("aria-current",String(state.view==="me"));
   $("navMeAv").innerHTML=myPic(24);
@@ -1865,7 +1905,7 @@ function render(){
   $("monthView").hidden=!isM;$("listView").hidden=isM||isP;
   $("heroSec").hidden=isP;$("stats").hidden=isP;document.querySelector(".bar").hidden=isP;$("crewView").hidden=!isC;$("frView").hidden=!isFv;$("meView").hidden=!isPf;
   $("tabMonth").setAttribute("aria-selected",isM);$("tabList").setAttribute("aria-selected",!isM);
-  renderCrewNav();renderFrNav();renderMeNav();
+  renderCrewNav();renderFrNav();renderMeNav();renderBNav();
   const n=filtered().length;const nf=FESTS.filter(fvis).length;$("countLine").textContent=n+(n===1?" show":" shows")+(nf?" + "+nf+(nf===1?" festival":" festivals"):"");
   const active=(state.genres.length<GENRES.length?1:0)+(state.venue?1:0)+(state.q?1:0)+((state.crewF||"all")!=="all"?1:0)+(state.cityOnly?1:0)+(state.showPast?1:0)+(state.fests?0:1)+(state.followOnly?1:0)+(state.newOnly?1:0);
   $("fcount").hidden=!active;$("fcount").textContent=active+" on";state._af=active;renderChips();
