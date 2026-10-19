@@ -831,11 +831,12 @@ button.pchip{cursor:pointer}
 .artf path{fill:var(--volt);stroke:#000000;stroke-width:1.6;stroke-linejoin:miter}
 .art[data-follow]:is(:hover,:focus-visible)>.artf{opacity:1;transform:none}
 @media (hover:hover){.lrow [data-follow]{display:none}}
-/* hero lava lamp: drawn on a canvas in the banner's own cyan and blended with "difference",
-   so where the lava flows the cyan turns black and the black type turns cyan. Lives down the right edge. */
+/* hero lava lamp: a copy of the banner with its two colors swapped (black field, cyan type), cut to the
+   lava's outline. Where the lava flows the cyan turns black and the black type turns cyan. */
 .hero{position:relative;overflow:hidden;isolation:isolate}
 .hero>.wrap{position:relative}
-.lava{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;mix-blend-mode:difference}
+.lava{--signal:#000000;--on-signal:#19c6d6;position:absolute;inset:0;z-index:2;pointer-events:none;background:var(--signal);color:var(--on-signal);clip-path:inset(0 0 0 100%);-webkit-clip-path:inset(0 0 0 100%)}
+.lava .rmenu{display:none!important}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
@@ -873,7 +874,7 @@ button.pchip{cursor:pointer}
 </header>
 
 <section class="hero" id="heroSec" aria-labelledby="heroTitle">
-  <canvas class="lava" id="lava" aria-hidden="true"></canvas>
+  <div class="lava" id="lava" aria-hidden="true"></div>
   <div class="wrap" id="hero"></div>
 </section>
 
@@ -1880,39 +1881,50 @@ function render(){
   inkAlign();
 }
 
-/* hero lava lamp: metaballs on a small canvas, scaled up. Blobs rise and sink beside a pool on the right edge */
+/* hero lava lamp: metaballs traced into a smooth outline (marching squares) each frame and used as the
+   clip-path of the swapped-color copy. Blobs rise and sink beside a pool on the right edge */
 function lavaLamp(){
-  const cv=$("lava"),sec=$("heroSec");if(!cv||!cv.getContext)return;
-  const cx=cv.getContext("2d"),off=document.createElement("canvas"),ox=off.getContext("2d");
-  const S=2,BL=[[0,90,-20,20,0,280],[30,70,15,24,-8,360],[10,110,-10,28,-15,220],[40,60,10,18,-4,320]];
+  const el=$("lava"),sec=$("heroSec"),src=$("hero");if(!el||!sec||!src)return;
+  const S=3,BL=[[0,90,-20,20,0,280],[30,70,15,24,-8,360],[10,110,-10,28,-15,220],[40,60,10,18,-4,320]];
   const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-  let W=0,H=0,w=0,h=0,img=null,F=null,raf=0,seen=true;const t0=performance.now();
   const still=matchMedia("(prefers-reduced-motion: reduce)");
-  function size(){const r=sec.getBoundingClientRect();if(!r.width||!r.height)return false;
-    if(r.width===W&&r.height===H)return true;W=r.width;H=r.height;const dpr=Math.min(2,window.devicePixelRatio||1);
-    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);w=Math.ceil(W/S)+1;h=Math.ceil(H/S)+1;off.width=w;off.height=h;img=ox.createImageData(w,h);return true;}
+  let raf=0,seen=true,sq=0,F=null,nb=null;const t0=performance.now();
+  const sync=()=>{sq=0;const c=src.cloneNode(true);c.removeAttribute("id");c.querySelectorAll("[id]").forEach(x=>x.removeAttribute("id"));el.replaceChildren(c);};
+  try{new MutationObserver(()=>{if(!sq)sq=requestAnimationFrame(sync);}).observe(src,{subtree:true,childList:true,attributes:true,characterData:true});}catch(e){}
+  sync();
   function draw(now){
-    if(!size())return;const ph=W<=640,ls=ph?.62:1,col=ph?110:300,t=(now-t0)/1000;
+    const W=sec.clientWidth,H=sec.clientHeight;if(!W||!H)return;
+    const ph=W<=640,ls=ph?.62:1,col=ph?110:300,t=(now-t0)/1000;
     const balls=BL.map(([rp,bw,dx,d,o,ht])=>{let p=((t-o)/d)%1;if(p<0)p+=1;const e=ease(p<.5?p*2:2-p*2);const r=bw/2*ls*(.85+.2*e);
       return [W-col*rp/100-bw/2*ls+dx*ls*e,H-r*.9-ht*ls*e,r*r];});
     const pool=(ph?24:58)*(1-.15*(.5+.5*Math.sin(t*Math.PI/11)));
-    if(!F||F.length!==w*h)F=new Float32Array(w*h);
-    for(let y=0,j=0;y<h;y++){const py=y*S;for(let x=0;x<w;x++,j++){const px=x*S;
-      const ex=Math.max(.5,W-px);let v=pool*pool/(ex*ex);
-      for(let k=0;k<4;k++){const b=balls[k],dx=px-b[0],dy=py-b[1];v+=b[2]/(dx*dx+dy*dy+1);}F[j]=v;}}
-    /* edge one sample wide everywhere: distance to the outline = (field - 1) / slope */
-    const d=img.data;
-    for(let y=0,j=0;y<h;y++)for(let x=0;x<w;x++,j++){const v=F[j];let a;
-      if(v<.5)a=0;else if(v>2)a=255;else{const gx=F[x<w-1?j+1:j]-F[x>0?j-1:j],gy=F[y<h-1?j+w:j]-F[y>0?j-w:j];
-        const g=Math.sqrt(gx*gx+gy*gy)*.5+1e-6;a=Math.max(0,Math.min(1,.5+(v-1)/g))*255|0;}
-      const i=j*4;d[i]=25;d[i+1]=198;d[i+2]=214;d[i+3]=a;}
-    ox.putImageData(img,0,0);cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);cx.imageSmoothingEnabled=true;
-    cx.drawImage(off,0,0,w*S*cv.width/W,h*S*cv.height/H);
+    /* field on a grid with one empty cell all round, so every outline closes */
+    const nx=Math.ceil(W/S)+3,ny=Math.ceil(H/S)+3,N=nx*ny;
+    if(!F||F.length!==N){F=new Float32Array(N);nb=new Int32Array(4*N);}else F.fill(0);
+    for(let j=1;j<ny-1;j++){const py=(j-1)*S;for(let i=1;i<nx-1;i++){const px=(i-1)*S,ex=Math.max(.5,W-px);let v=pool*pool/(ex*ex);
+      for(let k=0;k<4;k++){const b=balls[k],dx=px-b[0],dy=py-b[1];v+=b[2]/(dx*dx+dy*dy+1);}F[j*nx+i]=v;}}
+    /* marching squares: edges are keyed h(i,j)=j*nx+i and v(i,j)=N+j*nx+i; each edge point links to two others */
+    nb.fill(-1);
+    const link=(a,b)=>{nb[2*a+(nb[2*a]<0?0:1)]=b;nb[2*b+(nb[2*b]<0?0:1)]=a;};
+    for(let j=0;j<ny-1;j++)for(let i=0;i<nx-1;i++){const o=j*nx+i;
+      const c=(F[o]>=1?8:0)|(F[o+1]>=1?4:0)|(F[o+nx+1]>=1?2:0)|(F[o+nx]>=1?1:0);if(!c||c===15)continue;
+      const T=o,B=o+nx,L=N+o,R=N+o+1;
+      switch(c){case 1:case 14:link(L,B);break;case 2:case 13:link(B,R);break;case 3:case 12:link(L,R);break;case 4:case 11:link(T,R);break;
+        case 6:case 9:link(T,B);break;case 7:case 8:link(L,T);break;
+        case 5:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(L,T);link(B,R);}else{link(L,B);link(T,R);}break;
+        case 10:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(T,R);link(L,B);}else{link(L,T);link(B,R);}break;}}
+    const pt=k=>{if(k<N){const i=k%nx,j=(k/nx)|0,a=F[k],b=F[k+1];return (((i-1)+(1-a)/(b-a))*S).toFixed(1)+" "+((j-1)*S);}
+      const q=k-N,i=q%nx,j=(q/nx)|0,a=F[q],b=F[q+nx];return ((i-1)*S)+" "+(((j-1)+(1-a)/(b-a))*S).toFixed(1);};
+    let d="";const used=new Uint8Array(2*N);
+    for(let k=0;k<2*N;k++){if(used[k]||nb[2*k]<0)continue;let prev=-1,cur=k,n=0;d+="M"+pt(k);used[k]=1;
+      while(n++<1e5){const a=nb[2*cur],b=nb[2*cur+1];const nx2=a!==prev?a:b;if(nx2<0||nx2===k)break;if(used[nx2])break;used[nx2]=1;d+="L"+pt(nx2);prev=cur;cur=nx2;}
+      d+="Z";}
+    const cp=d?'path(evenodd,"'+d+'")':"inset(0 0 0 100%)";el.style.clipPath=cp;el.style.webkitClipPath=cp;
   }
   function loop(now){raf=0;if(!seen||sec.hidden||document.hidden)return;draw(now);if(!still.matches)raf=requestAnimationFrame(loop);}
   const go=()=>{if(!raf)raf=requestAnimationFrame(loop);};
   try{new IntersectionObserver(es=>{seen=es[0].isIntersecting;if(seen)go();}).observe(sec);}catch(e){}
-  try{new ResizeObserver(()=>{if(still.matches)go();}).observe(sec);}catch(e){}
+  try{new ResizeObserver(go).observe(sec);}catch(e){}
   document.addEventListener("visibilitychange",go);
   go();
 }
