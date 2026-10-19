@@ -1222,7 +1222,7 @@ async function api(fn,body){
   return j;
 }
 const ERRS={crew_not_found:"That invite link doesn't work anymore. Ask your friend to send a fresh one.",name_required:"Type your name first.",crew_name_required:"Give the crew a name first.",not_a_member:"This device isn't in that crew anymore. Open the invite link to rejoin.",crew_full:"That crew is full.",offline:"Can't reach the crew right now. Check your connection and try again.",not_set_up:"This isn't set up on the server yet. Run supabase/setup.sql in Supabase, then try again."};
-const errMsg=e=>ERRS[e.message]||"Something went wrong saving that. Try again in a minute.";
+const errMsg=e=>ERRS[e.message]||"Something went wrong saving that. Try again in a minute."+(e&&e.message?" ("+String(e.message).slice(0,90)+")":"");
 const EVMAP=new Map();
 SHOWS.forEach(s=>EVMAP.set(s.id,{id:s.id,title:s.title,tag:s.tag,date:s.date,where:s.venue,kind:"show"}));
 FESTS.forEach(f=>EVMAP.set(f.id,{id:f.id,title:f.name,date:f.start,end:f.end,where:f.city,kind:"fest"}));
