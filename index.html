@@ -2033,8 +2033,8 @@ function lavaLamp(){
     W=sec.clientWidth;H=sec.clientHeight;if(!W||!H)return false;
     const ph=W<=640,sc=ph?.5:1;X0=ph?Math.max(0,W-122):0;GX=ph?Math.max(0,X0-70):0;const RW=W-X0,GW=W-GX;
     PH=ph?18:34;PP=ph?16:30;
-    /* grid cell size: about 9000 cells over the lava's region, between 3 and 8 px */
-    S=Math.max(3,Math.min(8,Math.sqrt(GW*H/9000)));
+    /* grid cell size: about 15000 cells over the lava's region, between 3 and 7 px */
+    S=Math.max(3,Math.min(7,Math.sqrt(GW*H/15000)));
     nx=Math.ceil(GW/S)+3;ny=Math.ceil(H/S)+3;N=nx*ny;
     if(!F||F.length!==N){F=new Float32Array(N);nb=new Int32Array(4*N);used=new Uint8Array(2*N);pts=new Float32Array(4*N);lo=new Int32Array(ny);hi=new Int32Array(ny);}
     const n=ph?4:7;
@@ -2118,8 +2118,12 @@ function lavaLamp(){
         case 6:case 9:link(T,B);break;case 7:case 8:link(L,T);break;
         case 5:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(L,T);link(B,Rr);}else{link(L,B);link(T,Rr);}break;
         case 10:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(T,Rr);link(L,B);}else{link(L,T);link(B,Rr);}break;}}}
-    const px=k=>{if(k<N){const i=k%nx,a=F[k],b=F[k+1];return GX+((i-1)+(1-a)/(b-a))*S;}return GX+(((k-N)%nx)-1)*S;};
-    const py=k=>{if(k<N)return (((k/nx)|0)-1)*S;const q=k-N,a=F[q],b=F[q+nx];return ((((q/nx)|0)-1)+(1-a)/(b-a))*S;};
+    /* where the outline crosses a grid edge: the field falls off like 1/distance^4, so on its fourth root
+       it is close to a straight line, and a straight-line estimate there lands almost exactly on the true
+       outline (interpolating the raw values bent the edge towards the grid, which looked blocky) */
+    const cross=(a,b)=>{const wa=1/Math.sqrt(Math.sqrt(a+1e-9)),wb=1/Math.sqrt(Math.sqrt(b+1e-9));return (1-wa)/(wb-wa);};
+    const px=k=>{if(k<N){const i=k%nx;return GX+((i-1)+cross(F[k],F[k+1]))*S;}return GX+(((k-N)%nx)-1)*S;};
+    const py=k=>{if(k<N)return (((k/nx)|0)-1)*S;const q=k-N;return ((((q/nx)|0)-1)+cross(F[q],F[q+nx]))*S;};
     used.fill(0);let d="";
     for(let k=0;k<2*N;k++){if(used[k]||nb[2*k]<0)continue;
       /* walk the loop, taking every crossing point: each one slides continuously as the blobs move, so the
