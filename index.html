@@ -869,7 +869,6 @@ button.pchip{cursor:pointer}
 .artf path{fill:var(--volt);stroke:#000000;stroke-width:1.6;stroke-linejoin:miter}
 .art[data-follow]:is(:hover,:focus-visible)>.artf{opacity:1;transform:none}
 @media (hover:none){.nname .art[data-follow]>.artf{opacity:1;transform:none}.art[data-follow]{-webkit-tap-highlight-color:transparent}}
-@media (hover:hover){.lrow [data-follow]{display:none}}
 /* hero lava lamp: a copy of the banner with its two colors swapped (black field, cyan type), cut to the
    lava's outline. Where the lava flows the cyan turns black and the black type turns cyan. */
 .hero{position:relative;overflow:hidden;isolation:isolate}
@@ -1146,18 +1145,17 @@ const isNew=s=>!!s.added&&daysBetween(s.added,TODAY)>=0&&daysBetween(s.added,TOD
 const chi=a=>LOCALS.has(String(a).toLowerCase())?'<span class="chi" title="Chicago artist">CHI</span>':'';
 /* an artist's name: tapping or clicking the whole name follows/unfollows (it doesn't open the show).
    A lime + or − with a black border sits over its last letter: on hover with a mouse, and always on
-   the show names in the phone list. Phones also keep the Follow button inside an opened show */
+   the show names in the phone list */
 const artName=(a,cls)=>{const on=isF(a);const c='art'+(on?" fol":"")+(cls?" "+cls:"");
   const l=(on?"Unfollow ":"Follow ")+esc(a);
   return '<span class="'+c+'" role="button" tabindex="0" data-follow="'+esc(a)+'" aria-pressed="'+on+'" title="'+l+'">'+esc(a)+
     '<span class="artf" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="'+(on?"M2 6h12v4H2z":"M6 2h4v4h4v4h-4v4H6v-4H2V6h4z")+'"></path></svg></span></span>'+chi(a);};
 const nm=a=>artName(a);
 const supportHtml=s=>s.support.length?'<p class="rsup">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'</p>':'';
-function listenRow(a){const L=LINKS[a]||{};const q=encodeURIComponent(a);const on=isF(a);
+function listenRow(a){const L=LINKS[a]||{};const q=encodeURIComponent(a);
   return '<div class="lrow"><span class="listen"><span class="kicker">Listen</span>'+
     '<a href="'+esc(L.sc||"https://soundcloud.com/search?q="+q)+'" target="_blank" rel="noopener">SoundCloud</a>'+
-    '<a href="'+esc(L.sp||"https://open.spotify.com/search/"+q)+'" target="_blank" rel="noopener">Spotify</a></span>'+
-    '<button class="btn fbtn" type="button" data-follow="'+esc(a)+'" aria-pressed="'+on+'">'+(on?"Following":"Follow")+'<span class="lg"> '+esc(a)+'</span></button></div>';}
+    '<a href="'+esc(L.sp||"https://open.spotify.com/search/"+q)+'" target="_blank" rel="noopener">Spotify</a></span></div>';}
 const statusTags=s=>(isNew(s)?'<span class="tag nw">New</span>':'')+(followHit(s)?'<span class="tag fw">Following</span>':'');
 const miniTags=s=>isNew(s)?'<span class="nsaved">New</span>':'';
 function fvis(f){
