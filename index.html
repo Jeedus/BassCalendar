@@ -57,7 +57,7 @@
 
 *{box-sizing:border-box}
 /* month slide moves the grid/list 40px sideways; clip it so phones don't zoom out to fit the overflow */
-#monthView{overflow-x:clip}
+#monthView{overflow-x:clip;touch-action:pan-y pinch-zoom}
 body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:16px;line-height:1.4;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
 a{color:inherit}
@@ -2142,10 +2142,16 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d._tap||!d.open)retu
 document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.nshow"))return;if(d.open)openShows.add(d.dataset.show);else openShows.delete(d.dataset.show);},true);
 /* swipe anywhere in the month view (header, mini calendar, grid, night list) to change month,
    except from inside something that scrolls sideways on its own */
-let swOk=false;
+let swOk=false,swAxis="";
 const hScroller=el=>{for(;el&&el.id!=="monthView";el=el.parentElement){const o=getComputedStyle(el).overflowX;if((o==="auto"||o==="scroll")&&el.scrollWidth>el.clientWidth)return true;}return false;};
-$("monthView").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;swOk=e.touches.length===1&&!hScroller(e.target)&&!e.target.closest("input,select,textarea");},{passive:true});
-$("monthView").addEventListener("touchend",e=>{if(!swOk)return;swOk=false;const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){const b=dx<0?$("next"):$("prev");if(!b.disabled)b.click();}},{passive:true});
+$("monthView").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;swAxis="";swOk=e.touches.length===1&&!hScroller(e.target)&&!e.target.closest("input,select,textarea");},{passive:true});
+/* axis lock: the first ~10px of movement decides the gesture. Sideways locks out page scrolling until
+   the finger lifts; up/down scrolls as normal and can't turn into a month swipe halfway through */
+$("monthView").addEventListener("touchmove",e=>{if(!swOk)return;if(e.touches.length>1){swOk=false;return;}const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;
+  if(!swAxis){if(Math.hypot(dx,dy)<10)return;swAxis=Math.abs(dx)>Math.abs(dy)?"x":"y";if(swAxis==="y"){swOk=false;return;}}
+  if(swAxis==="x"&&e.cancelable)e.preventDefault();},{passive:false});
+$("monthView").addEventListener("touchend",e=>{if(!swOk||swAxis!=="x"){swOk=false;return;}swOk=false;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>60){const b=dx<0?$("next"):$("prev");if(!b.disabled)b.click();}},{passive:true});
+$("monthView").addEventListener("touchcancel",()=>{swOk=false;},{passive:true});
 setRail(false);
 $("navCrew").onclick=e=>{e.preventDefault();if(state.view==="crew"){setView(state.lastCal||"month");return;}if(!PAGES.includes(state.view))state.lastCal=state.view;setView("crew");if(inCrew())refreshCrew();};
 $("navFr").onclick=e=>{e.preventDefault();if(state.view==="friends"){if(state.frSel){state.frSel=null;render();return;}setView(state.lastCal||"month");return;}if(!PAGES.includes(state.view))state.lastCal=state.view;state.frSel=null;setView("friends");refreshFriends();};
