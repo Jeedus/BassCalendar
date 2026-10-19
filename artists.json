@@ -1,0 +1,918 @@
+{
+ "_about": "What each artist generally plays, as one of the site's genre ids, so new shows get the right genre. Researched October 2026 from artist bios, Beatport, festival and label pages (source per artist where one was used). 'confidence' is only set when it isn't high; low means the act couldn't be identified and the genre is a guess from the bill they're on. not_bass marks acts that aren't bass music. A show's genre normally comes from its headliner here, unless that night is clearly a different kind of set.",
+ "genres": {
+  "dubstep": "US/mainstream dubstep, brostep, heavy dubstep, tearout, trap-dubstep",
+  "riddim": "riddim, deathstep, metal-heavy dubstep",
+  "melodic": "melodic dubstep, future bass, melodic bass",
+  "dnb": "drum & bass, jungle, neurofunk, liquid, halftime",
+  "uk": "UK/deep dubstep, 140, original UK sound",
+  "wonky": "wonky, experimental and psychedelic bass, glitch-hop, hip-hop-leaning bass",
+  "adj": "bass-adjacent: bass house, festival trap, livetronica, midtempo, breakcore"
+ },
+ "artists": {
+  "1991": {
+   "genre": "dnb",
+   "style": "drum & bass (melodic/dancefloor)"
+  },
+  "4B": {
+   "genre": "adj",
+   "style": "festival trap / bass house"
+  },
+  "7L": {
+   "genre": "riddim",
+   "style": "unidentified; guessed from b2b with riddim act PYKE (ATLiens show)",
+   "confidence": "low"
+  },
+  "A Little Sound": {
+   "genre": "dnb",
+   "style": "drum & bass vocalist/DJ"
+  },
+  "Adventure Club": {
+   "genre": "melodic",
+   "style": "melodic dubstep",
+   "source": "https://edmmaniac.com/adventure-club-throwback-tour-fall-2025"
+  },
+  "Ahee": {
+   "genre": "wonky",
+   "style": "wonky / experimental bass"
+  },
+  "Alix Perez": {
+   "genre": "dnb",
+   "style": "drum & bass / halftime"
+  },
+  "ALLEYCVT": {
+   "genre": "dubstep",
+   "style": "hybrid heavy dubstep / bass"
+  },
+  "Andy C": {
+   "genre": "dnb",
+   "style": "drum & bass"
+  },
+  "Apashe": {
+   "genre": "adj",
+   "style": "orchestral bass / cinematic trap-midtempo",
+   "confidence": "medium"
+  },
+  "ATLiens": {
+   "genre": "dubstep",
+   "style": "hybrid trap-dubstep"
+  },
+  "Barely Alive": {
+   "genre": "dubstep",
+   "style": "heavy dubstep / brostep"
+  },
+  "Basstripper": {
+   "genre": "dnb",
+   "style": "jump-up drum & bass",
+   "source": "https://origin.dropthebass.co/artists/basstripper"
+  },
+  "Benda": {
+   "genre": "dubstep",
+   "style": "heavy dubstep (Borgore protege, Bassrush)",
+   "confidence": "medium",
+   "source": "https://www.insomniac.com/?p=95913"
+  },
+  "Big Gigantic": {
+   "genre": "adj",
+   "style": "livetronica / future funk"
+  },
+  "Black Tiger Sex Machine": {
+   "genre": "dubstep",
+   "style": "dark heavy dubstep / cyberpunk bass"
+  },
+  "Blankface": {
+   "genre": "riddim",
+   "style": "riddim / tearout"
+  },
+  "Blind Equation": {
+   "genre": "adj",
+   "style": "cybergrind (grindcore + breakcore/trance electronics)",
+   "not_bass": true,
+   "confidence": "medium",
+   "source": "https://distortedsoundmag.com/album-review-death-awaits-blind-equation/"
+  },
+  "BLVNKSPVCE": {
+   "genre": "riddim",
+   "style": "riddim"
+  },
+  "Borgore": {
+   "genre": "dubstep",
+   "style": "brostep / heavy dubstep"
+  },
+  "Calcium": {
+   "genre": "riddim",
+   "style": "heavy dubstep / riddim",
+   "confidence": "medium",
+   "source": "https://edmidentity.com/2021/10/25/calcium-talks-deep-streets-and-milk-preferences/"
+  },
+  "Camo & Krooked": {
+   "genre": "dnb",
+   "style": "drum & bass"
+  },
+  "Caspa": {
+   "genre": "uk",
+   "style": "original UK dubstep"
+  },
+  "Chachuba": {
+   "genre": "adj",
+   "style": "unidentified; SunSquabi (livetronica) opener, likely local livetronica/jam act",
+   "confidence": "low"
+  },
+  "Champagne Drip": {
+   "genre": "wonky",
+   "style": "\"drip hop\" experimental bass/dubstep",
+   "confidence": "medium",
+   "source": "https://www.insomniac.com/music/artists/champagne-drip/"
+  },
+  "Chibs": {
+   "genre": "riddim",
+   "style": "riddim",
+   "source": "https://www.mbartists.co.uk/cass/chibs"
+  },
+  "Chmura": {
+   "genre": "uk",
+   "style": "140 / deep dubstep (Daggz collabs, Odyzey)",
+   "confidence": "medium",
+   "source": "https://www.beatport.com/track/transmutation/15400893"
+  },
+  "Claybrook": {
+   "genre": "dubstep",
+   "style": "heavy dubstep (Birmingham UK, DPMO releases)",
+   "confidence": "medium",
+   "source": "https://www.beatport.com/track/try-again/18457466/"
+  },
+  "COCOJOEY": {
+   "genre": "adj",
+   "style": "cybergrind / digital hardcore / bitpop (Chicago)",
+   "not_bass": true,
+   "confidence": "medium",
+   "source": "https://cocojoey.bandcamp.com"
+  },
+  "Code: Pandorum": {
+   "genre": "riddim",
+   "style": "deathstep / heavy dubstep"
+  },
+  "Conrad.": {
+   "genre": "melodic",
+   "style": "indie/pop-influenced melodic electronic (Chicago, Koastle/Jai Wolf support)",
+   "confidence": "medium",
+   "source": "https://musicboxsd.com/event/14757903/"
+  },
+  "Costa": {
+   "genre": "dubstep",
+   "style": "hip-hop-rooted bass/dubstep (DMV producer, LEVEL UP tour support)",
+   "confidence": "medium",
+   "source": "https://www.insomniac.com/?p=522632"
+  },
+  "Crankdat": {
+   "genre": "dubstep",
+   "style": "dubstep / trap-dubstep hybrid",
+   "source": "https://en.wikipedia.org/wiki/Crankdat"
+  },
+  "Crawdad Sniper": {
+   "genre": "dubstep",
+   "style": "tearout / heavy dubstep"
+  },
+  "Culture Shock": {
+   "genre": "dnb",
+   "style": "drum & bass"
+  },
+  "CØNTRA": {
+   "genre": "uk",
+   "style": "UK bass / halftime / deep dubstep",
+   "confidence": "medium",
+   "source": "https://ra.co/events/2500997"
+  },
+  "Dabin": {
+   "genre": "melodic",
+   "style": "melodic bass / melodic dubstep (live instrumentation)"
+  },
+  "Daily Bread": {
+   "genre": "wonky",
+   "style": "hip-hop-leaning bass / glitch-hop"
+  },
+  "Death Instinct": {
+   "genre": "adj",
+   "style": "unidentified; on breakcore/cybergrind bill (Nero's Day at Disneyland)",
+   "confidence": "low"
+  },
+  "Deathpact": {
+   "genre": "dubstep",
+   "style": "dark dubstep / trap hybrid"
+  },
+  "Debstep": {
+   "genre": "dubstep",
+   "style": "unidentified; Subtronics opener, name suggests dubstep",
+   "confidence": "low"
+  },
+  "Delta Heavy": {
+   "genre": "dnb",
+   "style": "drum & bass (with dubstep crossover)"
+  },
+  "Dennett": {
+   "genre": "dubstep",
+   "style": "dubstep with melodic bass elements",
+   "confidence": "low",
+   "source": "https://www.mixgraph.io/artists/dennett"
+  },
+  "Detox Unit": {
+   "genre": "wonky",
+   "style": "experimental bass, breaks/hip-hop dubstep (Tipper circle)",
+   "source": "https://edmmaniac.com/detox-unit-detonator/"
+  },
+  "Dimension": {
+   "genre": "dnb",
+   "style": "drum & bass"
+  },
+  "Dirt Monkey": {
+   "genre": "dubstep",
+   "style": "funky / wonky dubstep",
+   "confidence": "medium"
+  },
+  "Distinct Motive": {
+   "genre": "uk",
+   "style": "UK dubstep / grime"
+  },
+  "Doctor P": {
+   "genre": "dubstep",
+   "style": "brostep / dubstep"
+  },
+  "Dream Takers": {
+   "genre": "melodic",
+   "style": "melodic + heavy dubstep duo with vocals",
+   "confidence": "medium",
+   "source": "https://www.frontstagefestivals.com/artist/dream-takers"
+  },
+  "EAZYBAKED": {
+   "genre": "wonky",
+   "style": "trippy freeform/psychedelic dubstep",
+   "confidence": "medium"
+  },
+  "EMRYS": {
+   "genre": "dubstep",
+   "style": "unidentified; Subtronics opener",
+   "confidence": "low"
+  },
+  "Eptic": {
+   "genre": "dubstep",
+   "style": "heavy dubstep"
+  },
+  "ERO808": {
+   "genre": "adj",
+   "style": "bass house / UKG / Latin bass with vocals (Deadbeats)",
+   "confidence": "medium",
+   "source": "https://edr.altervista.org/ero808-releases-tantalizing-new-ep-a-necessary-evil/"
+  },
+  "Excision": {
+   "genre": "dubstep",
+   "style": "heavy dubstep / brostep"
+  },
+  "Feed Me": {
+   "genre": "adj",
+   "style": "bass house"
+  },
+  "Fieldz": {
+   "genre": "riddim",
+   "style": "dubstep (Beatport); likely riddim — little info",
+   "confidence": "low",
+   "source": "https://www.beatport.com/track/motion/28513863/"
+  },
+  "Finnuh": {
+   "genre": "riddim",
+   "style": "riddim / dubstep (Dallas)",
+   "source": "https://www.bandsintown.com/a/15658500-finnuh"
+  },
+  "Flowdan": {
+   "genre": "uk",
+   "style": "grime MC (UK bass/dubstep/DnB features)",
+   "confidence": "medium"
+  },
+  "Flozone": {
+   "genre": "dubstep",
+   "style": "dubstep / trap hybrid",
+   "confidence": "low",
+   "source": "https://www.mixgraph.io/artists/flozone"
+  },
+  "Flux Pavilion": {
+   "genre": "dubstep",
+   "style": "brostep / dubstep"
+  },
+  "Fly": {
+   "genre": "dubstep",
+   "style": "technical dubstep/hip-hop DJ (frequent Saka b2b partner); little info",
+   "confidence": "low",
+   "source": "https://nysmusic.com/2024/05/07/boogie-t-brings-the-flava-yet-again-to-buffalo/"
+  },
+  "Fox Stevenson": {
+   "genre": "dnb",
+   "style": "drum & bass / electro-rock",
+   "confidence": "medium"
+  },
+  "FREAKY": {
+   "genre": "riddim",
+   "style": "riddim",
+   "source": "https://edmmaniac.com/freaky-ascension"
+  },
+  "FuntCase": {
+   "genre": "dubstep",
+   "style": "heavy dubstep"
+  },
+  "Ganja White Night": {
+   "genre": "dubstep",
+   "style": "wobble dubstep (heavy, melodic wobble)",
+   "confidence": "medium"
+  },
+  "Getter": {
+   "genre": "dubstep",
+   "style": "dubstep (with alt/melodic leanings)"
+  },
+  "GorillaT": {
+   "genre": "wonky",
+   "style": "gritty wonky bass / aggressive dubstep",
+   "confidence": "medium",
+   "source": "https://www.edmtunes.com/2026/04/gorillat-goes-full-send-with-latest-single-boom/"
+  },
+  "Grabbitz": {
+   "genre": "melodic",
+   "style": "melodic bass / electronic rock (Monstercat)",
+   "confidence": "medium"
+  },
+  "GRiZ": {
+   "genre": "adj",
+   "style": "livetronica / future funk bass"
+  },
+  "Gunpoint": {
+   "genre": "dubstep",
+   "style": "dubstep / trap-dubstep",
+   "confidence": "medium",
+   "source": "https://thissongissick.com/?p=99896"
+  },
+  "Hairitage": {
+   "genre": "dubstep",
+   "style": "heavy/\"freaky\" dubstep"
+  },
+  "Hamdi": {
+   "genre": "uk",
+   "style": "UK dubstep / 140"
+  },
+  "Hedex": {
+   "genre": "dnb",
+   "style": "jump-up drum & bass"
+  },
+  "Hexx": {
+   "genre": "riddim",
+   "style": "riddim",
+   "confidence": "medium"
+  },
+  "Hol!": {
+   "genre": "riddim",
+   "style": "riddim / heavy dubstep",
+   "confidence": "medium"
+  },
+  "Hurtbox": {
+   "genre": "dubstep",
+   "style": "riddim / heavy dubstep (French)",
+   "confidence": "medium",
+   "source": "https://www.frontstagefestivals.com/artist/hurtbox"
+  },
+  "Hybrid Minds": {
+   "genre": "dnb",
+   "style": "liquid drum & bass"
+  },
+  "ILLENIUM": {
+   "genre": "melodic",
+   "style": "melodic bass / future bass"
+  },
+  "INFEKT": {
+   "genre": "riddim",
+   "style": "riddim"
+  },
+  "Ivy Lab": {
+   "genre": "dnb",
+   "style": "halftime / 20/20 beats (DnB roots)",
+   "confidence": "medium"
+  },
+  "Izzy Vadim": {
+   "genre": "riddim",
+   "style": "riddim",
+   "source": "https://mbartists.co.uk/cass/izzy-vadim"
+  },
+  "Jade Cicada": {
+   "genre": "wonky",
+   "style": "psychedelic bass"
+  },
+  "Jai Wolf": {
+   "genre": "melodic",
+   "style": "future bass / indie electronic"
+  },
+  "Jantsen": {
+   "genre": "wonky",
+   "style": "wonky bass / hybrid dubstep-trap",
+   "confidence": "medium",
+   "source": "https://edmidentity.com/?p=132465"
+  },
+  "Jason Ross": {
+   "genre": "melodic",
+   "style": "melodic dubstep / melodic bass"
+  },
+  "Jessica Audiffred": {
+   "genre": "riddim",
+   "style": "heavy dubstep / riddim"
+  },
+  "JKYL & HYDE": {
+   "genre": "wonky",
+   "style": "experimental bass (formerly dubstep/riddim)",
+   "confidence": "medium",
+   "source": "https://edmmaniac.com/?p=108425"
+  },
+  "Jon Casey": {
+   "genre": "adj",
+   "style": "festival trap / bass (Monstercat)",
+   "confidence": "medium",
+   "source": "https://edm.com/music-releases/jon-casey-happy-to-be-here-ep/"
+  },
+  "Jon Cass": {
+   "genre": "dubstep",
+   "style": "heavy dubstep / tearout",
+   "confidence": "medium"
+  },
+  "Kai Wachi": {
+   "genre": "dubstep",
+   "style": "dark metal-influenced heavy dubstep / deathstep",
+   "confidence": "medium"
+  },
+  "Kanine": {
+   "genre": "dnb",
+   "style": "dancefloor / jump-up drum & bass",
+   "source": "https://ra.co/dj/kanine"
+  },
+  "Kings Of The Rollers": {
+   "genre": "dnb",
+   "style": "rollers drum & bass"
+  },
+  "Know Good": {
+   "genre": "wonky",
+   "style": "genre-blending bass w/ live instruments, rap/rock/pop elements",
+   "confidence": "medium",
+   "source": "https://www.insomniac.com/?p=546049"
+  },
+  "Kompany": {
+   "genre": "dubstep",
+   "style": "heavy dubstep / hybrid trap"
+  },
+  "Krewella": {
+   "genre": "melodic",
+   "style": "EDM-pop / melodic bass with dubstep elements",
+   "confidence": "medium"
+  },
+  "LAYZ": {
+   "genre": "riddim",
+   "style": "riddim / heavy dubstep"
+  },
+  "Lev3l": {
+   "genre": "dubstep",
+   "style": "bass producer (dubstep/glitch-hop/DnB/bass house), Orange County",
+   "confidence": "low",
+   "source": "https://app.discotech.me/articles/best-lev3l-songs-of-all-time-top-tracks"
+  },
+  "LEVEL UP": {
+   "genre": "riddim",
+   "style": "riddim"
+  },
+  "Level Up": {
+   "genre": "riddim",
+   "style": "riddim / heavy dubstep"
+  },
+  "Levity": {
+   "genre": "dubstep",
+   "style": "dubstep / tearout-wonky"
+  },
+  "Lil Texas": {
+   "genre": "adj",
+   "style": "hardcore / hard dance (Texas hardcore)",
+   "not_bass": true,
+   "confidence": "medium"
+  },
+  "Liquid Stranger": {
+   "genre": "wonky",
+   "style": "experimental/psychedelic dubstep (Wakaan)"
+  },
+  "Liu Kang": {
+   "genre": "dubstep",
+   "style": "unidentified; LEVEL UP tour opener",
+   "confidence": "low"
+  },
+  "LSDream": {
+   "genre": "wonky",
+   "style": "psychedelic/spiritual bass (Lightwork)"
+  },
+  "Lucky": {
+   "genre": "dubstep",
+   "style": "unidentified; Subtronics/ALLEYCVT opener",
+   "confidence": "low"
+  },
+  "Machinedrum": {
+   "genre": "wonky",
+   "style": "experimental footwork/jungle/electronica",
+   "confidence": "medium"
+  },
+  "Malaa": {
+   "genre": "adj",
+   "style": "bass house"
+  },
+  "Marah": {
+   "genre": "dubstep",
+   "style": "dubstep / trap / techno (Vancouver, Deadbeats)",
+   "confidence": "medium",
+   "source": "https://deadbeatsofficial.com/artists/marah"
+  },
+  "Marauda": {
+   "genre": "riddim",
+   "style": "riddim / tearout"
+  },
+  "Medicine Place": {
+   "genre": "uk",
+   "style": "140 old-school dubstep to experimental bass (Sub.mission)",
+   "confidence": "medium",
+   "source": "https://www.frontstagefestivals.com/artist/medicine-place"
+  },
+  "Mefjus": {
+   "genre": "dnb",
+   "style": "neurofunk"
+  },
+  "Mersiv": {
+   "genre": "wonky",
+   "style": "wonky/hip-hop-leaning midtempo bass"
+  },
+  "Metrik": {
+   "genre": "dnb",
+   "style": "dancefloor drum & bass"
+  },
+  "Midroll": {
+   "genre": "riddim",
+   "style": "unidentified; assumed riddim from festival context",
+   "confidence": "low"
+  },
+  "Mile32": {
+   "genre": "riddim",
+   "style": "riddim / tearout dubstep",
+   "source": "https://events.musicofourdesire.com/artist/mile32"
+  },
+  "Moody Good": {
+   "genre": "dubstep",
+   "style": "heavy / experimental dubstep",
+   "confidence": "medium"
+  },
+  "Mport": {
+   "genre": "wonky",
+   "style": "wonky dubstep / experimental bass",
+   "confidence": "medium",
+   "source": "https://app.opendate.io/e/mport-more-wonkier-tour-june-14-2025-580784"
+  },
+  "MUST DIE!": {
+   "genre": "dubstep",
+   "style": "heavy glitchy dubstep"
+  },
+  "Muzz": {
+   "genre": "dnb",
+   "style": "drum & bass (with dubstep crossover)"
+  },
+  "MVRDA": {
+   "genre": "riddim",
+   "style": "riddim / tearout"
+  },
+  "Mystery Skulls": {
+   "genre": "adj",
+   "style": "electro-funk / nu-disco / synth-pop",
+   "not_bass": true
+  },
+  "Nero's Day at Disneyland": {
+   "genre": "adj",
+   "style": "breakcore / IDM"
+  },
+  "Netsky": {
+   "genre": "dnb",
+   "style": "liquid / dancefloor drum & bass"
+  },
+  "NGHTMRE": {
+   "genre": "dubstep",
+   "style": "festival dubstep / trap hybrid"
+  },
+  "Nikita, the Wicked": {
+   "genre": "wonky",
+   "style": "dark experimental bass (Nikita, the Wicked) - assumed identity",
+   "confidence": "medium",
+   "source": "https://edmidentity.com/?p=268899"
+  },
+  "Noirkxtty": {
+   "genre": "dubstep",
+   "style": "unidentified; Subtronics opener",
+   "confidence": "low"
+  },
+  "Nostalgix": {
+   "genre": "adj",
+   "style": "bass house / UKG-tinged house"
+  },
+  "Of The Trees": {
+   "genre": "wonky",
+   "style": "psychedelic wonky bass"
+  },
+  "OG Nixin": {
+   "genre": "riddim",
+   "style": "riddim"
+  },
+  "Opiuo": {
+   "genre": "wonky",
+   "style": "glitch-hop / funk bass"
+  },
+  "Orbiix": {
+   "genre": "wonky",
+   "style": "weird/funky 'sploinkstep' dubstep",
+   "confidence": "medium",
+   "source": "https://m.soundcloud.com/orbiix"
+  },
+  "Otsukare": {
+   "genre": "riddim",
+   "style": "unidentified; assumed riddim from festival context",
+   "confidence": "low"
+  },
+  "Path": {
+   "genre": "riddim",
+   "style": "unidentified; Richard Finger opener",
+   "confidence": "low"
+  },
+  "PEEKABOO": {
+   "genre": "riddim",
+   "style": "riddim / wonky heavy dubstep",
+   "confidence": "medium"
+  },
+  "Pyke": {
+   "genre": "riddim",
+   "style": "riddim dubstep",
+   "confidence": "medium",
+   "source": "https://www.mixgraph.io/artists/pyke"
+  },
+  "Ray Volpe": {
+   "genre": "dubstep",
+   "style": "heavy dubstep / brostep"
+  },
+  "Rezz": {
+   "genre": "wonky",
+   "style": "dark hypnotic midtempo"
+  },
+  "Richard Finger": {
+   "genre": "dubstep",
+   "style": "tearout dubstep"
+  },
+  "Rusko": {
+   "genre": "dubstep",
+   "style": "dubstep / brostep (UK-born, reggae-influenced)"
+  },
+  "Said The Sky": {
+   "genre": "melodic",
+   "style": "melodic bass / future bass"
+  },
+  "Saigga": {
+   "genre": "dubstep",
+   "style": "experimental dubstep (SoundCloud releases)",
+   "confidence": "low",
+   "source": "https://www.beatport.com/track/pingastep/21273435"
+  },
+  "Saka": {
+   "genre": "wonky",
+   "style": "experimental halftime / dubstep / drumstep (Deadbeats)",
+   "confidence": "medium",
+   "source": "https://dropthebass.co/artists/saka"
+  },
+  "Seven Lions": {
+   "genre": "melodic",
+   "style": "melodic dubstep / melodic bass-trance"
+  },
+  "SHOSH": {
+   "genre": "uk",
+   "style": "UK garage / bassline moving into dubstep (UKF)",
+   "confidence": "medium",
+   "source": "https://earth-agency.com/artist/shosh/"
+  },
+  "Sigma": {
+   "genre": "dnb",
+   "style": "pop / commercial drum & bass"
+  },
+  "Sippy": {
+   "genre": "dubstep",
+   "style": "heavy dubstep, riddim-leaning"
+  },
+  "Skellytn": {
+   "genre": "dnb",
+   "style": "neurofunk drum & bass",
+   "source": "https://edmidentity.com/2024/11/24/skellytn-interview/"
+  },
+  "Skream": {
+   "genre": "uk",
+   "style": "original UK dubstep; lately mostly house/techno/disco sets, so check what each show is",
+   "confidence": "medium",
+   "source": "https://songkick.com/artists/35434-skream/calendar"
+  },
+  "SLANDER": {
+   "genre": "melodic",
+   "style": "melodic bass / melodic dubstep"
+  },
+  "Smoakland": {
+   "genre": "dubstep",
+   "style": "hip-hop-flavored heavy dubstep",
+   "confidence": "medium"
+  },
+  "Sota": {
+   "genre": "dnb",
+   "style": "jump-up drum & bass",
+   "source": "https://ukf.com/read/cover-story-sota/"
+  },
+  "Space Laces": {
+   "genre": "dubstep",
+   "style": "heavy dubstep / drumstep"
+  },
+  "St. Mary": {
+   "genre": "melodic",
+   "style": "trap & melodic/future bass",
+   "confidence": "medium",
+   "source": "https://fuxwithit.com/2023/05/17/guest-mix-interview-st-mary/"
+  },
+  "Stoned Level": {
+   "genre": "riddim",
+   "style": "riddim / heavy dubstep",
+   "source": "https://thissongissick.com/post/stoned-level-and-muerte-stoned-to-death"
+  },
+  "STVSH": {
+   "genre": "wonky",
+   "style": "hip-hop-leaning atmospheric bass (Deadbeats)",
+   "confidence": "medium",
+   "source": "https://concerts50.com/show/zeds-dead-in-chicago-tickets-dec-05-2026"
+  },
+  "Sub Focus": {
+   "genre": "dnb",
+   "style": "drum & bass"
+  },
+  "Subtronics": {
+   "genre": "dubstep",
+   "style": "heavy dubstep / riddim-tearout hybrid"
+  },
+  "Sullivan King": {
+   "genre": "riddim",
+   "style": "metal dubstep"
+  },
+  "SunSquabi": {
+   "genre": "adj",
+   "style": "livetronica / funk-electronic"
+  },
+  "Super Future": {
+   "genre": "wonky",
+   "style": "downtempo/midtempo experimental bass, trap-leaning",
+   "confidence": "medium",
+   "source": "https://edmidentity.com/2024/12/14/super-future-interview/"
+  },
+  "SVDDEN DEATH": {
+   "genre": "riddim",
+   "style": "riddim / deathstep"
+  },
+  "SweetTooth": {
+   "genre": "riddim",
+   "style": "riddim",
+   "confidence": "medium"
+  },
+  "Syzy": {
+   "genre": "riddim",
+   "style": "dubstep / riddim",
+   "confidence": "medium",
+   "source": "https://fuxwithit.com/2021/10/21/premiere-syzy-medium-rare-milk/"
+  },
+  "Taiki Nulight": {
+   "genre": "adj",
+   "style": "bass house / UK garage"
+  },
+  "Tape B": {
+   "genre": "dubstep",
+   "style": "funky / bouncy dubstep"
+  },
+  "The Resistance": {
+   "genre": "riddim",
+   "style": "heavy dubstep supergroup",
+   "confidence": "low",
+   "source": "https://www.dubstepfbi.com/post/welcome-to-the-inferno-the-resistance-is-taking-over-detroit-on-april-19"
+  },
+  "The Widdler": {
+   "genre": "uk",
+   "style": "deep/dark dubstep, 140",
+   "confidence": "medium"
+  },
+  "TroyBoi": {
+   "genre": "adj",
+   "style": "trap / bass trap"
+  },
+  "Truth": {
+   "genre": "uk",
+   "style": "deep UK-style dubstep (NZ duo)"
+  },
+  "Usaybflow": {
+   "genre": "riddim",
+   "style": "riddim / chop-heavy dubstep",
+   "confidence": "medium",
+   "source": "https://set79.com/tracklist/soundcloud.com/usaybflow/ll-mainstage-2026"
+  },
+  "VAMPA": {
+   "genre": "dubstep",
+   "style": "heavy / wonky dubstep (UK)",
+   "confidence": "medium"
+  },
+  "VEIL": {
+   "genre": "wonky",
+   "style": "dark leftfield bass / deep dubstep / halftime",
+   "confidence": "medium",
+   "source": "https://stagehoppers.com/veil-returns-with-netherworlds-ep-out-via-wakaan/"
+  },
+  "Versa": {
+   "genre": "riddim",
+   "style": "riddim",
+   "source": "https://www.dubstepfbi.com/post/versa-s-new-malignant-ep-brings-osha-violations-mosh-pits-to-a-city-near-you"
+  },
+  "Virtual Riot": {
+   "genre": "dubstep",
+   "style": "dubstep / colour bass"
+  },
+  "VLCN": {
+   "genre": "riddim",
+   "style": "riddim / heavy dubstep",
+   "confidence": "medium"
+  },
+  "VOYD": {
+   "genre": "riddim",
+   "style": "riddim / tearout"
+  },
+  "Warlord": {
+   "genre": "riddim",
+   "style": "unidentified; assumed riddim from festival context",
+   "confidence": "low"
+  },
+  "Whales": {
+   "genre": "dubstep",
+   "style": "heavy / experimental dubstep"
+  },
+  "Whethan": {
+   "genre": "melodic",
+   "style": "future bass / indie electronic",
+   "confidence": "medium"
+  },
+  "Wilkinson": {
+   "genre": "dnb",
+   "style": "drum & bass"
+  },
+  "Wolf'd": {
+   "genre": "uk",
+   "style": "140 / deep dubstep (Chicago)",
+   "confidence": "medium",
+   "source": "https://www.beatport.com/track/up/16835026"
+  },
+  "Wooli": {
+   "genre": "riddim",
+   "style": "heavy dubstep / riddim",
+   "confidence": "medium"
+  },
+  "WORSHIP": {
+   "genre": "dnb",
+   "style": "drum & bass supergroup (Sub Focus, Dimension, 1991, Culture Shock)"
+  },
+  "Wreckno": {
+   "genre": "riddim",
+   "style": "riddim / heavy dubstep",
+   "confidence": "medium"
+  },
+  "Xaebor": {
+   "genre": "riddim",
+   "style": "wobbly riddim dubstep",
+   "source": "https://www.frontstagefestivals.com/artist/xaebor"
+  },
+  "YOOKiE": {
+   "genre": "dubstep",
+   "style": "heavy dubstep"
+  },
+  "Z3LLA": {
+   "genre": "dubstep",
+   "style": "'HyperBass': hyperpop vocals over bass/dubstep (dance-pop roots)",
+   "confidence": "medium",
+   "source": "https://www.bandsintown.com/es/a/15529900-z3lla"
+  },
+  "Zeds Dead": {
+   "genre": "dubstep",
+   "style": "dubstep (eclectic bass)"
+  },
+  "Zingara": {
+   "genre": "wonky",
+   "style": "astral trap / ethereal experimental bass",
+   "confidence": "medium",
+   "source": "https://galaxy-mag.com/blog/interview-zingara-2024"
+  },
+  "Zomboy": {
+   "genre": "dubstep",
+   "style": "brostep / heavy dubstep"
+  }
+ }
+}

@@ -1,5 +1,5 @@
 {
- "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. Don't add shows headlined by anyone in skip; they aren't bass music.",
+ "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. Don't add shows headlined by anyone in skip; they aren't bass music. Pick each show's genre from its headliner's entry in artists.json (what they generally play); if that night is clearly a different kind of set, go by the set instead. If the headliner isn't in artists.json yet, look them up and add them. Acts marked not_bass there shouldn't headline a show here.",
  "updated": "2026-10-19",
  "checked": "2026-10-18",
  "links": {},
@@ -156,7 +156,7 @@
    "support": [],
    "venue": "BaseCamp Pub",
    "city": "Lisle",
-   "genre": "dubstep",
+   "genre": "adj",
    "url": "https://www.jambase.com/show/feed-me-basecamp-pub-20261031"
   },
   {

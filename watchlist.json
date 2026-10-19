@@ -1,5 +1,5 @@
 {
-  "_about": "Bass artists the daily updater checks for Chicago-area dates, on top of the venue and listing sites. Mostly built from recent North American bass festival lineups (sources below), plus a few well-known bass acts that tour the US regularly. Groups use the same genre ids as data.json. Each run checks 15 names in a rotating window so the whole list is covered about every 8 days. Add or remove names freely; keep each name spelled the way the artist bills it.",
+  "_about": "Bass artists the daily updater checks for Chicago-area dates, on top of the venue and listing sites. Mostly built from recent North American bass festival lineups (sources below), plus a few well-known bass acts that tour the US regularly. Groups use the same genre ids as data.json and match artists.json. Each run checks 15 names in a rotating window so the whole list is covered about every 8 days. Add or remove names freely; keep each name spelled the way the artist bills it.",
   "sources": [
     "https://edmidentity.com/2025/05/30/lost-lands-2025-lineup/",
     "https://edm.com/events/lost-lands-daily-lineup-2026-excision/",
@@ -17,34 +17,35 @@
   ],
   "artists": {
     "dubstep": [
-      "Excision", "Subtronics", "Zeds Dead", "NGHTMRE", "Virtual Riot", "Flux Pavilion", "Zomboy", "Doctor P",
-      "Getter", "Space Laces", "ATLiens", "Tape B", "Black Tiger Sex Machine", "Ray Volpe", "Barely Alive",
-      "FuntCase", "Eptic", "Rusko", "Moody Good", "Deathpact", "Kai Wachi", "Dirt Monkey", "MUST DIE!", "ALLEYCVT"
+      "Excision", "Subtronics", "Zeds Dead", "NGHTMRE", "Virtual Riot", "Flux Pavilion", "Zomboy",
+      "Doctor P", "Getter", "Space Laces", "ATLiens", "Tape B", "Black Tiger Sex Machine", "Ray Volpe",
+      "Barely Alive", "FuntCase", "Eptic", "Rusko", "Moody Good", "Deathpact", "Kai Wachi", "Dirt Monkey",
+      "MUST DIE!", "ALLEYCVT", "Kompany", "Gunpoint", "Flozone", "Dennett", "Crankdat", "Smoakland",
+      "Ganja White Night", "Levity", "Hairitage"
     ],
     "riddim": [
       "Sullivan King", "SVDDEN DEATH", "VOYD", "Wooli", "Level Up", "INFEKT", "Jessica Audiffred", "LAYZ",
-      "Marauda", "Kompany", "Hol!", "Calcium", "Code: Pandorum", "Mport", "Basstripper", "Syzy", "VEIL",
-      "Gunpoint", "Flozone", "Dennett", "Skellytn", "PEEKABOO", "Wreckno", "The Resistance"
+      "Marauda", "Hol!", "Calcium", "Code: Pandorum", "Syzy", "PEEKABOO", "Wreckno", "The Resistance"
     ],
     "melodic": [
-      "ILLENIUM", "Seven Lions", "SLANDER", "Adventure Club", "Krewella", "Crankdat", "Grabbitz", "Whethan",
+      "ILLENIUM", "Seven Lions", "SLANDER", "Adventure Club", "Krewella", "Grabbitz", "Whethan",
       "Said The Sky", "Dabin"
     ],
     "dnb": [
-      "Andy C", "Sub Focus", "Dimension", "Culture Shock", "1991", "WORSHIP", "Wilkinson", "Hedex", "Netsky",
-      "Hybrid Minds", "Kings Of The Rollers", "Delta Heavy", "Mefjus", "Sigma", "Kanine", "Sota", "Muzz",
-      "Camo & Krooked", "Metrik", "A Little Sound"
+      "Basstripper", "Skellytn", "Andy C", "Sub Focus", "Dimension", "Culture Shock", "1991", "WORSHIP",
+      "Wilkinson", "Hedex", "Netsky", "Hybrid Minds", "Kings Of The Rollers", "Delta Heavy", "Mefjus",
+      "Sigma", "Kanine", "Sota", "Muzz", "Camo & Krooked", "Metrik", "A Little Sound", "Ivy Lab"
     ],
     "uk": [
-      "Skream", "Caspa", "Truth", "Distinct Motive", "Hamdi", "Flowdan", "Jantsen", "Nikita"
+      "Skream", "Caspa", "Truth", "Distinct Motive", "Hamdi", "Flowdan", "The Widdler"
     ],
     "wonky": [
-      "Liquid Stranger", "Of The Trees", "Mersiv", "Zingara", "Ahee", "Daily Bread", "Champagne Drip",
-      "Detox Unit", "The Widdler", "Super Future", "EAZYBAKED", "Smoakland", "Ganja White Night", "Jade Cicada",
-      "Opiuo", "Ivy Lab", "Machinedrum", "Levity", "Apashe", "Rezz", "LSDream", "Jon Casey", "Hairitage"
+      "Mport", "VEIL", "Jantsen", "Nikita, the Wicked", "Liquid Stranger", "Of The Trees", "Mersiv",
+      "Zingara", "Ahee", "Daily Bread", "Champagne Drip", "Detox Unit", "Super Future", "EAZYBAKED",
+      "Jade Cicada", "Opiuo", "Machinedrum", "Rezz", "LSDream"
     ],
     "adj": [
-      "TroyBoi", "Nostalgix", "Taiki Nulight", "Big Gigantic", "GRiZ", "Malaa", "Lil Texas"
+      "Apashe", "Jon Casey", "TroyBoi", "Nostalgix", "Taiki Nulight", "Big Gigantic", "GRiZ", "Malaa"
     ]
   }
 }
