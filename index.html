@@ -2134,17 +2134,18 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matche
   if(d.open)openFests.add(id);else openFests.delete(id);
   document.querySelectorAll('details.more[data-more="'+id+'"]').forEach(x=>{if(x!==d&&x.open!==d.open)x.open=d.open;});},true);
 let sx=0,sy=0;
-$("grid").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
 document.addEventListener("click",e=>{const sm=e.target.closest("details.nshow>summary,details.more>summary,details.fsrc>summary");if(!sm)return;const d=sm.parentNode;
   /* closing: fold the content up first, then close */
   if(d.open&&!RM.matches){e.preventDefault();if(d._closing)return;d._closing=1;exitFx(d.querySelector(".nbody,.t3,.fbody"),"fx-dropout",()=>{d._closing=0;d.open=false;});return;}
   d._tap=1;},true);
 document.addEventListener("toggle",e=>{const d=e.target;if(!d._tap||!d.open)return;d._tap=0;fx(d.querySelector(".nbody,.t3,.fbody"),"fx-drop");},true);
 document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.nshow"))return;if(d.open)openShows.add(d.dataset.show);else openShows.delete(d.dataset.show);},true);
-["grid","nlist"].forEach(id=>{
-  $(id).addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
-  $(id).addEventListener("touchend",e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)(dx<0?$("next"):$("prev")).click();},{passive:true});
-});
+/* swipe anywhere in the month view (header, mini calendar, grid, night list) to change month,
+   except from inside something that scrolls sideways on its own */
+let swOk=false;
+const hScroller=el=>{for(;el&&el.id!=="monthView";el=el.parentElement){const o=getComputedStyle(el).overflowX;if((o==="auto"||o==="scroll")&&el.scrollWidth>el.clientWidth)return true;}return false;};
+$("monthView").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;swOk=e.touches.length===1&&!hScroller(e.target)&&!e.target.closest("input,select,textarea");},{passive:true});
+$("monthView").addEventListener("touchend",e=>{if(!swOk)return;swOk=false;const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){const b=dx<0?$("next"):$("prev");if(!b.disabled)b.click();}},{passive:true});
 setRail(false);
 $("navCrew").onclick=e=>{e.preventDefault();if(state.view==="crew"){setView(state.lastCal||"month");return;}if(!PAGES.includes(state.view))state.lastCal=state.view;setView("crew");if(inCrew())refreshCrew();};
 $("navFr").onclick=e=>{e.preventDefault();if(state.view==="friends"){if(state.frSel){state.frSel=null;render();return;}setView(state.lastCal||"month");return;}if(!PAGES.includes(state.view))state.lastCal=state.view;state.frSel=null;setView("friends");refreshFriends();};
