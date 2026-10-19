@@ -831,6 +831,20 @@ button.pchip{cursor:pointer}
 .artf path{fill:var(--volt);stroke:#000000;stroke-width:1.6;stroke-linejoin:miter}
 .art[data-follow]:is(:hover,:focus-visible)>.artf{opacity:1;transform:none}
 @media (hover:hover){.lrow [data-follow]{display:none}}
+/* hero lava lamp: cyan blobs blended with "difference", so where the lava flows the cyan turns black
+   and the black type turns cyan. It lives down the right edge, rising and sinking. */
+.hero{position:relative;overflow:hidden;isolation:isolate}
+.hero>.wrap{position:relative}
+.lava{--ls:1;position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:difference}
+.lava .goo{position:absolute;inset:-40px;filter:url(#goo)}
+.lava .pool{position:absolute;right:0;top:0;bottom:0;width:calc(110px * var(--ls));background:var(--signal);animation:lsway 11s ease-in-out infinite alternate}
+.lava .lcol{position:absolute;right:0;top:0;bottom:0;width:calc(300px * var(--ls))}
+.lava .b{position:absolute;bottom:40px;width:calc(var(--w) * 1px * var(--ls));height:calc(var(--w) * 1.1px * var(--ls));border-radius:50%;background:var(--signal);will-change:transform;animation:lrise var(--d) cubic-bezier(.45,0,.55,1) var(--t) infinite}
+@keyframes lrise{0%{transform:translate(0,0) scale(.85)}45%{transform:translate(calc(var(--x) * 1px * var(--ls)),calc(var(--h) * -1px * var(--ls))) scale(1.05,.95)}55%{transform:translate(calc(var(--x) * 1px * var(--ls)),calc(var(--h) * -1px * var(--ls))) scale(.95,1.05)}100%{transform:translate(0,0) scale(.85)}}
+@keyframes lsway{to{transform:translateX(20px) scaleX(.85)}}
+@media (max-width:640px){.lava{--ls:.62}.lava .pool{width:62px}.lava .lcol{width:110px}}
+.hero.still .lava *{animation-play-state:paused}
+@media (prefers-reduced-motion: reduce){.lava *{animation:none!important}}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
@@ -868,6 +882,13 @@ button.pchip{cursor:pointer}
 </header>
 
 <section class="hero" id="heroSec" aria-labelledby="heroTitle">
+  <div class="lava" aria-hidden="true"><div class="goo"><span class="pool"></span><div class="lcol">
+    <span class="b" style="right:0%;--w:90;--x:-20;--h:280;--d:20s;--t:0s"></span>
+    <span class="b" style="right:30%;--w:70;--x:15;--h:360;--d:24s;--t:-8s"></span>
+    <span class="b" style="right:10%;--w:110;--x:-10;--h:220;--d:28s;--t:-15s"></span>
+    <span class="b" style="right:40%;--w:60;--x:10;--h:320;--d:18s;--t:-4s"></span>
+  </div></div></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="16" result="b"></feGaussianBlur><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11"></feColorMatrix></filter></svg>
   <div class="wrap" id="hero"></div>
 </section>
 
@@ -2067,6 +2088,7 @@ if(location.hash==="#friends")state.view="friends";
 if(location.hash==="#me")state.view="me";
 render();
 intro();
+try{new IntersectionObserver(es=>es.forEach(x=>x.target.classList.toggle("still",!x.isIntersecting))).observe($("heroSec"));}catch(e){}
 try{document.fonts.ready.then(inkAlign);}catch(e){}
 {let rt=0;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(inkAlign,120);});}
 if(CREW_ON){if(fme)refreshFriends();if(friendCode&&!joinCode)openAddFriend(friendCode);}
