@@ -5,7 +5,9 @@
  "links": {},
  "locals": [],
  "skip": [
-  "Bassvictim"
+  "Bassvictim",
+  "HHUNTER",
+  "Twinsick"
  ],
  "shows": [
   {
@@ -74,7 +76,7 @@
    "venue": "Concord Music Hall",
    "addr": "2047 N Milwaukee Ave",
    "city": "Chicago",
-   "genre": "dubstep",
+   "genre": "uk",
    "price": "$19.50",
    "age": "18+",
    "url": "https://concordmusichall.com/calendar/truth/"
@@ -119,27 +121,6 @@
    "url": "https://www.jambase.com/show/sunsquabi-basecamp-pub-20261029"
   },
   {
-   "id": "hhaunt",
-   "date": "2026-10-30",
-   "doors": "21:00",
-   "title": "On the HHaunt Halloween 360°",
-   "support": [
-    "HHUNTER",
-    "Flash Gea",
-    "Junkie Kid",
-    "Prosperity Room",
-    "House of Heaven",
-    "KRIVX"
-   ],
-   "venue": "Concord Music Hall",
-   "addr": "2047 N Milwaukee Ave",
-   "city": "Chicago",
-   "genre": "adj",
-   "price": "$30",
-   "age": "18+",
-   "url": "https://concordmusichall.com/calendar/hhunter-360-set/"
-  },
-  {
    "id": "atliens",
    "date": "2026-10-30",
    "doors": "22:00",
@@ -164,7 +145,7 @@
    "support": [],
    "venue": "Alhambra Palace",
    "city": "Chicago",
-   "genre": "uk",
+   "genre": "adj",
    "url": "https://www.jambase.com/show/skream-alhambra-palace-20261030"
   },
   {
@@ -338,7 +319,7 @@
    "venue": "Radius",
    "addr": "640 W Cermak Rd",
    "city": "Chicago",
-   "genre": "dubstep",
+   "genre": "riddim",
    "flag": "Only one ticket site lists this so far. Confirm with Radius before buying.",
    "url": "https://concerts50.com/show/sullivan-king-in-chicago-tickets-dec-04-2026"
   },
@@ -352,7 +333,7 @@
    "venue": "Outset",
    "addr": "1675 N Elston Ave",
    "city": "Chicago",
-   "genre": "dubstep",
+   "genre": "wonky",
    "url": "https://www.songkick.com/concerts/43333084-gorillat-at-outset"
   },
   {
@@ -399,7 +380,7 @@
    "venue": "Ramova Theatre",
    "addr": "3520 S Halsted St",
    "city": "Chicago",
-   "genre": "dubstep",
+   "genre": "wonky",
    "url": "https://www.tixr.com/groups/ramovatheatre/events/jkyl-hyde-190271"
   },
   {
@@ -413,19 +394,6 @@
    "city": "Chicago",
    "genre": "riddim",
    "url": "https://app.discotech.me/events/38253282-svdden-death-at-the-salt-shed"
-  },
-  {
-   "id": "twinsick",
-   "date": "2027-01-22",
-   "doors": "20:00",
-   "title": "Twinsick",
-   "tag": "Good Company 2027",
-   "support": [],
-   "venue": "The Salt Shed",
-   "addr": "1357 N Elston Ave",
-   "city": "Chicago",
-   "genre": "adj",
-   "url": "https://app.discotech.me/events/38280053-twinsicks-good-company-2027-at-the-salt-shed"
   },
   {
    "id": "know-good",
