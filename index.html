@@ -509,6 +509,23 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   .fx-prev{animation:fromleft .42s var(--ease-out)}
   .fx-rise{animation:rise .5s var(--ease-out) both;animation-delay:calc(var(--i,0) * 45ms)}
   .fx-drop{animation:drop .3s var(--ease-out)}
+  /* closing animations: quicker than the openings, and they hold the end state until the element is hidden */
+  @keyframes menuout{to{opacity:0;transform:translateY(-4px)}}
+  @keyframes sheetdown{to{transform:translateY(100%)}}
+  @keyframes fadeout{to{opacity:0}}
+  @keyframes toastout{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,10px) scale(.97)}}
+  @keyframes sinkout{to{opacity:0;transform:translateY(10px)}}
+  @keyframes dropout{to{opacity:0;transform:translateY(-8px)}}
+  @keyframes outleft{to{opacity:0;transform:translateX(-40px)}}
+  @keyframes outright{to{opacity:0;transform:translateX(40px)}}
+  .fx-menuout{animation:menuout .12s ease-in forwards}
+  .fx-sheetdown{animation:sheetdown .28s cubic-bezier(.4,0,1,1) forwards}
+  .fx-fadeout{animation:fadeout .2s ease-in forwards}
+  .fx-toastout{animation:toastout .2s ease-in forwards}
+  .fx-sinkout{animation:sinkout .16s ease-in forwards}
+  .fx-dropout{animation:dropout .18s ease-in forwards}
+  .fx-outleft{animation:outleft .14s ease-in forwards}
+  .fx-outright{animation:outright .14s ease-in forwards}
   .fx-ring{animation:ring .5s var(--ease-out)}
   .toast:not([hidden]){animation:toastin .3s var(--ease-out)}
   .scrim:not([hidden]){animation:fadein .25s ease}
@@ -1158,6 +1175,14 @@ function fx(el,cls){
   const h=e=>{if(e.target!==el)return;el.classList.remove(cls);el.removeEventListener("animationend",h);};
   el.addEventListener("animationend",h);
 }
+/* play a closing animation, then run done; instant when motion is reduced or the element isn't showing */
+function exitFx(el,cls,done){
+  const els=(Array.isArray(el)?el:[el]).filter(x=>x&&!x.hidden&&x.getClientRects().length);
+  if(RM.matches||!els.length){done&&done();return;}
+  let fin=false;const end=()=>{if(fin)return;fin=true;els.forEach(x=>x.classList.remove(cls));done&&done();};
+  els.forEach(x=>x.classList.add(cls));els[0].addEventListener("animationend",function h(e){if(e.target!==els[0])return;els[0].removeEventListener("animationend",h);end();});
+  setTimeout(end,420);
+}
 /* one layout pass for the whole group, not one per element, so phones don't stutter */
 function stagger(root,sel,max){if(!root||RM.matches)return;const els=[...root.querySelectorAll(sel)].slice(0,max||14);if(!els.length)return;
   els.forEach((el,i)=>{el.classList.remove("fx-rise");el.style.setProperty("--i",i);});void root.offsetWidth;
@@ -1211,7 +1236,8 @@ function jumpNight(k){
 window.addEventListener("scroll",()=>{if(pinRaf)return;pinRaf=requestAnimationFrame(()=>{pinRaf=0;pinUpdate();});},{passive:true});
 window.addEventListener("resize",()=>pinUpdate(true));
 
-function closeMenus(){document.querySelectorAll(".rmenu:not([hidden])").forEach(m=>{m.hidden=true;m.classList.remove("up");const b=m.previousElementSibling;if(b)b.setAttribute("aria-expanded","false");});}
+function closeMenus(){document.querySelectorAll(".rmenu:not([hidden])").forEach(m=>{const b=m.previousElementSibling;if(b)b.setAttribute("aria-expanded","false");
+  if(m._closing)return;m._closing=1;exitFx(m,"fx-menuout",()=>{m._closing=0;m.hidden=true;m.classList.remove("up");});});}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){const o=document.querySelector(".rmenu:not([hidden])");if(o){const b=o.previousElementSibling;closeMenus();b&&b.focus();}}});
 /* ---------- crews ---------- */
 const CREW_API={url:"https://wcogiewqdkrnqfbrdioe.supabase.co",key:"sb_publishable_-ElK1lWcLDUcuRqGUixpiA_6xefgxZs"};
@@ -1598,9 +1624,8 @@ function renderBNav(){
     b("crew","Crew",inCrew()?crewPic(crew,22):BN_CREW,v==="crew","var(--signal)",!CREW_ON)+b("me","You",myPic(22),v==="me","var(--volt)");
 }
 function goSection(k){
-  window.scrollTo(0,0);
-  if(k==="cal"){if(PAGES.includes(state.view))setView(state.lastCal||"month");return;}
-  if(state.view===k){if(k==="friends"&&state.frSel){state.frSel=null;render();}return;}
+  if(k==="cal"){if(PAGES.includes(state.view))setView(state.lastCal||"month");else window.scrollTo(0,0);return;}
+  if(state.view===k){window.scrollTo(0,0);if(k==="friends"&&state.frSel){state.frSel=null;render();}return;}
   if(!PAGES.includes(state.view))state.lastCal=state.view;
   if(k==="friends")state.frSel=null;
   if(k==="me"){state.pfEdit=false;state.pfPicOpen=false;}
@@ -1727,7 +1752,8 @@ function gotoEvent(id){
 /* join flow */
 const joinCode=(()=>{try{return (new URLSearchParams(location.search).get("join")||"").trim().toLowerCase();}catch(e){return "";}})();
 function stripJoin(){try{const u=new URL(location.href);u.searchParams.delete("join");u.searchParams.delete("friend");history.replaceState(null,"",u.pathname+u.search+u.hash);}catch(e){}}
-function closeJoin(){$("joinx").hidden=true;$("joinx").classList.remove("fr");$("joinx").setAttribute("aria-label","Join a crew");document.documentElement.style.overflow="";stripJoin();}
+function closeJoin(){const x=$("joinx");document.documentElement.style.overflow="";stripJoin();
+  exitFx(x,"fx-fadeout",()=>{x.hidden=true;x.classList.remove("fr");x.setAttribute("aria-label","Join a crew");});}
 async function openJoin(code){
   const x=$("joinx");x.hidden=false;document.documentElement.style.overflow="hidden";
   x.innerHTML='<div class="jmsg"><span class="kicker">Crew invite</span><h2 style="margin:0;font-size:32px;font-weight:500">Opening the invite…</h2></div>';
@@ -1994,8 +2020,16 @@ function inkAlign(){
     });
   }catch(e){}
 }
-function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,Math.max(1800,String(t).length*60));}
-function setView(v){const was=state.view;state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if(PAGES.includes(v)&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);
+function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);el.classList.remove("fx-toastout");toast.t=setTimeout(()=>exitFx(el,"fx-toastout",()=>el.hidden=true),Math.max(1800,String(t).length*60));}
+/* switching between the calendar and Friends, Crew or You: the current page sinks out first */
+function setView(v){
+  const was=state.view;
+  if(v!==was&&(PAGES.includes(v)||PAGES.includes(was))&&!RM.matches){setView.to=v;if(setView.leaving)return;setView.leaving=1;
+    const out=PAGES.includes(was)?[$({crew:"crewView",friends:"frView",me:"meView"}[was])]:[$("heroSec"),document.querySelector(".wrap.page")];
+    exitFx(out,"fx-sinkout",()=>{setView.leaving=0;applyView(setView.to);});return;}
+  applyView(v);
+}
+function applyView(v){const was=state.view;state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if(PAGES.includes(v)&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);
   if(v===was){render();return;}
   if(v==="crew")later(()=>stagger($("crewView"),".chead,.wday,.cuprow,.mrow,.mostc,.cstart",10));
   if(v==="friends")later(()=>stagger($("frView"),".frhead,.frcode,.frrow,.cuprow,.cstart",10));
@@ -2022,8 +2056,10 @@ function pageWeek(n){
   for(let i=0;i<7;i++){const k=addDays(ws,i);if(k>=TODAY&&(vis.some(s=>s.date===k)||festsOn(k).length)){pick=k;break;}}
   state.sel=pick;render();
 }
-$("prev").onclick=()=>{let {y,m}=state.ym;m--;if(m<0){m=11;y--;}state.ym={y,m};slide(-1);render();};
-$("next").onclick=()=>{let {y,m}=state.ym;m++;if(m>11){m=0;y++;}state.ym={y,m};slide(1);render();};
+/* months: the old month slides off before the new one slides in */
+const monthOut=(dir,go)=>exitFx(["grid","nlist","mini"].map($).filter(x=>x&&x.offsetParent),dir>0?"fx-outleft":"fx-outright",go);
+$("prev").onclick=()=>monthOut(-1,()=>{let {y,m}=state.ym;m--;if(m<0){m=11;y--;}state.ym={y,m};slide(-1);render();});
+$("next").onclick=()=>monthOut(1,()=>{let {y,m}=state.ym;m++;if(m>11){m=0;y++;}state.ym={y,m};slide(1);render();});
 try{PHONE.addEventListener("change",()=>render());}catch(e){}
 $("q").addEventListener("input",e=>{state.q=e.target.value.trim();render();});
 $("venue").onchange=e=>{state.venue=e.target.value;render();};
@@ -2055,7 +2091,9 @@ $("copySaved").onclick=()=>{
   try{navigator.clipboard.writeText(txt).then(()=>toast("Copied "+list.length+" shows"),fallback);}catch(e){fallback();}
 };
 const mq=matchMedia("(max-width:900px)");
-function setRail(open){
+function setRail(open,now){
+  if(!open&&!now&&!$("rail").hidden&&mq.matches&&!RM.matches){if(setRail.closing)return;setRail.closing=1;
+    exitFx($("scrim"),"fx-fadeout");exitFx($("rail"),"fx-sheetdown",()=>{setRail.closing=0;setRail(false,true);});return;}
   $("main").classList.toggle("collapsed",!open);$("rail").hidden=!open;
   $("ftoggle").setAttribute("aria-expanded",String(open));
   const sheet=open&&mq.matches;$("scrim").hidden=!sheet;document.documentElement.style.overflow=sheet?"hidden":"";
@@ -2073,7 +2111,10 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matche
   document.querySelectorAll('details.more[data-more="'+id+'"]').forEach(x=>{if(x!==d&&x.open!==d.open)x.open=d.open;});},true);
 let sx=0,sy=0;
 $("grid").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
-document.addEventListener("click",e=>{const sm=e.target.closest("details.nshow>summary,details.more>summary,details.fsrc>summary");if(sm)sm.parentNode._tap=1;},true);
+document.addEventListener("click",e=>{const sm=e.target.closest("details.nshow>summary,details.more>summary,details.fsrc>summary");if(!sm)return;const d=sm.parentNode;
+  /* closing: fold the content up first, then close */
+  if(d.open&&!RM.matches){e.preventDefault();if(d._closing)return;d._closing=1;exitFx(d.querySelector(".nbody,.t3,.fbody"),"fx-dropout",()=>{d._closing=0;d.open=false;});return;}
+  d._tap=1;},true);
 document.addEventListener("toggle",e=>{const d=e.target;if(!d._tap||!d.open)return;d._tap=0;fx(d.querySelector(".nbody,.t3,.fbody"),"fx-drop");},true);
 document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.nshow"))return;if(d.open)openShows.add(d.dataset.show);else openShows.delete(d.dataset.show);},true);
 ["grid","nlist"].forEach(id=>{
@@ -2092,26 +2133,27 @@ document.addEventListener("click",e=>{
     const r=menu.getBoundingClientRect();menu.classList.toggle("up",r.bottom>innerHeight-8&&rm.getBoundingClientRect().top>r.height+8);menu.querySelector('[aria-checked="true"]')?.focus({preventScroll:true});}return;}
   if(!t.closest(".rmenu"))closeMenus();
   const mn=t.closest("[data-mini]");if(mn){if(!mn.disabled)jumpNight(mn.dataset.mini);return;}
-  const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();setRsvp(rb.dataset.rsvp,rb.dataset.st);return;}
+  const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();const m=rb.closest(".rmenu");const go=()=>setRsvp(rb.dataset.rsvp,rb.dataset.st);
+    if(m){const b=m.previousElementSibling;if(b)b.setAttribute("aria-expanded","false");m._closing=1;exitFx(m,"fx-menuout",go);}else go();return;}
   if(t.closest("[data-ftog]")){setRail($("rail").hidden);return;}
   const cf=t.closest("[data-cf]");
   if(cf){if(cf.dataset.cf!==state.crewF)later(()=>{stagger($("nlist"),".nrow",8);if(!PHONE.matches)fx($("grid"),"fx-drop");});state.crewF=cf.dataset.cf;render();return;}
   const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
   if(t.closest("[data-jclose]")){const gf=t.closest("[data-gofriends]");closeJoin();if(gf){state.view="friends";render();}return;}
   if(t.closest("#crShare")){shareInvite();return;}
-  if(t.closest("#crPic")){state.picOpen=!state.picOpen;if(state.picOpen)later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
+  if(t.closest("#crPic")){if(state.picOpen){exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.picOpen=false;render();});return;}state.picOpen=true;later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
   const pk=t.closest("[data-pic]");
-  if(pk&&inCrew()){const i=+pk.dataset.pic;const before=crew.pic;crew.pic=i;state.picOpen=false;saveCrew();render();
-    later(()=>fx(document.querySelector("#crPic .cpic"),"fx-pop"));
+  if(pk&&inCrew()){const i=+pk.dataset.pic;const before=crew.pic;crew.pic=i;saveCrew();
+    exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.picOpen=false;later(()=>fx(document.querySelector("#crPic .cpic"),"fx-pop"));render();});
     api("crew_set_pic",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_pic:i}).catch(err=>{crew.pic=before;saveCrew();render();toast(errMsg(err));});return;}
   if(t.closest("#frShare")){shareFriend();return;}
   if(t.closest("#frCopy")){copyText(friendUrl(),"Friend link copied");return;}
   const fs=t.closest("[data-frsel]");if(fs){state.frSel=fs.dataset.frsel;window.scrollTo(0,0);later(()=>stagger($("frView"),".frhead,.frcode,.pst,.cuprow",20));render();return;}
-  if(t.closest("[data-frback]")){state.frSel=null;render();return;}
+  if(t.closest("[data-frback]")){exitFx($("frView").querySelector(".pv"),"fx-sinkout",()=>{state.frSel=null;later(()=>stagger($("frView"),".frhead,.frcode,.frrow,.cuprow",10));render();});return;}
   if(t.closest("[data-gofr]")){window.scrollTo(0,0);state.frSel=null;setView("friends");return;}
-  if(t.closest("#pfPic")){state.pfPicOpen=!state.pfPicOpen;if(state.pfPicOpen)later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
+  if(t.closest("#pfPic")){if(state.pfPicOpen){exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.pfPicOpen=false;render();});return;}state.pfPicOpen=true;later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
   const pp=t.closest("[data-ppic]");
-  if(pp){prof.pic=+pp.dataset.ppic;state.pfPicOpen=false;saveProf();later(()=>{fx(document.querySelector("#pfPic .cpic"),"fx-pop");fx(document.querySelector("#navMeAv .cpic"),"fx-pop");});render();return;}
+  if(pp){prof.pic=+pp.dataset.ppic;saveProf();exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.pfPicOpen=false;later(()=>{fx(document.querySelector("#pfPic .cpic"),"fx-pop");fx(document.querySelector("#navMeAv .cpic"),"fx-pop");});render();});return;}
   if(t.closest("#pfEdit")){state.pfEdit=!state.pfEdit;render();if(state.pfEdit){const i=$("pfNameIn");if(i){i.focus();i.select();}}return;}
   if(t.closest("#pfCancel")){state.pfEdit=false;render();return;}
   const ps=t.closest("[data-psound]");
