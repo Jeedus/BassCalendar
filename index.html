@@ -868,6 +868,7 @@ button.pchip{cursor:pointer}
 .artf svg{width:100%;height:100%;display:block;overflow:visible}
 .artf path{fill:var(--volt);stroke:#000000;stroke-width:1.6;stroke-linejoin:miter}
 .art[data-follow]:is(:hover,:focus-visible)>.artf{opacity:1;transform:none}
+@media (hover:none){.nname .art[data-follow]>.artf{opacity:1;transform:none}.art[data-follow]{-webkit-tap-highlight-color:transparent}}
 @media (hover:hover){.lrow [data-follow]{display:none}}
 /* hero lava lamp: a copy of the banner with its two colors swapped (black field, cyan type), cut to the
    lava's outline. Where the lava flows the cyan turns black and the black type turns cyan. */
@@ -1143,11 +1144,10 @@ const showArtists=s=>[s.title].concat(s.support);
 const followHit=s=>showArtists(s).some(isF);
 const isNew=s=>!!s.added&&daysBetween(s.added,TODAY)>=0&&daysBetween(s.added,TODAY)<=7;
 const chi=a=>LOCALS.has(String(a).toLowerCase())?'<span class="chi" title="Chicago artist">CHI</span>':'';
-/* an artist's name: with a mouse the whole name follows/unfollows, and hovering shows a lime + or −
-   with a black border over its last letter. Phones keep the Follow button inside an opened show */
-const CAN_HOVER=matchMedia("(hover:hover)").matches;
+/* an artist's name: tapping or clicking the whole name follows/unfollows (it doesn't open the show).
+   A lime + or − with a black border sits over its last letter: on hover with a mouse, and always on
+   the show names in the phone list. Phones also keep the Follow button inside an opened show */
 const artName=(a,cls)=>{const on=isF(a);const c='art'+(on?" fol":"")+(cls?" "+cls:"");
-  if(!CAN_HOVER)return '<span class="'+c+'">'+esc(a)+'</span>'+chi(a);
   const l=(on?"Unfollow ":"Follow ")+esc(a);
   return '<span class="'+c+'" role="button" tabindex="0" data-follow="'+esc(a)+'" aria-pressed="'+on+'" title="'+l+'">'+esc(a)+
     '<span class="artf" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="'+(on?"M2 6h12v4H2z":"M6 2h4v4h4v4h-4v4H6v-4H2V6h4z")+'"></path></svg></span></span>'+chi(a);};
