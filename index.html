@@ -841,6 +841,10 @@ button.pchip{cursor:pointer}
 .bnav{display:none}
 @media (max-width:640px){
   .top .crewnav{display:none}
+  .top .wrap{height:30px}
+  .top .brand{font-size:14px;padding:0 12px;letter-spacing:-.02em}
+  .nrow{scroll-margin-top:calc(42px + env(safe-area-inset-top,0px))}
+  .content,.dayhead,.poster{scroll-margin-top:calc(46px + env(safe-area-inset-top,0px))}
   .bnav{position:fixed;left:0;right:0;bottom:0;z-index:28;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--paper);border-top:1px solid var(--rule);padding:0 max(4px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(4px,env(safe-area-inset-left,0px))}
   .bnav button{position:relative;height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0;border:0;border-radius:0;background:none;color:var(--ink-meta);font:500 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.02em;cursor:pointer}
   .bnav button[hidden]{display:none}
