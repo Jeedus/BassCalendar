@@ -822,15 +822,15 @@ button.pchip{cursor:pointer}
 .nfest .pp{height:22px}
 .fev .cc,.nfest .cc{background:transparent;border-color:var(--signal);color:var(--ink)}
 @media (max-width:640px){.fev{background:var(--signal);box-shadow:none;padding:0}}
-/* follow from the name: a bold + or − over the name's last letter, shown on hover; a page-colored halo keeps it readable */
+/* follow from the name: a lime + or − with a black border over the name's last letter, shown on hover */
 .art{position:relative}
-.artf{position:absolute;top:-.32em;right:-.22em;z-index:3;width:max(13px,.5em);height:max(13px,.5em);display:grid;place-items:center;padding:0;border:0;border-radius:0;background:transparent;color:var(--ink);cursor:pointer;opacity:0;pointer-events:none;transform:scale(.6);transition:opacity .12s ease,transform .16s var(--ease-spring,ease)}
+.art[data-follow]{cursor:pointer}
+.art[data-follow]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.artf{position:absolute;top:.2em;right:-.1em;z-index:3;width:max(11px,.42em);height:max(11px,.42em);pointer-events:none;opacity:0;transform:scale(.5);transition:opacity .12s ease,transform .16s var(--ease-spring,ease)}
 .artf svg{width:100%;height:100%;display:block;overflow:visible}
-.artf path{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:square}
-.artf path.halo{stroke:var(--paper);stroke-width:7}
-@media (hover:hover){.art:hover>.artf{opacity:1;pointer-events:auto;transform:none}.lrow [data-follow]{display:none}}
-.artf:focus-visible{opacity:1;pointer-events:auto;transform:none;outline:2px solid var(--focus);outline-offset:1px}
-@media (hover:none){.artf{display:none}}
+.artf path{fill:var(--volt);stroke:#000000;stroke-width:1.6;stroke-linejoin:miter}
+.art[data-follow]:is(:hover,:focus-visible)>.artf{opacity:1;transform:none}
+@media (hover:hover){.lrow [data-follow]{display:none}}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
@@ -1052,9 +1052,14 @@ const showArtists=s=>[s.title].concat(s.support);
 const followHit=s=>showArtists(s).some(isF);
 const isNew=s=>!!s.added&&daysBetween(s.added,TODAY)>=0&&daysBetween(s.added,TODAY)<=7;
 const chi=a=>LOCALS.has(String(a).toLowerCase())?'<span class="chi" title="Chicago artist">CHI</span>':'';
-/* an artist's name: hovering shows a bold + (follow) or − (unfollow) over its last letter */
-const artName=(a,cls)=>{const on=isF(a);const l=(on?"Unfollow ":"Follow ")+esc(a);
-  return '<span class="art'+(on?" fol":"")+(cls?" "+cls:"")+'">'+esc(a)+'<button type="button" class="artf'+(on?" on":"")+'" data-follow="'+esc(a)+'" aria-label="'+l+'" title="'+l+'"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="halo" d="'+(on?"M3.5 8h9":"M8 3.5v9M3.5 8h9")+'"></path><path d="'+(on?"M3.5 8h9":"M8 3.5v9M3.5 8h9")+'"></path></svg></button></span>'+chi(a);};
+/* an artist's name: with a mouse the whole name follows/unfollows, and hovering shows a lime + or −
+   with a black border over its last letter. Phones keep the Follow button inside an opened show */
+const CAN_HOVER=matchMedia("(hover:hover)").matches;
+const artName=(a,cls)=>{const on=isF(a);const c='art'+(on?" fol":"")+(cls?" "+cls:"");
+  if(!CAN_HOVER)return '<span class="'+c+'">'+esc(a)+'</span>'+chi(a);
+  const l=(on?"Unfollow ":"Follow ")+esc(a);
+  return '<span class="'+c+'" role="button" tabindex="0" data-follow="'+esc(a)+'" aria-pressed="'+on+'" title="'+l+'">'+esc(a)+
+    '<span class="artf" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="'+(on?"M2 6h12v4H2z":"M6 2h4v4h4v4h-4v4H6v-4H2V6h4z")+'"></path></svg></span></span>'+chi(a);};
 const nm=a=>artName(a);
 const supportHtml=s=>s.support.length?'<p class="rsup">With '+s.support.map(nm).join(", ")+(s.more?', plus '+esc(s.more):'')+'</p>':'';
 function listenRow(a){const L=LINKS[a]||{};const q=encodeURIComponent(a);const on=isF(a);
@@ -1926,7 +1931,7 @@ $("folForm").addEventListener("submit",e=>{e.preventDefault();const v=$("folIn")
   const name=known||v;follows.set(name.toLowerCase(),name);saveFollows();$("folIn").value="";render();toast("Following "+name);});
 document.addEventListener("click",e=>{
   const f=e.target.closest("[data-follow]");
-  if(f){if(f.classList.contains("artf"))e.preventDefault();const a=f.dataset.follow;if(isF(a)){follows.delete(a.toLowerCase());toast("Unfollowed "+a);}else{follows.set(a.toLowerCase(),a);toast("Following "+a);}saveFollows();render();return;}
+  if(f){if(f.classList.contains("art"))e.preventDefault();const a=f.dataset.follow;if(isF(a)){follows.delete(a.toLowerCase());toast("Unfollowed "+a);}else{follows.set(a.toLowerCase(),a);toast("Following "+a);}saveFollows();render();return;}
   const u=e.target.closest("[data-unfollow]");
   if(u){follows.delete(u.dataset.unfollow.toLowerCase());saveFollows();render();toast("Unfollowed "+u.dataset.unfollow);}
 });
@@ -1954,6 +1959,7 @@ $("ftoggle").onclick=()=>setRail($("rail").hidden);
 $("scrim").onclick=()=>setRail(false);
 $("sheetDone").onclick=()=>{setRail(false);document.querySelector(".content").scrollIntoView({block:"start"});};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("rail").hidden&&mq.matches)setRail(false);});
+document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches(".art[data-follow]")){e.preventDefault();e.target.click();}});
 try{mq.addEventListener("change",()=>setRail(!$("rail").hidden));}catch(e){}
 document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.more"))return;const id=d.dataset.more;
   if(d.open)openFests.add(id);else openFests.delete(id);
