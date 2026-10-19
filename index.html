@@ -1803,7 +1803,7 @@ function renderMonth(){
   let h=DOW.map(d=>'<div class="dow" role="columnheader"><span class="dl">'+d+'</span><span class="ds">'+d[0]+'</span></div>').join("");
   for(let i=0;i<first;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   for(let d=1;d<=days;d++){const k=iso(y,m,d);const ev=vmap[k]||[];const fe=festsOn(k);const tot=ev.length+fe.length;
-    const cls=["cell"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel)cls.push("sel");
+    const cls=["cell"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel&&state.allFor!==k)cls.push("sel");
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
       '<span class="d"><span>'+d+'</span>'+'</span>'+
       fe.map(f=>'<span class="fev"><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
@@ -1813,7 +1813,7 @@ function renderMonth(){
   $("grid").innerHTML=h;
   renderNights(y,m,days,vmap);renderMini(y,m,days,vmap);
   // day panel
-  const sel=state.sel;const inMonth=parts(sel).y===y&&parts(sel).m===m;
+  const sel=state.sel;const inMonth=state.allFor!==sel&&parts(sel).y===y&&parts(sel).m===m;
   const list=inMonth?(vmap[sel]||[]):vis.filter(s=>{const p=parts(s.date);return p.y===y&&p.m===m;});
   const mStart=iso(y,m,1),mEnd=iso(y,m,days);
   const flist=inMonth?festsOn(sel):FESTS.filter(f=>f.start&&f.start<=mEnd&&f.end>=mStart&&fvis(f));
@@ -1883,6 +1883,8 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-genre]");
   if(g){const id=g.dataset.genre;state.genres=state.genres.includes(id)?state.genres.filter(x=>x!==id):[...state.genres,id];render();return;}
   const d=e.target.closest("[data-day]");
+  /* tapping the picked day again shows the whole month; tapping it once more picks it again */
+  if(d&&d.classList.contains("cell")&&d.dataset.day===state.sel){state.allFor=state.allFor===state.sel?null:state.sel;later(()=>stagger($("dayRows"),":scope>*",6));render();return;}
   if(d){const k=d.dataset.day;if(k!==state.sel)later(()=>{fx(document.querySelector('#grid .cell[data-day="'+k+'"]'),"fx-ring");stagger($("dayRows"),":scope>*",6);});
     state.sel=k;const sp=parts(state.sel);state.ym={y:sp.y,m:sp.m};render();const t=document.querySelector(".dayhead");if(d.classList.contains("cell")&&window.innerWidth<900)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});return;}
 });
