@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>BassCalendar</title>
 <meta name="description" content="Dubstep, riddim, melodic bass and drum &amp; bass shows around Chicago, plus Midwest bass festivals. Updated daily.">
 <meta name="theme-color" content="#000000">
@@ -57,7 +57,9 @@
 
 *{box-sizing:border-box}
 /* month slide moves the grid/list 40px sideways; clip it so phones don't zoom out to fit the overflow */
-#monthView{overflow-x:clip;touch-action:pan-y pinch-zoom}
+#monthView{overflow-x:clip;touch-action:pan-y}
+/* no pinch zoom anywhere (iOS ignores user-scalable=no, so touch-action and the gesture block below do it) */
+html{touch-action:pan-x pan-y}
 body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:16px;line-height:1.4;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
 a{color:inherit}
@@ -2142,6 +2144,8 @@ document.addEventListener("toggle",e=>{const d=e.target;if(!d._tap||!d.open)retu
 document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.nshow"))return;if(d.open)openShows.add(d.dataset.show);else openShows.delete(d.dataset.show);},true);
 /* swipe anywhere in the month view (header, mini calendar, grid, night list) to change month,
    except from inside something that scrolls sideways on its own */
+["gesturestart","gesturechange"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+document.addEventListener("touchmove",e=>{if(e.touches.length>1&&e.cancelable)e.preventDefault();},{passive:false});
 let swOk=false,swAxis="";
 const hScroller=el=>{for(;el&&el.id!=="monthView";el=el.parentElement){const o=getComputedStyle(el).overflowX;if((o==="auto"||o==="scroll")&&el.scrollWidth>el.clientWidth)return true;}return false;};
 $("monthView").addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;swAxis="";swOk=e.touches.length===1&&!hScroller(e.target)&&!e.target.closest("input,select,textarea");},{passive:true});
