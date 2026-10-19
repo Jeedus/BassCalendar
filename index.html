@@ -875,21 +875,8 @@ button.pchip{cursor:pointer}
    lava's outline. Where the lava flows the cyan turns black and the black type turns cyan. */
 .hero{position:relative;overflow:hidden;isolation:isolate}
 .hero>.wrap{position:relative}
-.lava{--signal:#000000;--on-signal:#19c6d6;position:absolute;inset:0;z-index:2;pointer-events:none;background:var(--signal);color:var(--on-signal);clip-path:inset(0 0 0 100%);-webkit-clip-path:inset(0 0 0 100%)}
+.lava{--signal:#000000;--on-signal:#19c6d6;position:absolute;inset:0;z-index:2;pointer-events:none;contain:strict;will-change:clip-path;background:var(--signal);color:var(--on-signal);clip-path:inset(0 0 0 100%);-webkit-clip-path:inset(0 0 0 100%)}
 .lava .rmenu{display:none!important}
-/* desktop: lava lamp option A. A pool along the bottom; blobs heat up in it, rise, cool near the top and sink
-   back (moved by lavaLampA). Cyan goo blended with "difference", so where it flows the cyan turns black and the
-   black type turns cyan. Phones use the traced outline above (Safari can't merge the goo) */
-.lavaA{display:none}
-@media (min-width:641px){
-  .lava{display:none}
-  .lavaA{display:block;position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:difference}
-  .lavaA .goo{position:absolute;inset:-40px;filter:url(#goo)}
-  .lavaA .pool{position:absolute;left:0;right:0;bottom:40px;height:30px;background:var(--signal)}
-  .lavaA .b,.lavaA .pl{position:absolute;left:0;top:0;border-radius:50%;background:var(--signal);will-change:transform}
-}
-.hero.still .lavaA *{animation-play-state:paused}
-@media (prefers-reduced-motion: reduce){.lavaA *{animation:none!important}}
 /* phones: the main sections sit in a bar at the bottom, in thumb reach. The top bar keeps the name only */
 .bnav{display:none}
 @media (max-width:640px){
@@ -954,8 +941,6 @@ button.pchip{cursor:pointer}
 
 <section class="hero" id="heroSec" aria-labelledby="heroTitle">
   <div class="lava" id="lava" aria-hidden="true"></div>
-  <div class="lavaA" aria-hidden="true"><div class="goo"><span class="pool"></span></div></div>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="16" result="b"></feGaussianBlur><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11"></feColorMatrix></filter></svg>
   <div class="wrap" id="hero"></div>
 </section>
 
@@ -2011,80 +1996,46 @@ function render(){
 
 /* hero lava lamp: metaballs traced into a smooth outline (marching squares) each frame and used as the
    clip-path of the swapped-color copy. Blobs rise and sink beside a pool on the right edge */
+/* the lava lamp. One engine for phones and computers: blobs with a temperature that heat up in the pool,
+   rise, cool near the top and sink back; big ones heat and cool slower than small ones, every rate is a bit
+   random, crowded blobs nudge apart, and nothing stops dead (the pool, the top and the sides push back like
+   springs). Each blob trails two smaller lobes, and the pool's surface is a row of slow swells. It is drawn as
+   one metaball field: everything within reach melts together, so merging and splitting are continuous. The
+   field's outline (marching squares, then a smooth spline through the points) becomes the clip-path of a
+   colour-swapped copy of the banner, so where the lava flows the cyan turns black and the type turns cyan.
+   No filters or blend modes, which iPhone Safari can't do well. Phones keep the lava in a column on the right
+   so the text stays clear; computers run it across the whole banner */
 function lavaLamp(){
   const el=$("lava"),sec=$("heroSec"),src=$("hero");if(!el||!sec||!src)return;
-  let S=3;const BL=[[0,90,-20,20,0,280],[30,70,15,24,-8,360],[10,110,-10,28,-15,220],[40,60,10,18,-4,320]];
-  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-  const still=matchMedia("(prefers-reduced-motion: reduce)");
-  let raf=0,seen=true,sq=0,F=null,nb=null;const t0=performance.now();
+  const still=matchMedia("(prefers-reduced-motion: reduce)"),R=Math.random;
+  let sq=0;
   const sync=()=>{sq=0;const c=src.cloneNode(true);c.removeAttribute("id");c.querySelectorAll("[id]").forEach(x=>x.removeAttribute("id"));el.replaceChildren(c);};
   try{new MutationObserver(()=>{if(!sq)sq=requestAnimationFrame(sync);}).observe(src,{subtree:true,childList:true,attributes:true,characterData:true});}catch(e){}
   sync();
-  function draw(now){
-    const W=sec.clientWidth,H=sec.clientHeight;if(!W||!H)return;
-    const ph=W<=640,ls=ph?.62:1,col=ph?110:300,t=(now-t0)/1000;S=ph?4:3;
-    const balls=BL.map(([rp,bw,dx,d,o,ht])=>{let p=((t-o)/d)%1;if(p<0)p+=1;const e=ease(p<.5?p*2:2-p*2);const r=bw/2*ls*(.85+.2*e);
-      return [W-col*rp/100-bw/2*ls+dx*ls*e,H-r*.9-ht*ls*e,r*r];});
-    const pool=(ph?24:58)*(1-.15*(.5+.5*Math.sin(t*Math.PI/11)));
-    /* field on a grid with one empty cell all round, so every outline closes */
-    const nx=Math.ceil(W/S)+3,ny=Math.ceil(H/S)+3,N=nx*ny;
-    if(!F||F.length!==N){F=new Float32Array(N);nb=new Int32Array(4*N);}else F.fill(0);
-    /* lava only ever lives in the right-hand strip; leave the rest of the grid empty */
-    const x0=Math.max(1,Math.floor((W-col-70*ls-24)/S));
-    for(let j=1;j<ny-1;j++){const py=(j-1)*S;for(let i=x0;i<nx-1;i++){const px=(i-1)*S,ex=Math.max(.5,W-px);let v=pool*pool/(ex*ex);
-      for(let k=0;k<4;k++){const b=balls[k],dx=px-b[0],dy=py-b[1];v+=b[2]/(dx*dx+dy*dy+1);}F[j*nx+i]=v;}}
-    /* marching squares: edges are keyed h(i,j)=j*nx+i and v(i,j)=N+j*nx+i; each edge point links to two others */
-    nb.fill(-1);
-    const link=(a,b)=>{nb[2*a+(nb[2*a]<0?0:1)]=b;nb[2*b+(nb[2*b]<0?0:1)]=a;};
-    for(let j=0;j<ny-1;j++)for(let i=x0-1;i<nx-1;i++){const o=j*nx+i;
-      const c=(F[o]>=1?8:0)|(F[o+1]>=1?4:0)|(F[o+nx+1]>=1?2:0)|(F[o+nx]>=1?1:0);if(!c||c===15)continue;
-      const T=o,B=o+nx,L=N+o,R=N+o+1;
-      switch(c){case 1:case 14:link(L,B);break;case 2:case 13:link(B,R);break;case 3:case 12:link(L,R);break;case 4:case 11:link(T,R);break;
-        case 6:case 9:link(T,B);break;case 7:case 8:link(L,T);break;
-        case 5:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(L,T);link(B,R);}else{link(L,B);link(T,R);}break;
-        case 10:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(T,R);link(L,B);}else{link(L,T);link(B,R);}break;}}
-    const pt=k=>{if(k<N){const i=k%nx,j=(k/nx)|0,a=F[k],b=F[k+1];return (((i-1)+(1-a)/(b-a))*S).toFixed(1)+" "+((j-1)*S);}
-      const q=k-N,i=q%nx,j=(q/nx)|0,a=F[q],b=F[q+nx];return ((i-1)*S)+" "+(((j-1)+(1-a)/(b-a))*S).toFixed(1);};
-    let d="";const used=new Uint8Array(2*N);
-    for(let k=0;k<2*N;k++){if(used[k]||nb[2*k]<0)continue;let prev=-1,cur=k,n=0;d+="M"+pt(k);used[k]=1;
-      while(n++<1e5){const a=nb[2*cur],b=nb[2*cur+1];const nx2=a!==prev?a:b;if(nx2<0||nx2===k)break;if(used[nx2])break;used[nx2]=1;d+="L"+pt(nx2);prev=cur;cur=nx2;}
-      d+="Z";}
-    const cp=d?'path(evenodd,"'+d+'")':"inset(0 0 0 100%)";el.style.clipPath=cp;el.style.webkitClipPath=cp;
+  let W=0,H=0,X0=0,GX=0,S=4,PH=36,PP=40,nx=0,ny=0,N=0,F=null,nb=null,used=null,pts=null,lo=null,hi=null;
+  const bl=[],sw=[];
+  function setup(){
+    W=sec.clientWidth;H=sec.clientHeight;if(!W||!H)return false;
+    const ph=W<=640,sc=ph?.5:1;X0=ph?Math.max(0,W-122):0;GX=ph?Math.max(0,X0-70):0;const RW=W-X0,GW=W-GX;
+    PH=ph?18:34;PP=ph?16:30;
+    /* grid cell size: about 9000 cells over the lava's region, between 3 and 8 px */
+    S=Math.max(3,Math.min(8,Math.sqrt(GW*H/9000)));
+    nx=Math.ceil(GW/S)+3;ny=Math.ceil(H/S)+3;N=nx*ny;
+    if(!F||F.length!==N){F=new Float32Array(N);nb=new Int32Array(4*N);used=new Uint8Array(2*N);pts=new Float32Array(4*N);lo=new Int32Array(ny);hi=new Int32Array(ny);}
+    const n=ph?4:7;
+    if(bl.length!==n){bl.length=0;
+      for(let i=0;i<n;i++){const r=(24+Math.pow(R(),1.4)*50)*sc,sz=Math.sqrt(46*sc/r);
+        bl.push({r,x:X0+r+R()*Math.max(1,RW-2*r),y:H*.2+R()*H*.8,vx:0,vy:0,k:0,t:R(),heat:(.12+R()*.16)*sz,cool:(.08+R()*.12)*sz,ph:R()*6.3,wob:.15+R()*.35,
+          lobes:[0,1].map(()=>({f:.45+R()*.25,a:R()*6.3,spin:(R()<.5?-1:1)*(.1+R()*.25),x:0,y:0,set:0}))});}}
+    const ns=Math.max(2,Math.ceil(RW/190)+1);
+    if(sw.length!==ns){sw.length=0;for(let i=0;i<ns;i++)sw.push({r:(22+R()*14)*sc,u:i/ns+R()*.08,sp:.012+R()*.02,ph:R()*6.3,bob:.25+R()*.35});}
+    for(const b of bl){b.x=Math.min(Math.max(b.x,X0+b.r),Math.max(X0+b.r,W-b.r));b.y=Math.min(b.y,H-b.r*.3);}
+    return true;
   }
-  let last=0;
-  function loop(now){raf=0;if(!seen||sec.hidden||document.hidden||!PHONE.matches)return;if(now-last>=30||still.matches){last=now;draw(now);}if(!still.matches)raf=requestAnimationFrame(loop);}
-  const go=()=>{if(!raf)raf=requestAnimationFrame(loop);};
-  try{new IntersectionObserver(es=>{seen=es[0].isIntersecting;if(seen)go();}).observe(sec);}catch(e){}
-  try{new ResizeObserver(go).observe(sec);}catch(e){}
-  document.addEventListener("visibilitychange",go);
-  try{PHONE.addEventListener("change",go);}catch(e){}
-  try{new IntersectionObserver(es=>sec.classList.toggle("still",!es[0].isIntersecting)).observe(sec);}catch(e){}
-  go();
-}
-/* desktop lava lamp physics. Each blob has a temperature: the pool at the bottom heats it until it's
-   lighter than the liquid and rises; near the top it cools, gets heavy and sinks back. Big blobs heat and cool
-   slower than small ones, and every rate is a little random, so they never fall into step. A blob is a main
-   drop plus two smaller lobes that lag behind it, so the goo pulls it into teardrops and lumpy shapes instead
-   of perfect circles. The pool's surface is a row of wide, slow swells. Nothing stops dead: the pool, the top
-   and the sides push back like springs */
-function lavaLampA(){
-  const box=document.querySelector(".lavaA .goo"),sec=$("heroSec");if(!box||!sec)return;
-  const wide=matchMedia("(min-width:641px)"),still=matchMedia("(prefers-reduced-motion: reduce)"),R=Math.random,PAD=40;
-  const mk=c=>{const el=document.createElement("span");el.className=c;box.appendChild(el);return el;};
-  const swells=[];for(let i=0;i<6;i++)swells.push({el:mk("pl"),w:200+R()*220,h:46+R()*30,u:i/6+R()*.08,sp:.012+R()*.02,ph:R()*6.3,bob:.25+R()*.35});
-  const bl=[];
-  for(let i=0;i<7;i++){const r=26+Math.pow(R(),1.4)*54,sz=Math.sqrt(48/r);
-    const lobes=[0,1].map(j=>({el:mk("b"),f:.45+R()*.25,a:R()*6.3,spin:(R()<.5?-1:1)*(.1+R()*.25),x:0,y:0}));
-    bl.push({el:mk("b"),lobes,r,x:0,y:0,vx:0,vy:0,k:0,t:R(),heat:(.12+R()*.16)*sz,cool:(.08+R()*.12)*sz,ph:R()*6.3,wob:.15+R()*.35,set:0});}
-  let W=0,H=0;
-  function size(){W=sec.clientWidth;H=sec.clientHeight;if(!W||!H)return;
-    for(const b of bl){if(!b.set){b.set=1;b.x=b.r+R()*(W-2*b.r);b.y=H*.2+R()*H*.8;b.el.style.width=b.el.style.height=2*b.r+"px";
-      b.lobes.forEach(l=>{l.x=b.x;l.y=b.y;l.el.style.width=l.el.style.height=2*b.r*l.f+"px";});}}
-    swells.forEach(w=>{w.el.style.width=w.w+"px";w.el.style.height=w.h+"px";});}
   function step(dt,s){
     for(const b of bl){
       const depth=b.y/H;
-      if(b.y>H-30-b.r*.3)b.t+=b.heat*dt;
+      if(b.y>H-PH-b.r*.3)b.t+=b.heat*dt;
       else if(depth<.4)b.t-=b.cool*dt*(1.6-depth*2);
       else b.t-=b.cool*.2*dt;
       b.t=Math.min(1,Math.max(0,b.t));
@@ -2092,7 +2043,7 @@ function lavaLampA(){
       b.vy+=-(b.t-.5)*80*dt;
       b.vx+=Math.sin(s*b.wob+b.ph)*7*dt;
       /* soft limits: sinking into the pool, the top and the sides all push back gradually */
-      const floor=H-b.r*.45,ceil=b.r*.7,lw=b.r*.8,rw=W-b.r*.8;let visc=1.6;
+      const floor=H-b.r*.45,ceil=b.r*.7,lw=X0+b.r*.8,rw=W-b.r*.8;let visc=1.6;
       if(b.y>floor){b.vy-=(b.y-floor)*9*dt;visc=4;}
       if(b.y<ceil){b.vy+=(ceil-b.y)*9*dt;visc=3;}
       if(b.x<lw)b.vx+=(lw-b.x)*6*dt;else if(b.x>rw)b.vx-=(b.x-rw)*6*dt;
@@ -2101,7 +2052,7 @@ function lavaLampA(){
     /* blobs that crowd each other get nudged apart, mostly sideways, so they don't stack up */
     for(let i=0;i<bl.length;i++)for(let j=i+1;j<bl.length;j++){const a=bl[i],c=bl[j];
       const dx=c.x-a.x,dy=c.y-a.y,d=Math.hypot(dx,dy)||1,min=(a.r+c.r)*.8;
-      if(d<min){const f=(min-d)*1.6*dt,nx=dx/d,ny=dy/d*.4;a.vx-=nx*f;a.vy-=ny*f;c.vx+=nx*f;c.vy+=ny*f;}}
+      if(d<min){const f=(min-d)*1.6*dt,ux=dx/d,uy=dy/d*.4;a.vx-=ux*f;a.vy-=uy*f;c.vx+=ux*f;c.vy+=uy*f;}}
     const ease=1-Math.exp(-2.2*dt),kE=1-Math.exp(-5*dt);
     for(const b of bl){
       b.x+=b.vx*dt;b.y+=b.vy*dt;
@@ -2109,27 +2060,79 @@ function lavaLampA(){
       /* lobes circle slowly around the drop and trail behind its motion */
       for(const l of b.lobes){l.a+=l.spin*dt;const off=b.r*(.32+.12*Math.sin(s*.4+l.a*2));
         const tx=b.x+Math.cos(l.a)*off-b.vx*.9,ty=b.y+Math.sin(l.a)*off*.6-b.vy*1.1;
-        l.x+=(tx-l.x)*ease;l.y+=(ty-l.y)*ease;}
+        if(!l.set){l.set=1;l.x=tx;l.y=ty;}else{l.x+=(tx-l.x)*ease;l.y+=(ty-l.y)*ease;}}
     }
   }
-  const T=(x,y,sx,sy)=>"translate("+x.toFixed(1)+"px,"+y.toFixed(1)+"px) scale("+sx.toFixed(3)+","+sy.toFixed(3)+")";
-  function draw(s){
-    for(const b of bl){b.el.style.transform=T(b.x-b.r+PAD,b.y-b.r+PAD,1-b.k*.6,1+b.k);
-      for(const l of b.lobes){const lr=b.r*l.f;l.el.style.transform=T(l.x-lr+PAD,l.y-lr+PAD,1,1);}}
-    for(const w of swells){const cx=((w.u+s*w.sp)%1)*(W+w.w+160)-w.w/2-80,cy=H-6+Math.sin(s*w.bob+w.ph)*7;
-      w.el.style.transform=T(cx-w.w/2+PAD,cy-w.h/2+PAD,1,1);}
+  /* the field: pool along the bottom (a line source, cut off at the column's left edge on phones), swells
+     riding its surface, then every blob and lobe, stretched a little along its motion. Everything falls off
+     with the fourth power of distance, so two shapes only melt together once they nearly touch, like wax.
+     Each source only writes to the cells it can reach (where its share is above C0), which is what keeps a
+     frame cheap; C0 is taken off so the share fades to nothing at that edge instead of jumping */
+  const C0=.006,REACH=1/Math.sqrt(Math.sqrt(C0));
+  const balls=[];
+  function field(s){
+    F.fill(0);lo.fill(nx);hi.fill(-1);
+    const touch=(j,i0,i1)=>{if(i0<lo[j])lo[j]=i0;if(i1>hi[j])hi[j]=i1;};
+    balls.length=0;
+    for(const b of bl){const sx=1/(1-b.k*.6),sy=1/(1+b.k);balls.push(b.x,b.y,b.r*b.r,sx*sx,sy*sy);
+      for(const l of b.lobes){const lr=b.r*l.f;balls.push(l.x,l.y,lr*lr,1,1);}}
+    const RW=W-X0;
+    for(const w of sw){const cx=X0+((w.u+s*w.sp)%1)*(RW+2*w.r)-w.r,cy=H-PH+w.r*.7+Math.sin(s*w.bob+w.ph)*4;balls.push(cx,cy,w.r*w.r,1,1);}
+    /* the pool: one value per row, and on phones a taper over about 60px left of the column */
+    const py0=H-PH+PP,P2=PP*PP,xl=X0+16;
+    for(let j=1;j<ny-1;j++){const py=(j-1)*S,dy=py0-py,dy2=dy*dy,base=P2/(dy2+.25),vb=base*base-C0;if(vb<=0)continue;const row=j*nx;touch(j,1,nx-2);
+      for(let i=1;i<nx-1;i++){const px=GX+(i-1)*S;
+        if(px<xl){const ex=(xl-px)*.3,q=P2/(dy2+ex*ex+.25),v=q*q-C0;if(v>0)F[row+i]+=v;}else F[row+i]+=vb;}}
+    for(let k=0;k<balls.length;k+=5){const bx=balls[k],by=balls[k+1],r2=balls[k+2],sx2=balls[k+3],sy2=balls[k+4],r=Math.sqrt(r2);
+      const rx=REACH*r/Math.sqrt(sx2),ry=REACH*r/Math.sqrt(sy2);
+      const i0=Math.max(1,Math.floor((bx-rx-GX)/S)+1),i1=Math.min(nx-2,Math.ceil((bx+rx-GX)/S)+1);
+      const j0=Math.max(1,Math.floor((by-ry)/S)+1),j1=Math.min(ny-2,Math.ceil((by+ry)/S)+1);
+      for(let j=j0;j<=j1;j++){const ddy=(j-1)*S-by,dy2=ddy*ddy*sy2,row=j*nx;touch(j,i0,i1);
+        for(let i=i0;i<=i1;i++){const dx=GX+(i-1)*S-bx,q=r2/(dx*dx*sx2+dy2+1),v=q*q-C0;if(v>0)F[row+i]+=v;}}}
   }
-  let raf=0,seen=true,last=0,clock=R()*100;
-  function loop(now){raf=0;if(!seen||sec.hidden||document.hidden||!wide.matches)return;
-    if(!W)size();const dt=Math.min(.05,last?(now-last)/1000:0);last=now;
-    if(dt>0&&!still.matches){clock+=dt;step(dt,clock);}draw(clock);if(!still.matches)raf=requestAnimationFrame(loop);}
+  /* marching squares: edges are keyed h(i,j)=j*nx+i and v(i,j)=N+j*nx+i; each crossing links to two others */
+  const f1=v=>Math.round(v*10)/10;
+  function outline(){
+    nb.fill(-1);
+    const link=(a,b)=>{nb[2*a+(nb[2*a]<0?0:1)]=b;nb[2*b+(nb[2*b]<0?0:1)]=a;};
+    for(let j=0;j<ny-1;j++){const a0=Math.max(0,Math.min(lo[j],lo[j+1])-1),a1=Math.min(nx-2,Math.max(hi[j],hi[j+1]));
+      for(let i=a0;i<=a1;i++){const o=j*nx+i;
+      const c=(F[o]>=1?8:0)|(F[o+1]>=1?4:0)|(F[o+nx+1]>=1?2:0)|(F[o+nx]>=1?1:0);if(!c||c===15)continue;
+      const T=o,B=o+nx,L=N+o,Rr=N+o+1;
+      switch(c){case 1:case 14:link(L,B);break;case 2:case 13:link(B,Rr);break;case 3:case 12:link(L,Rr);break;case 4:case 11:link(T,Rr);break;
+        case 6:case 9:link(T,B);break;case 7:case 8:link(L,T);break;
+        case 5:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(L,T);link(B,Rr);}else{link(L,B);link(T,Rr);}break;
+        case 10:if((F[o]+F[o+1]+F[o+nx]+F[o+nx+1])/4>=1){link(T,Rr);link(L,B);}else{link(L,T);link(B,Rr);}break;}}}
+    const px=k=>{if(k<N){const i=k%nx,a=F[k],b=F[k+1];return GX+((i-1)+(1-a)/(b-a))*S;}return GX+(((k-N)%nx)-1)*S;};
+    const py=k=>{if(k<N)return (((k/nx)|0)-1)*S;const q=k-N,a=F[q],b=F[q+nx];return ((((q/nx)|0)-1)+(1-a)/(b-a))*S;};
+    used.fill(0);let d="";const gap=S*1.5;
+    for(let k=0;k<2*N;k++){if(used[k]||nb[2*k]<0)continue;
+      /* walk the loop, keeping points about a cell and a half apart (the spline fills in between) */
+      let n=0,prev=-1,cur=k;used[k]=1;pts[0]=px(k);pts[1]=py(k);n=1;
+      while(n<2*N){const a=nb[2*cur],b=nb[2*cur+1];const nxt=a!==prev?a:b;if(nxt<0||nxt===k||used[nxt])break;used[nxt]=1;
+        const x=px(nxt),y=py(nxt);if(Math.abs(x-pts[2*n-2])+Math.abs(y-pts[2*n-1])>=gap){pts[2*n]=x;pts[2*n+1]=y;n++;}prev=cur;cur=nxt;}
+      if(n<3)continue;
+      /* a closed Catmull-Rom spline through the points, written as cubic curves */
+      d+="M"+f1(pts[0])+" "+f1(pts[1]);
+      for(let i=0;i<n;i++){const i0=(i-1+n)%n,i1=i,i2=(i+1)%n,i3=(i+2)%n;
+        const x0=pts[2*i0],y0=pts[2*i0+1],x1=pts[2*i1],y1=pts[2*i1+1],x2=pts[2*i2],y2=pts[2*i2+1],x3=pts[2*i3],y3=pts[2*i3+1];
+        d+="C"+f1(x1+(x2-x0)/6)+" "+f1(y1+(y2-y0)/6)+" "+f1(x2-(x3-x1)/6)+" "+f1(y2-(y3-y1)/6)+" "+f1(x2)+" "+f1(y2);}
+      d+="Z";}
+    const cp=d?'path(evenodd,"'+d+'")':"inset(0 0 0 100%)";el.style.clipPath=cp;el.style.webkitClipPath=cp;
+  }
+  let raf=0,seen=true,last=0,clock=R()*100,dirty=true;
+  function loop(now){raf=0;if(!seen||sec.hidden||document.hidden)return;
+    if(dirty){dirty=false;if(!setup())return;}
+    const dt=Math.min(.05,last?(now-last)/1000:0);last=now;
+    if(dt>0&&!still.matches){clock+=dt;step(dt,clock);}
+    field(clock);outline();
+    if(!still.matches)raf=requestAnimationFrame(loop);}
   const go=()=>{last=0;if(!raf)raf=requestAnimationFrame(loop);};
   /* reduced motion: let the lamp settle into a random moment, then hold still */
-  if(still.matches){size();for(let i=0;i<600;i++){clock+=.05;step(.05,clock);}}
+  if(still.matches&&setup()){dirty=false;for(let i=0;i<600;i++){clock+=.05;step(.05,clock);}}
   try{new IntersectionObserver(es=>{seen=es[0].isIntersecting;if(seen)go();}).observe(sec);}catch(e){}
-  try{new ResizeObserver(()=>{size();go();}).observe(sec);}catch(e){}
+  try{new ResizeObserver(()=>{dirty=true;go();}).observe(sec);}catch(e){}
   document.addEventListener("visibilitychange",go);
-  try{wide.addEventListener("change",()=>{size();go();});}catch(e){}
   go();
 }
 /* big type: pull each heading left by its first letter's side bearing so the ink lines up with everything else */
@@ -2360,7 +2363,7 @@ if(location.hash==="#friends")state.view="friends";
 if(location.hash==="#me")state.view="me";
 render();
 intro();
-lavaLamp();lavaLampA();
+lavaLamp();
 if(CREW_ON&&fme)setTimeout(()=>loadQr().catch(()=>{}),2500);
 try{document.fonts.ready.then(inkAlign);}catch(e){}
 {let rt=0;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(inkAlign,120);});}
