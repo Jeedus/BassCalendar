@@ -874,6 +874,21 @@ button.pchip{cursor:pointer}
 .hero>.wrap{position:relative}
 .lava{--signal:#000000;--on-signal:#19c6d6;position:absolute;inset:0;z-index:2;pointer-events:none;background:var(--signal);color:var(--on-signal);clip-path:inset(0 0 0 100%);-webkit-clip-path:inset(0 0 0 100%)}
 .lava .rmenu{display:none!important}
+/* desktop keeps the original lava: cyan goo blended with "difference", so where it flows the cyan turns
+   black and the black type turns cyan. Phones use the traced outline above (Safari can't merge the goo) */
+.lavaA{display:none}
+@media (min-width:641px){
+  .lava{display:none}
+  .lavaA{display:block;position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:difference}
+  .lavaA .goo{position:absolute;inset:-40px;filter:url(#goo)}
+  .lavaA .pool{position:absolute;right:0;top:0;bottom:0;width:110px;background:var(--signal);animation:lsway 11s ease-in-out infinite alternate}
+  .lavaA .lcol{position:absolute;right:0;top:0;bottom:0;width:300px}
+  .lavaA .b{position:absolute;bottom:40px;width:calc(var(--w) * 1px);height:calc(var(--w) * 1.1px);border-radius:50%;background:var(--signal);will-change:transform;animation:lrise var(--d) cubic-bezier(.45,0,.55,1) var(--t) infinite}
+}
+@keyframes lrise{0%{transform:translate(0,0) scale(.85)}45%{transform:translate(calc(var(--x) * 1px),calc(var(--h) * -1px)) scale(1.05,.95)}55%{transform:translate(calc(var(--x) * 1px),calc(var(--h) * -1px)) scale(.95,1.05)}100%{transform:translate(0,0) scale(.85)}}
+@keyframes lsway{to{transform:translateX(20px) scaleX(.85)}}
+.hero.still .lavaA *{animation-play-state:paused}
+@media (prefers-reduced-motion: reduce){.lavaA *{animation:none!important}}
 /* phones: the main sections sit in a bar at the bottom, in thumb reach. The top bar keeps the name only */
 .bnav{display:none}
 @media (max-width:640px){
@@ -938,6 +953,13 @@ button.pchip{cursor:pointer}
 
 <section class="hero" id="heroSec" aria-labelledby="heroTitle">
   <div class="lava" id="lava" aria-hidden="true"></div>
+  <div class="lavaA" aria-hidden="true"><div class="goo"><span class="pool"></span><div class="lcol">
+    <span class="b" style="right:0%;--w:90;--x:-20;--h:280;--d:20s;--t:0s"></span>
+    <span class="b" style="right:30%;--w:70;--x:15;--h:360;--d:24s;--t:-8s"></span>
+    <span class="b" style="right:10%;--w:110;--x:-10;--h:220;--d:28s;--t:-15s"></span>
+    <span class="b" style="right:40%;--w:60;--x:10;--h:320;--d:18s;--t:-4s"></span>
+  </div></div></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="16" result="b"></feGaussianBlur><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11"></feColorMatrix></filter></svg>
   <div class="wrap" id="hero"></div>
 </section>
 
@@ -2032,11 +2054,13 @@ function lavaLamp(){
     const cp=d?'path(evenodd,"'+d+'")':"inset(0 0 0 100%)";el.style.clipPath=cp;el.style.webkitClipPath=cp;
   }
   let last=0;
-  function loop(now){raf=0;if(!seen||sec.hidden||document.hidden)return;if(now-last>=30||still.matches){last=now;draw(now);}if(!still.matches)raf=requestAnimationFrame(loop);}
+  function loop(now){raf=0;if(!seen||sec.hidden||document.hidden||!PHONE.matches)return;if(now-last>=30||still.matches){last=now;draw(now);}if(!still.matches)raf=requestAnimationFrame(loop);}
   const go=()=>{if(!raf)raf=requestAnimationFrame(loop);};
   try{new IntersectionObserver(es=>{seen=es[0].isIntersecting;if(seen)go();}).observe(sec);}catch(e){}
   try{new ResizeObserver(go).observe(sec);}catch(e){}
   document.addEventListener("visibilitychange",go);
+  try{PHONE.addEventListener("change",go);}catch(e){}
+  try{new IntersectionObserver(es=>sec.classList.toggle("still",!es[0].isIntersecting)).observe(sec);}catch(e){}
   go();
 }
 /* big type: pull each heading left by its first letter's side bearing so the ink lines up with everything else */
