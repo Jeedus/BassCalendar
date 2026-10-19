@@ -874,18 +874,17 @@ button.pchip{cursor:pointer}
 .hero>.wrap{position:relative}
 .lava{--signal:#000000;--on-signal:#19c6d6;position:absolute;inset:0;z-index:2;pointer-events:none;background:var(--signal);color:var(--on-signal);clip-path:inset(0 0 0 100%);-webkit-clip-path:inset(0 0 0 100%)}
 .lava .rmenu{display:none!important}
-/* desktop: lava lamp option A. A pool along the bottom with blobs that rise, stretch and sink back,
-   cyan goo blended with "difference", so where it flows the cyan turns black and the black type turns cyan.
-   Phones use the traced outline above (Safari can't merge the goo) */
+/* desktop: lava lamp option A. A pool along the bottom; blobs heat up in it, rise, cool near the top and sink
+   back (moved by lavaLampA). Cyan goo blended with "difference", so where it flows the cyan turns black and the
+   black type turns cyan. Phones use the traced outline above (Safari can't merge the goo) */
 .lavaA{display:none}
 @media (min-width:641px){
   .lava{display:none}
   .lavaA{display:block;position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:difference}
   .lavaA .goo{position:absolute;inset:-40px;filter:url(#goo)}
   .lavaA .pool{position:absolute;left:0;right:0;bottom:40px;height:34px;background:var(--signal);animation:lpool 9s ease-in-out infinite alternate}
-  .lavaA .b{position:absolute;bottom:40px;width:calc(var(--w) * 1px);height:calc(var(--w) * 1.1px);border-radius:50%;background:var(--signal);will-change:transform;animation:lrise var(--d) cubic-bezier(.45,0,.55,1) var(--t) infinite}
+  .lavaA .b{position:absolute;left:0;top:0;border-radius:50%;background:var(--signal);will-change:transform}
 }
-@keyframes lrise{0%{transform:translate(0,0) scale(.85)}45%{transform:translate(calc(var(--x) * 1px),calc(var(--h) * -1px)) scale(1.05,.95)}55%{transform:translate(calc(var(--x) * 1px),calc(var(--h) * -1px)) scale(.95,1.05)}100%{transform:translate(0,0) scale(.85)}}
 @keyframes lpool{to{transform:translateY(14px) scaleY(.85)}}
 .hero.still .lavaA *{animation-play-state:paused}
 @media (prefers-reduced-motion: reduce){.lavaA *{animation:none!important}}
@@ -953,14 +952,7 @@ button.pchip{cursor:pointer}
 
 <section class="hero" id="heroSec" aria-labelledby="heroTitle">
   <div class="lava" id="lava" aria-hidden="true"></div>
-  <div class="lavaA" aria-hidden="true"><div class="goo"><span class="pool"></span>
-    <span class="b" style="left:8%;--w:120;--x:9;--h:260;--d:18s;--t:0s"></span>
-    <span class="b" style="left:24%;--w:90;--x:-30;--h:340;--d:23s;--t:-6s"></span>
-    <span class="b" style="left:42%;--w:140;--x:40;--h:220;--d:27s;--t:-12s"></span>
-    <span class="b" style="left:61%;--w:100;--x:-20;--h:380;--d:21s;--t:-3s"></span>
-    <span class="b" style="left:78%;--w:130;--x:25;--h:300;--d:25s;--t:-9s"></span>
-    <span class="b" style="left:90%;--w:80;--x:-15;--h:260;--d:19s;--t:-15s"></span>
-  </div></div>
+  <div class="lavaA" aria-hidden="true"><div class="goo"><span class="pool"></span></div></div>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="16" result="b"></feGaussianBlur><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11"></feColorMatrix></filter></svg>
   <div class="wrap" id="hero"></div>
 </section>
@@ -2065,6 +2057,57 @@ function lavaLamp(){
   try{new IntersectionObserver(es=>sec.classList.toggle("still",!es[0].isIntersecting)).observe(sec);}catch(e){}
   go();
 }
+/* desktop lava lamp physics. Each blob has a temperature: the pool at the bottom heats it until it's
+   lighter than the liquid and rises; near the top it cools, gets heavy and sinks back. Sizes, heating and
+   cooling rates are random per blob, so they drift out of step, bump apart and merge through the goo */
+function lavaLampA(){
+  const box=document.querySelector(".lavaA .goo"),sec=$("heroSec");if(!box||!sec)return;
+  const wide=matchMedia("(min-width:641px)"),still=matchMedia("(prefers-reduced-motion: reduce)"),R=Math.random,PAD=40,POOL=30;
+  const bl=[];let W=0,H=0;
+  for(let i=0;i<8;i++){const el=document.createElement("span");el.className="b";box.appendChild(el);
+    bl.push({el,r:32+R()*46,x:0,y:0,vx:0,vy:0,t:R(),heat:.16+R()*.24,cool:.1+R()*.18,ph:R()*6.3,wob:.3+R()*.5,set:0});}
+  function size(){W=sec.clientWidth;H=sec.clientHeight;
+    for(const b of bl){if(!b.set&&W&&H){b.set=1;b.x=b.r+R()*(W-2*b.r);b.y=H*.15+R()*H*.85;b.el.style.width=b.el.style.height=2*b.r+"px";}
+      b.x=Math.min(Math.max(b.x,b.r),Math.max(b.r,W-b.r));}}
+  function step(dt,s){
+    const floor=H-POOL;
+    for(const b of bl){
+      const depth=b.y/H;
+      if(b.y>floor-b.r*.3)b.t+=b.heat*dt;
+      else if(depth<.4)b.t-=b.cool*dt*(1.6-depth*2);
+      else b.t-=b.cool*.2*dt;
+      b.t=Math.min(1,Math.max(0,b.t));
+      /* buoyancy (warm rises), a slow sideways wander, and drag from the thick liquid */
+      b.vy+=-(b.t-.5)*110*dt;
+      b.vx+=Math.sin(s*b.wob+b.ph)*10*dt;
+      const drag=Math.exp(-1.3*dt);b.vx*=drag;b.vy*=drag;
+    }
+    /* blobs that crowd each other get nudged apart, mostly sideways, so they don't stack up */
+    for(let i=0;i<bl.length;i++)for(let j=i+1;j<bl.length;j++){const a=bl[i],c=bl[j];
+      const dx=c.x-a.x,dy=c.y-a.y,d=Math.hypot(dx,dy)||1,min=(a.r+c.r)*.85;
+      if(d<min){const f=(min-d)*2.2*dt,nx=dx/d,ny=dy/d*.4;a.vx-=nx*f;a.vy-=ny*f;c.vx+=nx*f;c.vy+=ny*f;}}
+    for(const b of bl){
+      b.x+=b.vx*dt;b.y+=b.vy*dt;
+      if(b.x<b.r){b.x=b.r;b.vx=Math.abs(b.vx)*.3;}else if(b.x>W-b.r){b.x=W-b.r;b.vx=-Math.abs(b.vx)*.3;}
+      if(b.y<b.r*.6){b.y=b.r*.6;b.vy=Math.max(b.vy,0);}
+      const rest=H-b.r*.35;if(b.y>rest){b.y=rest;b.vy=Math.min(b.vy,0);}
+    }
+  }
+  function draw(){for(const b of bl){const k=Math.min(.16,Math.abs(b.vy)/260);
+    b.el.style.transform="translate("+(b.x-b.r+PAD).toFixed(1)+"px,"+(b.y-b.r+PAD).toFixed(1)+"px) scale("+(1-k).toFixed(3)+","+(1+k).toFixed(3)+")";}}
+  let raf=0,seen=true,last=0;
+  function loop(now){raf=0;if(!seen||sec.hidden||document.hidden||!wide.matches)return;
+    if(!W)size();const dt=Math.min(.05,last?(now-last)/1000:0);last=now;
+    if(dt>0&&!still.matches)step(dt,now/1000);draw();if(!still.matches)raf=requestAnimationFrame(loop);}
+  const go=()=>{last=0;if(!raf)raf=requestAnimationFrame(loop);};
+  /* reduced motion: let the lamp settle into a random moment, then hold still */
+  if(still.matches){size();for(let i=0;i<400;i++)step(.05,i*.05);}
+  try{new IntersectionObserver(es=>{seen=es[0].isIntersecting;if(seen)go();}).observe(sec);}catch(e){}
+  try{new ResizeObserver(()=>{size();go();}).observe(sec);}catch(e){}
+  document.addEventListener("visibilitychange",go);
+  try{wide.addEventListener("change",()=>{size();go();});}catch(e){}
+  go();
+}
 /* big type: pull each heading left by its first letter's side bearing so the ink lines up with everything else */
 const INK_SEL="#heroTitle,.hero .lede,.frhead > .cname,.jleft > .cname,.mhead h2,.cstart h2,.dayhead h3";
 let inkCtx=null;
@@ -2293,7 +2336,7 @@ if(location.hash==="#friends")state.view="friends";
 if(location.hash==="#me")state.view="me";
 render();
 intro();
-lavaLamp();
+lavaLamp();lavaLampA();
 if(CREW_ON&&fme)setTimeout(()=>loadQr().catch(()=>{}),2500);
 try{document.fonts.ready.then(inkAlign);}catch(e){}
 {let rt=0;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(inkAlign,120);});}
