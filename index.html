@@ -1943,7 +1943,7 @@ function inkAlign(){
     });
   }catch(e){}
 }
-function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
+function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,Math.max(1800,String(t).length*60));}
 function setView(v){const was=state.view;state.view=v;try{history.replaceState(null,"","#"+v);}catch(e){}if(PAGES.includes(v)&&typeof setRail==="function"&&!$("rail").hidden)setRail(false);
   if(v===was){render();return;}
   if(v==="crew")later(()=>stagger($("crewView"),".chead,.wday,.cuprow,.mrow,.mostc,.cstart",20));
