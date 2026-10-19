@@ -1407,7 +1407,7 @@ function shortDay(d){if(!d)return "dates TBA";if(d===TODAY)return "tonight";if(d
 function renderCrewStart(){
   return '<div class="cstart"><span class="kicker">Crews</span><h2>Start a crew</h2>'+
     '<p>A crew is you and your friends. Everyone marks shows Going, Interested or Got tix, and the calendar shows who\'s going to what. No accounts: you share one invite link and friends type their name.</p>'+
-    '<form class="cform" id="createForm" autocomplete="off"><label for="crName">Crew name</label><input id="crName" maxlength="40" placeholder="Wobble Crew" required>'+
+    '<form class="cform" id="createForm" autocomplete="off"><label for="crName">Crew name</label><input id="crName" maxlength="40" placeholder="SpunSquabi" required>'+
     '<label for="crMe">Your name</label><input id="crMe" maxlength="30" value="'+esc(lastName())+'" required><button class="go" type="submit">Start the crew</button></form>'+
     '<p class="note">Got an invite? Just open the link your friend sent.</p></div>';
 }
