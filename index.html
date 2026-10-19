@@ -1820,7 +1820,10 @@ function renderMonth(){
   $("dayTitle").textContent=inMonth?(sel===TODAY?"Tonight, "+MON[parts(sel).m]+" "+parts(sel).d:longDate(sel)):"All of "+MONTHS[m];
   const tot=list.length+flist.length;
   $("dayMeta").textContent=list.length+(list.length===1?" show":" shows")+(flist.length?" + "+flist.length+(flist.length===1?" festival":" festivals"):"");
-  $("dayRows").innerHTML=tot?flist.map(f=>festPoster(f,inMonth?sel:"month")).join("")+list.map(s=>row(s,{rel:true})).join(""):
+  /* the whole month runs in date order; a festival sits before the shows on the day it starts */
+  const items=inMonth?flist.map(f=>({k:"",h:festPoster(f,sel)})).concat(list.map(s=>({k:"",h:row(s,{rel:true})}))):
+    flist.map(f=>({k:(f.start<mStart?mStart:f.start)+"0",h:festPoster(f,"month")})).concat(list.map(s=>({k:s.date+"1",h:row(s,{rel:true})}))).sort((a,b)=>a.k.localeCompare(b.k));
+  $("dayRows").innerHTML=tot?items.map(x=>x.h).join(""):
     '<div class="empty"><b>'+(inMonth?"Nothing on this night.":"No bass shows listed for "+MONTHS[m]+" yet.")+'</b><span class="note">'+(inMonth?"Pick a day with a show, or check the List view for everything ahead.":"Winter announcements usually land a few weeks out. Check back, or loosen the filters.")+'</span></div>';
 }
 
