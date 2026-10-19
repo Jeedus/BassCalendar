@@ -40,6 +40,7 @@
   --signal:#19c6d6; --on-signal:#000000;
   --pink:#ff4fb8; --on-pink:#000000;
   --volt:#d6f45a; --on-volt:#000000;
+  --fest-tint:rgba(25,198,214,.16);
   --slate:#597e87; --sage:#d1ddd3; --blue:#3292ff; --heat:#ff4b5c;
   --focus:#000000;
   --font-sans:"Geist","Helvetica Neue",Arial,sans-serif;
@@ -48,11 +49,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
-  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; color-scheme:dark}}
+  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
-  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; color-scheme:dark}
+  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:16px;line-height:1.4;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
@@ -807,6 +808,20 @@ button.pchip{cursor:pointer}
   .pst:nth-child(n+3){border-top:1px solid var(--rule-soft)}
   .pvup .cuprow>.rsel,.pvup .cuprow>.pwent{grid-column:2;justify-self:start}
 }
+/* festivals: a pale cyan tint with a solid cyan edge, so crew and friend dots sit on it as they are */
+.fev,.nfest,.wpick.fest{background:var(--fest-tint);color:var(--ink);box-shadow:inset 4px 0 0 var(--signal)}
+.fev{padding-left:12px}
+.nfest,.wpick.fest{padding-left:16px}
+.nfest .crewl,.wpick.fest .crewl,.nfest .frl,.wpick.fest .frl{color:var(--ink-soft)}
+.nfest .frl .k{color:var(--ink-meta)}
+.nfest .av,.wpick.fest .av{box-shadow:0 0 0 2px var(--paper),inset 0 0 0 1px rgba(0,0,0,.25)}
+.nfest .fav,.wpick.fest .fav{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--paper)}
+.nfest .frl .tx,.wpick.fest .frl .tx{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--pink)}
+.fev .pp,.nfest .pp{background:none;padding:0}
+.fev .pp{height:18px}
+.nfest .pp{height:22px}
+.fev .cc,.nfest .cc{background:transparent;border-color:var(--signal);color:var(--ink)}
+@media (max-width:640px){.fev{background:var(--signal);box-shadow:none;padding:0}}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
