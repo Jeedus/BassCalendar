@@ -298,6 +298,10 @@ details.nshow[data-g]{position:relative}
 details.nshow[data-g]::before{content:"";position:absolute;left:-12px;top:2px;bottom:2px;width:4px;background:var(--gc)}
 details.nshow[data-g] .nname{grid-template-columns:minmax(0,1fr) auto}
 details.nshow[data-g] .nname>.sw{display:none}
+details.nshow[data-g] .nmeta{padding-left:0}
+details.nshow[data-g] .nbody{padding-left:0}
+/* festival cards line up with the shows: cyan bar on the same line as the genre bars, name with show names */
+.nev .nfest{margin-left:-12px;padding-left:12px}
 details.nshow>summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:4px}
 details.nshow>summary::-webkit-details-marker{display:none}
 .nname{display:grid;grid-template-columns:11px minmax(0,1fr) auto;gap:8px;align-items:start;font-size:21px;font-weight:500;letter-spacing:-.02em;line-height:1.15}
