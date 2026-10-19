@@ -1218,10 +1218,10 @@ async function api(fn,body){
   let r;try{r=await fetch(CREW_API.url.replace(/\/+$/,"")+"/rest/v1/rpc/"+fn,{method:"POST",headers:h,body:JSON.stringify(body)});}
   catch(e){throw new Error("offline");}
   let j=null;try{j=await r.json();}catch(e){}
-  if(!r.ok)throw new Error((j&&(j.message||j.msg))||("http_"+r.status));
+  if(!r.ok){const m=(j&&(j.message||j.msg))||"";throw new Error(/could not find the function|PGRST202/i.test(m+" "+(j&&j.code||""))?"not_set_up":(m||("http_"+r.status)));}
   return j;
 }
-const ERRS={crew_not_found:"That invite link doesn't work anymore. Ask your friend to send a fresh one.",name_required:"Type your name first.",crew_name_required:"Give the crew a name first.",not_a_member:"This device isn't in that crew anymore. Open the invite link to rejoin.",crew_full:"That crew is full.",offline:"Can't reach the crew right now. Check your connection and try again."};
+const ERRS={crew_not_found:"That invite link doesn't work anymore. Ask your friend to send a fresh one.",name_required:"Type your name first.",crew_name_required:"Give the crew a name first.",not_a_member:"This device isn't in that crew anymore. Open the invite link to rejoin.",crew_full:"That crew is full.",offline:"Can't reach the crew right now. Check your connection and try again.",not_set_up:"This isn't set up on the server yet. Run supabase/setup.sql in Supabase, then try again."};
 const errMsg=e=>ERRS[e.message]||"Something went wrong saving that. Try again in a minute.";
 const EVMAP=new Map();
 SHOWS.forEach(s=>EVMAP.set(s.id,{id:s.id,title:s.title,tag:s.tag,date:s.date,where:s.venue,kind:"show"}));
@@ -1545,7 +1545,7 @@ async function profSync(){
   let last="";try{last=localStorage.getItem(PSYNC)||"";}catch(e){}
   if(j===last)return;
   try{await api("friend_set_profile",Object.assign({p_id:fme.id,p_token:fme.token},body));try{localStorage.setItem(PSYNC,j);}catch(e){}}
-  catch(e){if(/could not find|http_404/i.test(e.message))profMissing=true;}
+  catch(e){if(/not_set_up|http_404/.test(e.message))profMissing=true;}
 }
 async function renameMe(nm){
   const old={fr:fr&&fr.name,me:me&&me.name,last:lastName()};
