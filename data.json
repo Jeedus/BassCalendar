@@ -1,9 +1,12 @@
 {
- "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id.",
- "updated": "2026-10-17",
+ "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. Don't add shows headlined by anyone in skip; they aren't bass music.",
+ "updated": "2026-10-19",
  "checked": "2026-10-18",
  "links": {},
  "locals": [],
+ "skip": [
+  "Bassvictim"
+ ],
  "shows": [
   {
    "id": "subtronics-1",
@@ -55,40 +58,6 @@
    "genre": "dubstep",
    "age": "18+",
    "url": "https://www.radius-chicago.com/events/detail/1500446"
-  },
-  {
-   "id": "bassvictim-1",
-   "date": "2026-10-22",
-   "doors": "18:30",
-   "title": "Bassvictim",
-   "tag": "Night 1",
-   "support": [
-    "Thoom",
-    "Nation",
-    "Lightremoval"
-   ],
-   "venue": "Radius",
-   "addr": "640 W Cermak Rd",
-   "city": "Chicago",
-   "genre": "adj",
-   "url": "https://www.radius-chicago.com/events/detail/1566048"
-  },
-  {
-   "id": "bassvictim-2",
-   "date": "2026-10-23",
-   "doors": "19:00",
-   "title": "Bassvictim",
-   "tag": "Night 2",
-   "support": [
-    "Thoom",
-    "Nation",
-    "Lightremoval"
-   ],
-   "venue": "Radius",
-   "addr": "640 W Cermak Rd",
-   "city": "Chicago",
-   "genre": "adj",
-   "url": "https://www.radius-chicago.com/events/detail/1617801"
   },
   {
    "id": "truth",
