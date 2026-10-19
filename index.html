@@ -831,20 +831,11 @@ button.pchip{cursor:pointer}
 .artf path{fill:var(--volt);stroke:#000000;stroke-width:1.6;stroke-linejoin:miter}
 .art[data-follow]:is(:hover,:focus-visible)>.artf{opacity:1;transform:none}
 @media (hover:hover){.lrow [data-follow]{display:none}}
-/* hero lava lamp: cyan blobs blended with "difference", so where the lava flows the cyan turns black
-   and the black type turns cyan. It lives down the right edge, rising and sinking. */
+/* hero lava lamp: drawn on a canvas in the banner's own cyan and blended with "difference",
+   so where the lava flows the cyan turns black and the black type turns cyan. Lives down the right edge. */
 .hero{position:relative;overflow:hidden;isolation:isolate}
 .hero>.wrap{position:relative}
-.lava{--ls:1;position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:difference}
-.lava .goo{position:absolute;inset:-40px;filter:url(#goo)}
-.lava .pool{position:absolute;right:0;top:0;bottom:0;width:calc(110px * var(--ls));background:var(--signal);animation:lsway 11s ease-in-out infinite alternate}
-.lava .lcol{position:absolute;right:0;top:0;bottom:0;width:calc(300px * var(--ls))}
-.lava .b{position:absolute;bottom:40px;width:calc(var(--w) * 1px * var(--ls));height:calc(var(--w) * 1.1px * var(--ls));border-radius:50%;background:var(--signal);will-change:transform;animation:lrise var(--d) cubic-bezier(.45,0,.55,1) var(--t) infinite}
-@keyframes lrise{0%{transform:translate(0,0) scale(.85)}45%{transform:translate(calc(var(--x) * 1px * var(--ls)),calc(var(--h) * -1px * var(--ls))) scale(1.05,.95)}55%{transform:translate(calc(var(--x) * 1px * var(--ls)),calc(var(--h) * -1px * var(--ls))) scale(.95,1.05)}100%{transform:translate(0,0) scale(.85)}}
-@keyframes lsway{to{transform:translateX(20px) scaleX(.85)}}
-@media (max-width:640px){.lava{--ls:.62}.lava .pool{width:62px}.lava .lcol{width:110px}}
-.hero.still .lava *{animation-play-state:paused}
-@media (prefers-reduced-motion: reduce){.lava *{animation:none!important}}
+.lava{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;mix-blend-mode:difference}
 /* control system: one height, one border, one hover */
 :root{--ctl:36px}
 @media (max-width:640px){:root{--ctl:40px}}
@@ -882,13 +873,7 @@ button.pchip{cursor:pointer}
 </header>
 
 <section class="hero" id="heroSec" aria-labelledby="heroTitle">
-  <div class="lava" aria-hidden="true"><div class="goo"><span class="pool"></span><div class="lcol">
-    <span class="b" style="right:0%;--w:90;--x:-20;--h:280;--d:20s;--t:0s"></span>
-    <span class="b" style="right:30%;--w:70;--x:15;--h:360;--d:24s;--t:-8s"></span>
-    <span class="b" style="right:10%;--w:110;--x:-10;--h:220;--d:28s;--t:-15s"></span>
-    <span class="b" style="right:40%;--w:60;--x:10;--h:320;--d:18s;--t:-4s"></span>
-  </div></div></div>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="16" result="b"></feGaussianBlur><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11"></feColorMatrix></filter></svg>
+  <canvas class="lava" id="lava" aria-hidden="true"></canvas>
   <div class="wrap" id="hero"></div>
 </section>
 
@@ -1895,6 +1880,42 @@ function render(){
   inkAlign();
 }
 
+/* hero lava lamp: metaballs on a small canvas, scaled up. Blobs rise and sink beside a pool on the right edge */
+function lavaLamp(){
+  const cv=$("lava"),sec=$("heroSec");if(!cv||!cv.getContext)return;
+  const cx=cv.getContext("2d"),off=document.createElement("canvas"),ox=off.getContext("2d");
+  const S=2,BL=[[0,90,-20,20,0,280],[30,70,15,24,-8,360],[10,110,-10,28,-15,220],[40,60,10,18,-4,320]];
+  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  let W=0,H=0,w=0,h=0,img=null,F=null,raf=0,seen=true;const t0=performance.now();
+  const still=matchMedia("(prefers-reduced-motion: reduce)");
+  function size(){const r=sec.getBoundingClientRect();if(!r.width||!r.height)return false;
+    if(r.width===W&&r.height===H)return true;W=r.width;H=r.height;const dpr=Math.min(2,window.devicePixelRatio||1);
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);w=Math.ceil(W/S)+1;h=Math.ceil(H/S)+1;off.width=w;off.height=h;img=ox.createImageData(w,h);return true;}
+  function draw(now){
+    if(!size())return;const ph=W<=640,ls=ph?.62:1,col=ph?110:300,t=(now-t0)/1000;
+    const balls=BL.map(([rp,bw,dx,d,o,ht])=>{let p=((t-o)/d)%1;if(p<0)p+=1;const e=ease(p<.5?p*2:2-p*2);const r=bw/2*ls*(.85+.2*e);
+      return [W-col*rp/100-bw/2*ls+dx*ls*e,H-r*.9-ht*ls*e,r*r];});
+    const pool=(ph?24:58)*(1-.15*(.5+.5*Math.sin(t*Math.PI/11)));
+    if(!F||F.length!==w*h)F=new Float32Array(w*h);
+    for(let y=0,j=0;y<h;y++){const py=y*S;for(let x=0;x<w;x++,j++){const px=x*S;
+      const ex=Math.max(.5,W-px);let v=pool*pool/(ex*ex);
+      for(let k=0;k<4;k++){const b=balls[k],dx=px-b[0],dy=py-b[1];v+=b[2]/(dx*dx+dy*dy+1);}F[j]=v;}}
+    /* edge one sample wide everywhere: distance to the outline = (field - 1) / slope */
+    const d=img.data;
+    for(let y=0,j=0;y<h;y++)for(let x=0;x<w;x++,j++){const v=F[j];let a;
+      if(v<.5)a=0;else if(v>2)a=255;else{const gx=F[x<w-1?j+1:j]-F[x>0?j-1:j],gy=F[y<h-1?j+w:j]-F[y>0?j-w:j];
+        const g=Math.sqrt(gx*gx+gy*gy)*.5+1e-6;a=Math.max(0,Math.min(1,.5+(v-1)/g))*255|0;}
+      const i=j*4;d[i]=25;d[i+1]=198;d[i+2]=214;d[i+3]=a;}
+    ox.putImageData(img,0,0);cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);cx.imageSmoothingEnabled=true;
+    cx.drawImage(off,0,0,w*S*cv.width/W,h*S*cv.height/H);
+  }
+  function loop(now){raf=0;if(!seen||sec.hidden||document.hidden)return;draw(now);if(!still.matches)raf=requestAnimationFrame(loop);}
+  const go=()=>{if(!raf)raf=requestAnimationFrame(loop);};
+  try{new IntersectionObserver(es=>{seen=es[0].isIntersecting;if(seen)go();}).observe(sec);}catch(e){}
+  try{new ResizeObserver(()=>{if(still.matches)go();}).observe(sec);}catch(e){}
+  document.addEventListener("visibilitychange",go);
+  go();
+}
 /* big type: pull each heading left by its first letter's side bearing so the ink lines up with everything else */
 const INK_SEL="#heroTitle,.hero .lede,.frhead > .cname,.jleft > .cname,.mhead h2,.cstart h2,.dayhead h3";
 let inkCtx=null;
@@ -2088,7 +2109,7 @@ if(location.hash==="#friends")state.view="friends";
 if(location.hash==="#me")state.view="me";
 render();
 intro();
-try{new IntersectionObserver(es=>es.forEach(x=>x.target.classList.toggle("still",!x.isIntersecting))).observe($("heroSec"));}catch(e){}
+lavaLamp();
 try{document.fonts.ready.then(inkAlign);}catch(e){}
 {let rt=0;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(inkAlign,120);});}
 if(CREW_ON){if(fme)refreshFriends();if(friendCode&&!joinCode)openAddFriend(friendCode);}
