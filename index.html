@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -23,7 +23,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +33,8 @@
    Signal swapped from orange to sub-cyan, second voice swapped from lavender to volt.
    Layout: sticky top bar, one signal hero for the next show, stat row, then a
    filter rail (left, ~4/12) beside the calendar (right, ~8/12). */
+/* light mode is switched off for now: <html data-theme="dark"> pins the dark tokens below. Drop that
+   attribute to bring light back (it then follows the device setting again). */
 :root{
   --paper:#ffffff; --mist:#f2f8f9; --wash:rgba(0,0,0,.05);
   --ink:#000000; --ink-soft:#111111; --ink-muted:rgba(0,0,0,.6); --ink-meta:#666666;
