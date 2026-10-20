@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -23,23 +23,25 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&family=Geist+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&family=Geist+Mono:wght@500;700&display=swap">
 <style>
 /* Field Report language: paper + ink, square corners, hairline rules, one loud field.
    Signal swapped from orange to sub-cyan, second voice swapped from lavender to volt.
    Layout: sticky top bar, one signal hero for the next show, stat row, then a
    filter rail (left, ~4/12) beside the calendar (right, ~8/12). */
+/* light mode is switched off for now: <html data-theme="dark"> pins the dark tokens below. Drop that
+   attribute to bring light back (it then follows the device setting again). */
 :root{
   --paper:#ffffff; --mist:#f2f8f9; --wash:rgba(0,0,0,.05);
   --ink:#000000; --ink-soft:#111111; --ink-muted:rgba(0,0,0,.6); --ink-meta:#666666;
   --rule:#000000; --rule-soft:#767676;
   --signal:#19c6d6; --on-signal:#000000;
   --pink:#ff4fb8; --on-pink:#000000;
-  --volt:#d6f45a; --on-volt:#000000;
+  --volt:#d6f45a; --on-volt:#000000; --tix-edge:#000000;
   --fest-tint:rgba(25,198,214,.16);
   --slate:#597e87; --sage:#d1ddd3; --blue:#3292ff; --heat:#ff4b5c;
   /* genre colors: kept clear of cyan (festivals/crew), pink (friends) and volt (accents) */
@@ -52,12 +54,12 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
-  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark;
+  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); --tix-edge:transparent; color-scheme:dark;
   --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-house:#d08a4f; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000; --on-g-house:#000}}
 :root[data-theme="dark"]{
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
-  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark;
+  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); --tix-edge:transparent; color-scheme:dark;
   --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-house:#d08a4f; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000; --on-g-house:#000}
 
 *{box-sizing:border-box}
@@ -176,13 +178,13 @@ button,input,select{font:inherit;color:inherit}
 .cell.today{box-shadow:inset 0 3px 0 var(--signal)}
 .cell.sel{background:var(--mist);box-shadow:inset 0 0 0 2px var(--ink)}
 .cell.today.sel{box-shadow:inset 0 0 0 2px var(--ink),inset 0 5px 0 var(--signal)}
-.ev{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:6px;align-items:start;font-size:clamp(12px,1.65cqi,16px);line-height:1.2;font-weight:500;letter-spacing:0;min-width:0;flex:none}
-.ev .sw{width:10px;height:10px}
-.ev .sw{margin-top:.25em}
-.ev>span:nth-child(2){overflow-wrap:anywhere;min-width:0}
-.ev[data-g]{grid-template-columns:minmax(0,1fr) auto;margin:0 -8px;padding:3px 8px;font-weight:600;background:var(--gc);color:var(--on-gc)}
-.ev[data-g]>.sw{display:none}
-.ev.saved>span:nth-child(2){background:var(--volt);color:var(--on-volt);padding:0 3px;justify-self:start}
+/* month grid shows: a mono genre code in the genre colour, then the name; a followed name gets the lime underline.
+   Festivals have no code: the cyan tint marks them */
+.ev,.fev{display:grid;grid-template-columns:2.4em minmax(0,1fr) auto;gap:4px;align-items:start;font-size:clamp(12px,1.65cqi,16px);line-height:1.2;letter-spacing:0;min-width:0;flex:none}
+.fev{grid-template-columns:minmax(0,1fr) auto}
+.ev{font-weight:500;padding:1px 0}
+.ev>span:nth-child(2),.fev>span:first-child{overflow-wrap:anywhere;min-width:0}
+.gcd{font-family:var(--font-mono);font-size:.75em;font-weight:700;line-height:1.6;letter-spacing:.04em;color:var(--gc)}
 .dots{display:none;gap:3px;flex-wrap:wrap}
 .dots .sw{width:7px;height:7px}
 @media (max-width:640px){.cell{padding:4px}.cell .ev{display:none}.dots{display:flex}.cell .x{font-size:10px;padding:1px 3px}}
@@ -328,7 +330,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .wd.sel{background:var(--ink);color:var(--paper);border-color:var(--ink);opacity:1}
 .wd.sel .l{color:var(--paper)}
 .wd.sel .sw.g-dubstep{background:var(--paper)}
-.fev{display:block;overflow-wrap:anywhere;flex:none;margin:0 -8px;padding:4px 8px;background:var(--signal);color:var(--on-signal);font-size:clamp(12px,1.65cqi,16px);font-weight:700;line-height:1.2;letter-spacing:0}
+.fev{overflow-wrap:anywhere;flex:none;margin:0 -8px;padding:4px 8px;background:var(--signal);color:var(--on-signal);font-size:clamp(12px,1.65cqi,16px);font-weight:700;line-height:1.2;letter-spacing:0}
 .fname{background:var(--signal);color:var(--on-signal);padding:0 6px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 @media (max-width:640px){.fev{font-size:0;padding:0;height:6px;margin:0 -2px}}
 @media (max-width:640px){.pgrid{grid-template-columns:minmax(0,1fr)}.t2{font-size:17px}}
@@ -352,7 +354,9 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .avs.big .av{width:36px;height:36px;font-size:14px}
 .crewl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .crewl .t{min-width:0}
-.crewl .tx{font-family:var(--font-mono);font-size:11px;background:var(--volt);color:var(--on-volt);padding:1px 4px;margin-right:2px}
+/* TIX is a ticket stub: round notch each end, outline drawn by ::before under the text */
+.crewl .tx,.frl .tx{--tk-edge:var(--tix-edge);position:relative;isolation:isolate;display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:700;line-height:15px;letter-spacing:.03em;padding:0 7px;margin-right:5px;background:var(--volt);color:var(--on-volt);-webkit-mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat}
+.crewl .tx::before,.frl .tx::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--tk-edge);-webkit-mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat;mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat}
 .rsvp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-width:440px}
 .rb{min-height:44px;padding:0 6px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);letter-spacing:-.01em;cursor:pointer;border-radius:0}
 @media (hover:hover){.rb:hover{border-color:var(--ink)}}
@@ -373,8 +377,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .cc svg{width:10px;height:10px;flex:none}
 .cc.me{background:var(--signal);border-color:var(--signal);color:var(--on-signal)}
 .ev .cc{margin-top:1px}
-.fev{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
-.fev>span:first-child{min-width:0;overflow-wrap:anywhere}
 .fev .cc,.nfest .cc{background:var(--on-signal);border-color:var(--on-signal);color:var(--signal)}
 .nname .cc{height:22px;padding:0 7px;font-size:12px;gap:5px;margin-top:2px}
 .nname .cc svg{width:11px;height:11px}
@@ -731,7 +733,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .frl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .frl .t{min-width:0}
 .frl .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;color:var(--ink-meta);margin-right:6px}
-.frl .tx{font-family:var(--font-mono);font-size:11px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--pink);padding:1px 4px;margin-right:4px}
+.frl .tx{--tk-edge:var(--pink);background:transparent;color:var(--ink)}
 .crewl+.frl{margin-top:-2px}
 .nshow .frl{margin-top:2px}
 .hero .frl,.nfest .frl,.wpick.fest .frl{color:var(--on-signal)}
@@ -848,13 +850,13 @@ button.pchip{cursor:pointer}
 }
 /* festivals: a pale cyan tint with a solid cyan edge, so crew and friend dots sit on it as they are */
 .fev,.nfest,.wpick.fest{background:var(--fest-tint);color:var(--ink);box-shadow:inset 4px 0 0 var(--signal)}
-.fev{padding-left:12px}
+.fev{padding:3px 8px;box-shadow:none}
 .nfest,.wpick.fest{padding-left:16px}
 .nfest .crewl,.wpick.fest .crewl,.nfest .frl,.wpick.fest .frl{color:var(--ink-soft)}
 .nfest .frl .k{color:var(--ink-meta)}
 .nfest .av,.wpick.fest .av{box-shadow:0 0 0 2px var(--paper),inset 0 0 0 1px rgba(0,0,0,.25)}
 .nfest .fav,.wpick.fest .fav{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--paper)}
-.nfest .frl .tx,.wpick.fest .frl .tx{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--pink)}
+.nfest .frl .tx,.wpick.fest .frl .tx{background:transparent;color:var(--ink)}
 .fev .pp,.nfest .pp{background:none;padding:0}
 .fev .pp{height:18px}
 .nfest .pp{height:22px}
@@ -1054,16 +1056,17 @@ button.pchip{cursor:pointer}
 <script>
 function boot(DATA){
 const GENRES = [
-  {id:"dubstep", label:"Dubstep"},
-  {id:"riddim",  label:"Riddim / heavy"},
-  {id:"melodic", label:"Melodic & future bass"},
-  {id:"dnb",     label:"Drum & bass"},
-  {id:"uk",      label:"UK dubstep"},
-  {id:"wonky",   label:"Wonky & experimental"},
-  {id:"house",   label:"Bass house"},
-  {id:"adj",     label:"Bass-adjacent"}
+  {id:"dubstep", label:"Dubstep",               code:"DUB"},
+  {id:"riddim",  label:"Riddim / heavy",        code:"RID"},
+  {id:"melodic", label:"Melodic & future bass", code:"MEL"},
+  {id:"dnb",     label:"Drum & bass",           code:"DNB"},
+  {id:"uk",      label:"UK dubstep",            code:"UK"},
+  {id:"wonky",   label:"Wonky & experimental",  code:"WNK"},
+  {id:"house",   label:"Bass house",            code:"HSE"},
+  {id:"adj",     label:"Bass-adjacent",         code:"ADJ"}
 ];
 const SHOWS = DATA.shows;
+const gCode=id=>(GENRES.find(g=>g.id===id)||{code:""}).code;
 
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -1107,7 +1110,7 @@ function gcal(s){
 /* state */
 const KEY="basschi:v1";
 let saved=new Set();let plans={};
-let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY};
+let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY,allFor:TODAY};
 try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state){Object.assign(state,o.state,{sel:TODAY,ym:null});
   /* a genre added since these filters were saved starts switched on */
   const known=o.state.gknown||["dubstep","riddim","melodic","dnb","uk","wonky","adj"];delete state.gknown;
@@ -1790,7 +1793,7 @@ function renderChips(){
 function gotoEvent(id){
   const e=EVMAP.get(id);if(!e)return;keepScroll(state.view,"month");
   if(e.kind==="fest"){state.view="month";render();requestAnimationFrame(()=>{const p=document.getElementById("fest-"+id);if(p)p.scrollIntoView({block:"start"});});return;}
-  state.view="month";state.sel=e.date;const p=parts(e.date);state.ym={y:p.y,m:p.m};openShows.add(id);
+  state.view="month";state.sel=e.date;state.allFor=null;const p=parts(e.date);state.ym={y:p.y,m:p.m};openShows.add(id);
   try{history.replaceState(null,"","#month");}catch(x){}
   render();
   requestAnimationFrame(()=>{const t=PHONE.matches?document.querySelector('details.nshow[data-show="'+id+'"]'):document.getElementById("r-"+id);if(t){t.scrollIntoView({block:"center"});const r=document.getElementById("r-"+id);if(r&&!PHONE.matches){r.classList.remove("flash");void r.offsetWidth;r.classList.add("flash");}}});
@@ -1951,7 +1954,7 @@ function renderMonth(){
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
       '<span class="d"><span>'+d+'</span>'+'</span>'+
       fe.map(f=>'<span class="fev"><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
-      ev.map(s=>'<span class="ev" data-g="'+s.genre+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
+      ev.map(s=>'<span class="ev" data-g="'+s.genre+'"><span class="gcd">'+gCode(s.genre)+'</span><span'+(followHit(s)?' class="fol"':'')+'>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   $("grid").innerHTML=h;
@@ -2221,13 +2224,14 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-genre]");
   if(g){const id=g.dataset.genre;state.genres=state.genres.includes(id)?state.genres.filter(x=>x!==id):[...state.genres,id];render();return;}
   const d=e.target.closest("[data-day]");
-  /* tapping the picked day again shows the whole month; tapping it once more picks it again */
+  /* the panel opens on the whole month (allFor===sel); tapping a day picks it, tapping the picked day
+     again goes back to the whole month */
   if(d&&d.classList.contains("cell")&&d.dataset.day===state.sel){state.allFor=state.allFor===state.sel?null:state.sel;later(()=>stagger($("dayRows"),":scope>*",6));render();return;}
   if(d){const k=d.dataset.day;if(k!==state.sel)later(()=>{fx(document.querySelector('#grid .cell[data-day="'+k+'"]'),"fx-ring");stagger($("dayRows"),":scope>*",6);});
-    state.sel=k;const sp=parts(state.sel);state.ym={y:sp.y,m:sp.m};render();const t=document.querySelector(".dayhead");if(d.classList.contains("cell")&&window.innerWidth<900)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});return;}
+    state.sel=k;state.allFor=null;const sp=parts(state.sel);state.ym={y:sp.y,m:sp.m};render();const t=document.querySelector(".dayhead");if(d.classList.contains("cell")&&window.innerWidth<900)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});return;}
 });
 $("tabMonth").onclick=()=>setView("month");$("tabList").onclick=()=>setView("list");
-document.querySelector(".brand").onclick=e=>{e.preventDefault();state.ym={y:tp.y,m:tp.m};state.sel=TODAY;scrollMem.cal=0;setView("month");window.scrollTo(0,0);};
+document.querySelector(".brand").onclick=e=>{e.preventDefault();state.ym={y:tp.y,m:tp.m};state.sel=TODAY;state.allFor=TODAY;scrollMem.cal=0;setView("month");window.scrollTo(0,0);};
 function pageWeek(n){
   const nw=addDays(state.sel,n);const ws=addDays(nw,-dow(nw));const vis=filtered();let pick=nw;
   for(let i=0;i<7;i++){const k=addDays(ws,i);if(k>=TODAY&&(vis.some(s=>s.date===k)||festsOn(k).length)){pick=k;break;}}
