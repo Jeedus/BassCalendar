@@ -1110,7 +1110,7 @@ function gcal(s){
 /* state */
 const KEY="basschi:v1";
 let saved=new Set();let plans={};
-let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY};
+let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY,allFor:TODAY};
 try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state){Object.assign(state,o.state,{sel:TODAY,ym:null});
   /* a genre added since these filters were saved starts switched on */
   const known=o.state.gknown||["dubstep","riddim","melodic","dnb","uk","wonky","adj"];delete state.gknown;
@@ -1793,7 +1793,7 @@ function renderChips(){
 function gotoEvent(id){
   const e=EVMAP.get(id);if(!e)return;keepScroll(state.view,"month");
   if(e.kind==="fest"){state.view="month";render();requestAnimationFrame(()=>{const p=document.getElementById("fest-"+id);if(p)p.scrollIntoView({block:"start"});});return;}
-  state.view="month";state.sel=e.date;const p=parts(e.date);state.ym={y:p.y,m:p.m};openShows.add(id);
+  state.view="month";state.sel=e.date;state.allFor=null;const p=parts(e.date);state.ym={y:p.y,m:p.m};openShows.add(id);
   try{history.replaceState(null,"","#month");}catch(x){}
   render();
   requestAnimationFrame(()=>{const t=PHONE.matches?document.querySelector('details.nshow[data-show="'+id+'"]'):document.getElementById("r-"+id);if(t){t.scrollIntoView({block:"center"});const r=document.getElementById("r-"+id);if(r&&!PHONE.matches){r.classList.remove("flash");void r.offsetWidth;r.classList.add("flash");}}});
@@ -2201,13 +2201,14 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-genre]");
   if(g){const id=g.dataset.genre;state.genres=state.genres.includes(id)?state.genres.filter(x=>x!==id):[...state.genres,id];render();return;}
   const d=e.target.closest("[data-day]");
-  /* tapping the picked day again shows the whole month; tapping it once more picks it again */
+  /* the panel opens on the whole month (allFor===sel); tapping a day picks it, tapping the picked day
+     again goes back to the whole month */
   if(d&&d.classList.contains("cell")&&d.dataset.day===state.sel){state.allFor=state.allFor===state.sel?null:state.sel;later(()=>stagger($("dayRows"),":scope>*",6));render();return;}
   if(d){const k=d.dataset.day;if(k!==state.sel)later(()=>{fx(document.querySelector('#grid .cell[data-day="'+k+'"]'),"fx-ring");stagger($("dayRows"),":scope>*",6);});
-    state.sel=k;const sp=parts(state.sel);state.ym={y:sp.y,m:sp.m};render();const t=document.querySelector(".dayhead");if(d.classList.contains("cell")&&window.innerWidth<900)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});return;}
+    state.sel=k;state.allFor=null;const sp=parts(state.sel);state.ym={y:sp.y,m:sp.m};render();const t=document.querySelector(".dayhead");if(d.classList.contains("cell")&&window.innerWidth<900)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});return;}
 });
 $("tabMonth").onclick=()=>setView("month");$("tabList").onclick=()=>setView("list");
-document.querySelector(".brand").onclick=e=>{e.preventDefault();state.ym={y:tp.y,m:tp.m};state.sel=TODAY;scrollMem.cal=0;setView("month");window.scrollTo(0,0);};
+document.querySelector(".brand").onclick=e=>{e.preventDefault();state.ym={y:tp.y,m:tp.m};state.sel=TODAY;state.allFor=TODAY;scrollMem.cal=0;setView("month");window.scrollTo(0,0);};
 function pageWeek(n){
   const nw=addDays(state.sel,n);const ws=addDays(nw,-dow(nw));const vis=filtered();let pick=nw;
   for(let i=0;i<7;i++){const k=addDays(ws,i);if(k>=TODAY&&(vis.some(s=>s.date===k)||festsOn(k).length)){pick=k;break;}}
