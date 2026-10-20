@@ -1,5 +1,5 @@
 {
- "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. Don't add shows headlined by anyone in skip; they aren't bass music. A show's genre is always its headliner's genre in artists.json (what they're known for). If the headliner isn't in artists.json yet, look them up and add them. Acts marked not_bass there shouldn't headline a show here.",
+ "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. GENRE GATE (non-bass acts have slipped in three times: hard techno, dance pop, breakcore), check every new show before adding it: 1) Never add a show headlined by anyone in skip or marked not_bass in artists.json. 2) If the headliner isn't in artists.json, research what they are known for (bio, Beatport genre, label, festival pages; not the venue's or ticket site's 'electronic' category) and add them with genre, style and source; if they aren't bass music add them with not_bass: true and put them in skip. 3) Bass music here is dubstep, riddim, melodic bass/future bass, drum & bass, UK/deep dubstep, wonky/experimental bass, bass house, and bass-adjacent festival trap, livetronica, midtempo and orchestral bass. Breakcore, drill 'n' bass, IDM, cybergrind, digital hardcore, hardcore, techno, trance, regular house, hyperpop, synth-pop, dance pop and pop EDM are not bass music, even when a listing calls them electronic. 4) If you can't confirm from a source that the headliner plays bass music, leave the show out and mention it in the update message. 5) A show's genre is always its headliner's genre in artists.json, never the venue's or event's category.",
  "updated": "2026-10-19",
  "checked": "2026-10-18",
  "links": {},
@@ -7,6 +7,7 @@
  "skip": [
   "Bassvictim",
   "HHUNTER",
+  "Nero's Day at Disneyland",
   "Twinsick"
  ],
  "shows": [
@@ -91,21 +92,6 @@
    "city": "Chicago",
    "genre": "melodic",
    "url": "https://www.songkick.com/concerts/43333682-grabbitz-at-outset"
-  },
-  {
-   "id": "neros-day",
-   "date": "2026-10-25",
-   "doors": null,
-   "title": "Nero's Day at Disneyland",
-   "support": [
-    "Death Instinct",
-    "COCOJOEY",
-    "Blind Equation"
-   ],
-   "venue": "Subterranean",
-   "city": "Chicago",
-   "genre": "adj",
-   "url": "https://www.songkick.com/concerts/43394473-neros-day-at-disneyland-at-subterranean"
   },
   {
    "id": "sunsquabi",
