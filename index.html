@@ -178,12 +178,13 @@ button,input,select{font:inherit;color:inherit}
 .cell.today{box-shadow:inset 0 3px 0 var(--signal)}
 .cell.sel{background:var(--mist);box-shadow:inset 0 0 0 2px var(--ink)}
 .cell.today.sel{box-shadow:inset 0 0 0 2px var(--ink),inset 0 5px 0 var(--signal)}
-/* month grid shows: a mono genre code in the genre colour, then the name; a followed name gets the lime underline */
+/* month grid shows: a mono genre code in the genre colour, then the name; a followed name gets the lime underline.
+   Festivals have no code: the cyan tint marks them */
 .ev,.fev{display:grid;grid-template-columns:2.4em minmax(0,1fr) auto;gap:4px;align-items:start;font-size:clamp(12px,1.65cqi,16px);line-height:1.2;letter-spacing:0;min-width:0;flex:none}
+.fev{grid-template-columns:minmax(0,1fr) auto}
 .ev{font-weight:500;padding:1px 0}
-.ev>span:nth-child(2),.fev>span:nth-child(2){overflow-wrap:anywhere;min-width:0}
+.ev>span:nth-child(2),.fev>span:first-child{overflow-wrap:anywhere;min-width:0}
 .gcd{font-family:var(--font-mono);font-size:.75em;font-weight:700;line-height:1.6;letter-spacing:.04em;color:var(--gc)}
-.fev .gcd{color:var(--signal)}
 .dots{display:none;gap:3px;flex-wrap:wrap}
 .dots .sw{width:7px;height:7px}
 @media (max-width:640px){.cell{padding:4px}.cell .ev{display:none}.dots{display:flex}.cell .x{font-size:10px;padding:1px 3px}}
@@ -1952,7 +1953,7 @@ function renderMonth(){
     const cls=["cell"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel&&state.allFor!==k)cls.push("sel");
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
       '<span class="d"><span>'+d+'</span>'+'</span>'+
-      fe.map(f=>'<span class="fev"><span class="gcd">FEST</span><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
+      fe.map(f=>'<span class="fev"><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
       ev.map(s=>'<span class="ev" data-g="'+s.genre+'"><span class="gcd">'+gCode(s.genre)+'</span><span'+(followHit(s)?' class="fol"':'')+'>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
