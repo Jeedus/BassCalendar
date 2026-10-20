@@ -27,7 +27,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&family=Geist+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&family=Geist+Mono:wght@500;700&display=swap">
 <style>
 /* Field Report language: paper + ink, square corners, hairline rules, one loud field.
    Signal swapped from orange to sub-cyan, second voice swapped from lavender to volt.
@@ -39,7 +39,7 @@
   --rule:#000000; --rule-soft:#767676;
   --signal:#19c6d6; --on-signal:#000000;
   --pink:#ff4fb8; --on-pink:#000000;
-  --volt:#d6f45a; --on-volt:#000000;
+  --volt:#d6f45a; --on-volt:#000000; --tix-edge:#000000;
   --fest-tint:rgba(25,198,214,.16);
   --slate:#597e87; --sage:#d1ddd3; --blue:#3292ff; --heat:#ff4b5c;
   /* genre colors: kept clear of cyan (festivals/crew), pink (friends) and volt (accents) */
@@ -52,12 +52,12 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
-  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark;
+  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); --tix-edge:transparent; color-scheme:dark;
   --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-house:#d08a4f; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000; --on-g-house:#000}}
 :root[data-theme="dark"]{
   --paper:#000000; --mist:#0e1618; --wash:rgba(255,255,255,.08);
   --ink:#ffffff; --ink-soft:#f2f2f2; --ink-muted:rgba(255,255,255,.62); --ink-meta:#a3a3a3;
-  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); color-scheme:dark;
+  --rule:#ffffff; --rule-soft:#8a8a8a; --focus:#ffffff; --fest-tint:rgba(25,198,214,.22); --tix-edge:transparent; color-scheme:dark;
   --g-riddim:#ff4d66; --g-melodic:#b38aff; --g-dnb:#ffa133; --g-uk:#2fd27a; --g-wonky:#5b86ff; --g-house:#d08a4f; --g-adj:#8b9198; --on-g-melodic:#000; --on-g-wonky:#000; --on-g-house:#000}
 
 *{box-sizing:border-box}
@@ -352,7 +352,9 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .avs.big .av{width:36px;height:36px;font-size:14px}
 .crewl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .crewl .t{min-width:0}
-.crewl .tx{font-family:var(--font-mono);font-size:11px;background:var(--volt);color:var(--on-volt);padding:1px 4px;margin-right:2px}
+/* TIX is a ticket stub: round notch each end, outline drawn by ::before under the text */
+.crewl .tx,.frl .tx{--tk-edge:var(--tix-edge);position:relative;isolation:isolate;display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:700;line-height:15px;letter-spacing:.03em;padding:0 7px;margin-right:5px;background:var(--volt);color:var(--on-volt);-webkit-mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat}
+.crewl .tx::before,.frl .tx::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--tk-edge);-webkit-mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat;mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat}
 .rsvp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-width:440px}
 .rb{min-height:44px;padding:0 6px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);letter-spacing:-.01em;cursor:pointer;border-radius:0}
 @media (hover:hover){.rb:hover{border-color:var(--ink)}}
@@ -731,7 +733,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .frl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .frl .t{min-width:0}
 .frl .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;color:var(--ink-meta);margin-right:6px}
-.frl .tx{font-family:var(--font-mono);font-size:11px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--pink);padding:1px 4px;margin-right:4px}
+.frl .tx{--tk-edge:var(--pink);background:transparent;color:var(--ink)}
 .crewl+.frl{margin-top:-2px}
 .nshow .frl{margin-top:2px}
 .hero .frl,.nfest .frl,.wpick.fest .frl{color:var(--on-signal)}
@@ -854,7 +856,7 @@ button.pchip{cursor:pointer}
 .nfest .frl .k{color:var(--ink-meta)}
 .nfest .av,.wpick.fest .av{box-shadow:0 0 0 2px var(--paper),inset 0 0 0 1px rgba(0,0,0,.25)}
 .nfest .fav,.wpick.fest .fav{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--paper)}
-.nfest .frl .tx,.wpick.fest .frl .tx{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--pink)}
+.nfest .frl .tx,.wpick.fest .frl .tx{background:transparent;color:var(--ink)}
 .fev .pp,.nfest .pp{background:none;padding:0}
 .fev .pp{height:18px}
 .nfest .pp{height:22px}
