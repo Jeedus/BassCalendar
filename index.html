@@ -354,10 +354,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .avs.big .av{width:36px;height:36px;font-size:14px}
 .crewl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .crewl .t{min-width:0}
-.pi{width:24px;height:16px;flex:none;display:block}
-.pi-crew{color:var(--signal)}
-.pi-fr{color:var(--pink)}
-.hero .pi-crew,.nfest .pi-crew,.wpick.fest .pi-crew,.jleft .pi-crew{color:var(--on-signal)}
 /* TIX is a ticket stub: round notch each end, outline drawn by ::before under the text */
 .crewl .tx,.frl .tx{--tk-edge:var(--tix-edge);position:relative;isolation:isolate;display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:700;line-height:15px;letter-spacing:.03em;padding:0 7px;margin-right:5px;background:var(--volt);color:var(--on-volt);-webkit-mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat}
 .crewl .tx::before,.frl .tx::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--tk-edge);-webkit-mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat;mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat}
@@ -365,7 +361,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .rb{min-height:44px;padding:0 6px;border:1px solid var(--rule-soft);background:transparent;color:var(--ink);font:500 15px var(--font-sans);letter-spacing:-.01em;cursor:pointer;border-radius:0}
 @media (hover:hover){.rb:hover{border-color:var(--ink)}}
 .rb[aria-pressed="true"]{border-color:transparent;font-weight:700}
-.rb-going[aria-pressed="true"]{background:var(--signal);color:var(--on-signal)}
 .rb-interested[aria-pressed="true"]{background:var(--volt);color:var(--on-volt)}
 .rb-tix[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .hero .rsvp{max-width:none}
@@ -600,7 +595,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .rst{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 9px 0 11px;border:1px solid var(--rule-soft);border-radius:0;background:transparent;color:var(--ink);font:500 14px var(--font-sans);letter-spacing:-.01em;white-space:nowrap;cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease,transform .14s ease}
 .rst svg:last-child{opacity:.7}
 .rst.on{font-weight:700}
-.rst-going{background:var(--signal);border-color:var(--signal);color:var(--on-signal)}
 .rst-interested{background:var(--volt);border-color:var(--volt);color:var(--on-volt)}
 .rst-tix{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 @media (hover:hover){.rst:not(.on):hover{border-color:var(--ink)}}
@@ -611,7 +605,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .ri:first-child{border-top:0}
 @media (hover:hover){.ri:hover{background:var(--wash)}}
 .ri .rx{margin-left:auto;font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.02em;opacity:.7}
-.ri-going[aria-checked="true"]{background:var(--signal);color:var(--on-signal);font-weight:700}
 .ri-interested[aria-checked="true"]{background:var(--volt);color:var(--on-volt);font-weight:700}
 .ri-tix[aria-checked="true"]{background:var(--ink);color:var(--paper);font-weight:700}
 .hero .ib,.hero .rst{border-color:var(--on-signal);color:var(--on-signal)}
@@ -710,19 +703,18 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 @media (max-width:640px){.bar{display:none}}
 
 /* crew picture */
-.cpic{display:inline-grid;place-items:center;flex:none;box-shadow:inset 0 0 0 1px var(--rule-soft);overflow:hidden}
+/* profile and crew pictures are bare tiles: no outline, ring or border anywhere */
+.cpic{display:inline-grid;place-items:center;flex:none;box-shadow:none!important;overflow:hidden;transition:opacity .15s ease}
 .cpic svg{width:100%;height:100%;display:block}
-.crewnav .cpic{box-shadow:none}
 .cnrow{justify-content:flex-start;align-items:center}
 .cnrow .cname{flex:1}
 .cpicbtn{padding:0;border:0;background:none;cursor:pointer;flex:none;display:flex;border-radius:0}
-.cpicbtn[aria-expanded="true"] .cpic{box-shadow:inset 0 0 0 2px var(--ink)}
-@media (hover:hover){.cpicbtn:hover .cpic{box-shadow:inset 0 0 0 2px var(--ink)}}
+@media (hover:hover){.cpicbtn:hover .cpic{opacity:.8}}
 .picrow{display:flex;flex-wrap:wrap;gap:8px}
 .picpick{padding:0;border:0;background:none;cursor:pointer;display:flex;border-radius:0}
-.picpick[aria-pressed="true"] .cpic{box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 4px var(--paper)}
-@media (hover:hover){.picpick:not([aria-pressed="true"]):hover .cpic{box-shadow:inset 0 0 0 2px var(--ink)}}
-.jleft .cpic.big{box-shadow:0 0 0 2px #000000}
+/* in the picker the current picture is at full strength and the rest are dimmed */
+.picpick[aria-pressed="false"] .cpic{opacity:.4}
+@media (hover:hover){.picpick[aria-pressed="false"]:hover .cpic{opacity:1}}
 @media (max-width:640px){.cnrow .cpic{width:48px!important;height:48px!important}}
 /* friends: pink is friends the way cyan is crew */
 .top .wrap>.crewnav+.crewnav{margin-left:0}
@@ -736,6 +728,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .favs .fav+.fav{margin-left:-4px}
 .frl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .frl .t{min-width:0}
+.jmore{border:0;background:none;padding:0;color:inherit;font:inherit;letter-spacing:inherit;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
 .frl .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;color:var(--ink-meta);margin-right:6px}
 .frl .tx{--tk-edge:var(--pink);background:transparent;color:var(--ink)}
 .crewl+.frl{margin-top:-2px}
@@ -743,7 +736,10 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .hero .frl,.nfest .frl,.wpick.fest .frl{color:var(--on-signal)}
 .hero .frl .k,.nfest .frl .k{color:inherit}
 .hero .fav,.nfest .fav,.wpick.fest .fav{background:#000000;color:#ffffff;box-shadow:inset 0 0 0 2px var(--pink),0 0 0 2px var(--signal)}
-.hero .frl .tx,.nfest .frl .tx,.wpick.fest .frl .tx{background:#000000;color:#ffffff}
+.nfest .frl .tx,.wpick.fest .frl .tx{background:#000000;color:#ffffff}
+/* tickets on the cyan banner: black, no outline, type in the group's colour (volt crew, pink friends) */
+.hero .crewl .tx,.hero .frl .tx{--tk-edge:transparent;background:#000000;color:var(--volt)}
+.hero .frl .tx{color:var(--pink)}
 .nfest .frl span{font-family:var(--font-sans);font-size:14px;text-transform:none}
 .nfest .frl .k,.nfest .frl .tx{font-family:var(--font-mono);font-size:11px}
 .ccs{display:inline-flex;gap:3px;flex:none;align-items:flex-start}
@@ -782,6 +778,11 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .fracts .go{flex:1;height:44px;border:0;background:var(--ink);color:var(--paper);font:700 16px var(--font-sans);cursor:pointer;border-radius:0}
 .fracts .btn{height:44px;padding:0 16px}
 .frlist{display:flex;flex-direction:column;border-top:1px solid var(--rule);padding-top:10px}
+.frlist:not(.all):not(.q) .frrow.more{display:none}
+.frlist.q .frall{display:none}
+.frq{margin:6px 0 4px}
+.frall{margin-top:12px}
+.frnomatch{padding-block:12px}
 .frrow{display:grid;grid-template-columns:36px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft)}
 .frrow .fav{width:36px;height:36px;font-size:14px}
 .frrow b{font-size:18px;font-weight:500;letter-spacing:-.01em}
@@ -1000,7 +1001,7 @@ button.pchip{cursor:pointer}
       </div>
       <div class="block">
         <div class="kicker"><span>Your list</span><span class="tab" id="savedCount">0</span></div>
-        <p class="note" id="savedNote">Mark shows Going, Interested or Got tix. Your picks stay on this device.</p>
+        <p class="note" id="savedNote">Mark shows Got tix or Interested. Your picks stay on this device.</p>
         <div class="toggles">
           <button class="linkbtn" id="copySaved" type="button">Copy my list</button>
           <button class="linkbtn" id="reset" type="button">Reset filters</button>
@@ -1115,13 +1116,16 @@ function gcal(s){
 
 /* state */
 const KEY="basschi:v1";
+/* there is no "going" any more: if you're going you've got tix, so older going plans read as tix */
+const normSt=s=>s==="going"?"tix":s;
+const normRs=list=>(list||[]).forEach(r=>{if(r)r.status=normSt(r.status);});
 let saved=new Set();let plans={};
 let state={view:"month",genres:GENRES.map(g=>g.id),venue:"",q:"",savedOnly:false,cityOnly:false,showPast:false,fests:true,followOnly:false,newOnly:false,crewF:"all",wkOff:0,ym:null,sel:TODAY,allFor:TODAY};
 try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(Array.isArray(o.saved))saved=new Set(o.saved);if(o.state){Object.assign(state,o.state,{sel:TODAY,ym:null});
   /* a genre added since these filters were saved starts switched on */
   const known=o.state.gknown||["dubstep","riddim","melodic","dnb","uk","wonky","adj"];delete state.gknown;
   if(Array.isArray(state.genres))GENRES.forEach(g=>{if(!known.includes(g.id)&&!state.genres.includes(g.id))state.genres.push(g.id);});}}}catch(e){}
-try{const pl=JSON.parse(localStorage.getItem(KEY+":plans")||"null");if(pl&&typeof pl==="object")plans=pl;}catch(e){}
+try{const pl=JSON.parse(localStorage.getItem(KEY+":plans")||"null");if(pl&&typeof pl==="object"){plans=pl;Object.keys(plans).forEach(k=>plans[k]=normSt(plans[k]));}}catch(e){}
 if(saved.size&&!Object.keys(plans).length){saved.forEach(id=>{plans[id]="interested";});}
 saved=new Set();
 if(state.savedOnly){state.savedOnly=false;state.crewF="mine";}
@@ -1290,16 +1294,58 @@ const CREW_ON=!!(CREW_API.url&&CREW_API.key);
 const CKEY=KEY+":crew";
 let me=null,crew=null,RS=new Map();
 try{me=JSON.parse(localStorage.getItem(CKEY)||"null");}catch(e){}
-try{const c=JSON.parse(localStorage.getItem(CKEY+":state")||"null");if(c&&me&&c.code===me.code)crew=c;}catch(e){}
+try{const c=JSON.parse(localStorage.getItem(CKEY+":state")||"null");if(c&&me&&c.code===me.code){normRs(c.rsvps);crew=c;}}catch(e){}
 const AV=["#19c6d6","#d6f45a","#ffffff","#3292ff","#ff4b5c","#d1ddd3","#597e87"];
-/* crew picture: six built-in tiles; a new crew gets one picked from its invite code */
+/* crew picture: 45 built-in tiles; a new crew gets one picked from its invite code.
+   Tiles are 48x48 drawn on a Fibonacci grid: the art sits in a 34 square (7..41) whose golden split 21/13
+   puts the guide lines at 20 and 28 around the centre 24; strokes are 2, 3 or 5; radii and lengths come from
+   1 2 3 5 8 13 21 34. All-over patterns (Checker, Stripes, Grid, Hatch) run full bleed on an 8 module. */
 const CREW_PICS=[
- {n:"Sub",bg:"#19c6d6",d:'<circle cx="24" cy="24" r="17" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="10" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="3.5" fill="#000"/>'},
- {n:"Wave",bg:"#000000",d:'<path d="M4 24c3.3-12 6.7-12 10 0s6.7 12 10 0 6.7-12 10 0 6.7 12 10 0" fill="none" stroke="#d6f45a" stroke-width="3.5" stroke-linecap="square"/>'},
- {n:"Levels",bg:"#d6f45a",d:'<path d="M9 40V26M17 40V12M25 40V20M33 40V8M41 40V28" stroke="#000" stroke-width="5"/>'},
- {n:"Wobble",bg:"#3292ff",d:'<path d="M4 31l7-14 7 14 7-14 7 14 7-14 5 10" fill="none" stroke="#000" stroke-width="3.5" stroke-linejoin="miter"/>'},
- {n:"Drop",bg:"#ff4b5c",d:'<path d="M12 10l12 12 12-12M12 22l12 12 12-12" fill="none" stroke="#000" stroke-width="4"/><path d="M8 40h32" stroke="#000" stroke-width="4"/>'},
- {n:"Stack",bg:"#d1ddd3",d:'<path d="M8 8h14v14H8zM26 26h14v14H26z" fill="#000"/><path d="M26 8h14v14H26zM8 26h14v14H8z" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Sub",bg:"#19c6d6",d:'<circle cx="24" cy="24" r="15.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="9" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="4" fill="#000"/>'},
+ {n:"Wave",bg:"#000000",d:'<path d="M7 24c2.83-12 5.67-12 8.5 0s5.67 12 8.5 0 5.67-12 8.5 0 5.67 12 8.5 0" fill="none" stroke="#d6f45a" stroke-width="3"/>'},
+ {n:"Levels",bg:"#d6f45a",d:'<path d="M10 41V28M17 41V15M24 41V7M31 41V20M38 41V33" fill="none" stroke="#000" stroke-width="5"/>'},
+ {n:"Wobble",bg:"#3292ff",d:'<path d="M8 30l5.33-12 5.34 12 5.33-12 5.33 12 5.34-12L40 30" fill="none" stroke="#000" stroke-width="3" stroke-linejoin="miter"/>'},
+ {n:"Drop",bg:"#ff4b5c",d:'<path d="M12 8l12 12 12-12M12 20l12 12 12-12M12 39.5h24" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Stack",bg:"#d1ddd3",d:'<path d="M7 7h13v13H7zM28 28h13v13H28z" fill="#000"/><path d="M29.5 8.5h10v10h-10zM8.5 29.5h10v10h-10z" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Stage",bg:"#000000",d:'<path d="M12 15L7 41h10zM24 7l-5 34h10zM36 15l-5 26h10z" fill="#19c6d6"/>'},
+ {n:"Stacks",bg:"#ff4fb8",d:'<path d="M8.5 8.5h13v31h-13zM26.5 8.5h13v31h-13z" fill="none" stroke="#000" stroke-width="3"/><circle cx="15" cy="17" r="2" fill="#000"/><circle cx="15" cy="30" r="3.5" fill="#000"/><circle cx="33" cy="17" r="2" fill="#000"/><circle cx="33" cy="30" r="3.5" fill="#000"/>'},
+ {n:"Sun",bg:"#d6f45a",d:'<circle cx="24" cy="24" r="8" fill="#000"/><path d="M24 7v5M24 36v5M7 24h5M36 24h5M12 12l3.5 3.5M32.5 32.5l3.5 3.5M36 12l-3.5 3.5M15.5 32.5L12 36" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Tent",bg:"#3292ff",d:'<path d="M24 7L7 41h34z" fill="#000"/><path d="M24 28l-5 13h10z" fill="#3292ff"/>'},
+ {n:"Checker",bg:"#ffffff",d:'<path d="M0 0h8v8H0zM16 0h8v8h-8zM32 0h8v8h-8zM8 8h8v8H8zM24 8h8v8h-8zM40 8h8v8h-8zM0 16h8v8H0zM16 16h8v8h-8zM32 16h8v8h-8zM8 24h8v8H8zM24 24h8v8h-8zM40 24h8v8h-8zM0 32h8v8H0zM16 32h8v8h-8zM32 32h8v8h-8zM8 40h8v8H8zM24 40h8v8h-8zM40 40h8v8h-8z" fill="#000"/>'},
+ {n:"Pulse",bg:"#ff4b5c",d:'<path d="M7 24h7l4-12 6 24 5-16 3 4h9" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Frames",bg:"#19c6d6",d:'<path d="M8.5 8.5h31v31h-31zM15 15h18v18H15z" fill="none" stroke="#000" stroke-width="3"/><path d="M20 20h8v8h-8z" fill="#000"/>'},
+ {n:"Peaks",bg:"#d1ddd3",d:'<path d="M7 41L18 7l7 13 6-8 10 29z" fill="#000"/>'},
+ {n:"Prism",bg:"#000000",d:'<path d="M24 11L38 39H10z" fill="none" stroke="#d6f45a" stroke-width="3"/><path d="M24 23l5.5 11h-11z" fill="#d6f45a"/>'},
+ {n:"Stripes",bg:"#d6f45a",d:'<path d="M0 0h8L0 8zM16 0h8L0 24v-8zM32 0h8L0 40v-8zM48 0v8L8 48H0zM48 16v8L24 48h-8zM48 32v8l-8 8h-8z" fill="#000"/>'},
+ {n:"Dots",bg:"#ff4fb8",d:'<circle cx="12" cy="12" r="5" fill="#000"/><circle cx="24" cy="12" r="5" fill="#000"/><circle cx="36" cy="12" r="5" fill="#000"/><circle cx="12" cy="24" r="5" fill="#000"/><circle cx="24" cy="24" r="5" fill="#000"/><circle cx="36" cy="24" r="5" fill="#000"/><circle cx="12" cy="36" r="5" fill="#000"/><circle cx="24" cy="36" r="5" fill="#000"/><circle cx="36" cy="36" r="5" fill="#000"/>'},
+ {n:"Zigzag",bg:"#19c6d6",d:'<path d="M8 17l8-8 8 8 8-8 8 8M8 28l8-8 8 8 8-8 8 8M8 39l8-8 8 8 8-8 8 8" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Chevrons",bg:"#ff4b5c",d:'<path d="M8 9l16 8 16-8M8 20l16 8 16-8M8 31l16 8 16-8" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Grid",bg:"#ffffff",d:'<path d="M8 0v48M16 0v48M24 0v48M32 0v48M40 0v48M0 8h48M0 16h48M0 24h48M0 32h48M0 40h48" fill="none" stroke="#000" stroke-width="2"/>'},
+ {n:"Hex",bg:"#3292ff",d:'<path d="M24 7l14.7 8.5v17L24 41 9.3 32.5v-17z" fill="#000"/><path d="M24 17.5l5.6 3.25v6.5L24 30.5l-5.6-3.25v-6.5z" fill="#3292ff"/>'},
+ {n:"Plus",bg:"#d6f45a",d:'<path d="M17.5 7h13v10.5H41v13H30.5V41h-13V30.5H7v-13h10.5z" fill="#000"/>'},
+ {n:"Asterisk",bg:"#ff4fb8",d:'<path d="M24 7v34M9.28 15.5l29.44 17M9.28 32.5l29.44-17" fill="none" stroke="#000" stroke-width="5"/>'},
+ {n:"Steps",bg:"#d1ddd3",d:'<path d="M7 41v-8.5h8.5V24H24v-8.5h8.5V7H41v34z" fill="#000"/>'},
+ {n:"Arch",bg:"#ff8a00",d:'<path d="M7 41V24a17 17 0 0 1 34 0v17h-6.5V24a10.5 10.5 0 0 0-21 0v17z" fill="#000"/>'},
+ {n:"Rainbow",bg:"#19c6d6",d:'<path d="M8.5 32.5a15.5 15.5 0 0 1 31 0M14.5 32.5a9.5 9.5 0 0 1 19 0M20.5 32.5a3.5 3.5 0 0 1 7 0" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Tides",bg:"#3292ff",d:'<path d="M8 13c5-6 11-6 16 0s11 6 16 0M8 24c5-6 11-6 16 0s11 6 16 0M8 35c5-6 11-6 16 0s11 6 16 0" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Triangles",bg:"#d6f45a",d:'<path d="M7 23l8.5-16 8.5 16zM24 23l8.5-16 8.5 16zM15.5 41l8.5-16 8.5 16z" fill="#000"/>'},
+ {n:"Trio",bg:"#ff4b5c",d:'<circle cx="15" cy="15" r="8" fill="#000"/><circle cx="33" cy="15" r="8" fill="#000"/><circle cx="24" cy="33" r="8" fill="#000"/>'},
+ {n:"Crowd",bg:"#19c6d6",d:'<circle cx="14" cy="19" r="4.5" fill="#000"/><circle cx="24" cy="14" r="6" fill="#000"/><circle cx="34" cy="19" r="4.5" fill="#000"/><path d="M7 41v-4a7 7 0 0 1 14 0v4zM14 41v-5a10 10 0 0 1 20 0v5zM27 41v-4a7 7 0 0 1 14 0v4z" fill="#000"/>'},
+ {n:"Hands",bg:"#ff4fb8",d:'<path d="M8 9l5 7 5-7" fill="none" stroke="#000" stroke-width="3"/><circle cx="13" cy="21" r="3" fill="#000"/><path d="M10 27h6v14h-6z" fill="#000"/><path d="M19 9l5 7 5-7" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="21" r="3" fill="#000"/><path d="M21 27h6v14h-6z" fill="#000"/><path d="M30 9l5 7 5-7" fill="none" stroke="#000" stroke-width="3"/><circle cx="35" cy="21" r="3" fill="#000"/><path d="M32 27h6v14h-6z" fill="#000"/>'},
+ {n:"Disco",bg:"#ffffff",d:'<path d="M24 7v3" fill="none" stroke="#000" stroke-width="2"/><circle cx="24" cy="25.5" r="15.5" fill="#000"/><path d="M8.5 25.5h31M24 10v31M11.4 16.5h25.2M11.4 34.5h25.2M16 13.5a30 30 0 0 0 0 24M32 13.5a30 30 0 0 1 0 24" fill="none" stroke="#ffffff" stroke-width="1.5"/>'},
+ {n:"Burst",bg:"#d6f45a",d:'<path d="M24 7l3.25 9.15L36 12l-4.15 8.75L41 24l-9.15 3.25L36 36l-8.75-4.15L24 41l-3.25-9.15L12 36l4.15-8.75L7 24l9.15-3.25L12 12l8.75 4.15z" fill="#000"/>'},
+ {n:"Phases",bg:"#d1ddd3",d:'<circle cx="15.5" cy="15.5" r="6.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="32.5" cy="15.5" r="6.5" fill="none" stroke="#000" stroke-width="3"/><path d="M32.5 7.5a8 8 0 0 1 0 16z" fill="#000"/><circle cx="15.5" cy="32.5" r="6.5" fill="none" stroke="#000" stroke-width="3"/><path d="M15.5 40.5a8 8 0 0 1 0-16z" fill="#000"/><circle cx="32.5" cy="32.5" r="8" fill="#000"/>'},
+ {n:"Orbit",bg:"#b38aff",d:'<circle cx="24" cy="24" r="5" fill="#000"/><circle cx="24" cy="24" r="15.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="34.96" cy="13.04" r="3" fill="#000"/>'},
+ {n:"Halftone",bg:"#19c6d6",d:'<circle cx="8" cy="8" r="2" fill="#000"/><circle cx="16" cy="8" r="2" fill="#000"/><circle cx="24" cy="8" r="2" fill="#000"/><circle cx="32" cy="8" r="2" fill="#000"/><circle cx="40" cy="8" r="2" fill="#000"/><circle cx="8" cy="16" r="2" fill="#000"/><circle cx="16" cy="16" r="3" fill="#000"/><circle cx="24" cy="16" r="3" fill="#000"/><circle cx="32" cy="16" r="3" fill="#000"/><circle cx="40" cy="16" r="2" fill="#000"/><circle cx="8" cy="24" r="2" fill="#000"/><circle cx="16" cy="24" r="3" fill="#000"/><circle cx="24" cy="24" r="5" fill="#000"/><circle cx="32" cy="24" r="3" fill="#000"/><circle cx="40" cy="24" r="2" fill="#000"/><circle cx="8" cy="32" r="2" fill="#000"/><circle cx="16" cy="32" r="3" fill="#000"/><circle cx="24" cy="32" r="3" fill="#000"/><circle cx="32" cy="32" r="3" fill="#000"/><circle cx="40" cy="32" r="2" fill="#000"/><circle cx="8" cy="40" r="2" fill="#000"/><circle cx="16" cy="40" r="2" fill="#000"/><circle cx="24" cy="40" r="2" fill="#000"/><circle cx="32" cy="40" r="2" fill="#000"/><circle cx="40" cy="40" r="2" fill="#000"/>'},
+ {n:"Bars",bg:"#ff4b5c",d:'<path d="M7 7h34v8H7zM13.5 20h21v8h-21zM11 33h26v8H11z" fill="#000"/>'},
+ {n:"Diamonds",bg:"#d6f45a",d:'<path d="M24 7l6.5 8.5-6.5 8.5-6.5-8.5zM13.5 24l6.5 8.5-6.5 8.5L7 32.5zM34.5 24l6.5 8.5-6.5 8.5-6.5-8.5z" fill="#000"/>'},
+ {n:"Ripple",bg:"#3292ff",d:'<path d="M39.5 37.5A29 29 0 0 0 10.5 8.5M31 37.5A20.5 20.5 0 0 0 10.5 17M22.5 37.5A12 12 0 0 0 10.5 25.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="10.5" cy="37.5" r="3.5" fill="#000"/>'},
+ {n:"Vortex",bg:"#ff8a00",d:'<path d="M8.5 39.5v-31h31v31h-25v-25h19v19h-13v-13h7v7" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Hatch",bg:"#ffffff",d:'<path d="M0 16L16 0M0 32L32 0M0 48L48 0M16 48L48 16M32 48L48 32M0 32l16 16M0 16l32 32M0 0l48 48M16 0l32 32M32 0l16 16" fill="none" stroke="#000" stroke-width="2"/>'},
+ {n:"Cube",bg:"#3292ff",d:'<path d="M24 7l14.7 8.5v17L24 41 9.3 32.5v-17z" fill="#000"/><path d="M24 24L9.3 15.5M24 24l14.7-8.5M24 24v17" fill="none" stroke="#3292ff" stroke-width="2"/>'},
+ {n:"Columns",bg:"#ff4fb8",d:'<path d="M7 7h8v34H7zM20 7h8v34h-8zM33 7h8v34h-8z" fill="#000"/>'},
+ {n:"Waveform",bg:"#2fd27a",d:'<path d="M9 21v6M14 16v16M19 11v26M24 19v10M29 7v34M34 16v16M39 21v6" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Bunting",bg:"#d6f45a",d:'<path d="M7 9h34M7 27h34" fill="none" stroke="#000" stroke-width="2"/><path d="M9 10h8l-4 13zM20 10h8l-4 13zM31 10h8l-4 13zM14.5 28h8l-4 13zM25.5 28h8l-4 13z" fill="#000"/>'},
 ];
 function crewPicIdx(c){if(!c)return 0;if(typeof c.pic==="number"&&c.pic>=0&&c.pic<CREW_PICS.length)return c.pic;let h=0;for(const ch of String(c.code||""))h=(h*31+ch.charCodeAt(0))>>>0;return h%CREW_PICS.length;}
 const tileHtml=(p,size,cls,label)=>'<span class="cpic'+(cls?" "+cls:"")+'" style="width:'+size+'px;height:'+size+'px;background:'+p.bg+'" role="img" aria-label="'+esc(label)+'"><svg viewBox="0 0 48 48" aria-hidden="true">'+p.d+'</svg></span>';
@@ -1329,7 +1375,7 @@ function indexCrew(){
   RS=new Map();if(!crew)return;
   const mm=new Map(crew.members.map(m=>[m.id,m]));
   crew.rsvps.forEach(r=>{const m=mm.get(r.member_id);if(!m)return;if(!RS.has(r.event_id))RS.set(r.event_id,[]);RS.get(r.event_id).push({m,status:r.status});});
-  const order={tix:0,going:1,interested:2};
+  const order={tix:0,interested:1};
   RS.forEach(a=>a.sort((x,y)=>(me&&y.m.id===me.member_id)-(me&&x.m.id===me.member_id)||order[x.status]-order[y.status]));
 }
 indexCrew();
@@ -1344,12 +1390,14 @@ const av=m=>'<span class="av'+(isMe(m)?" me":"")+'" style="background:'+AV[(m.co
 function avStack(list,max,cls){max=max||4;const ms=list.map(x=>x.m||x);
   return '<span class="avs'+(cls?" "+cls:"")+'">'+ms.slice(0,max).map(av).join("")+(ms.length>max?'<span class="av more">+'+(ms.length-max)+'</span>':'')+'</span>';}
 const jn=a=>a.length<=2?a.join(" + "):a.slice(0,2).join(", ")+" + "+(a.length-2);
+/* the same, as markup: the "+ N" is a button that swaps in the rest of the names, for long friend lists */
+const jnx=a=>{if(a.length<=2)return esc(a.join(" + "));const rest=a.slice(2).join(", ");
+  return esc(a.slice(0,2).join(", "))+' <button type="button" class="jmore" data-more="'+esc(rest)+'" aria-label="Show the other '+(a.length-2)+': '+esc(rest)+'">+ '+(a.length-2)+'</button>';};
 function crewText(a){
-  const name=x=>isMe(x.m)?"You":x.m.name;const g={tix:[],going:[],interested:[]};a.forEach(x=>g[x.status].push(name(x)));
+  const name=x=>isMe(x.m)?"You":x.m.name;const g={tix:[],interested:[]};a.forEach(x=>(g[x.status]||g.tix).push(name(x)));
   const out=[];
-  if(g.tix.length)out.push('<span class="tx">TIX</span>'+esc(jn(g.tix)));
-  if(g.going.length)out.push(esc(jn(g.going))+" going");
-  if(g.interested.length)out.push(esc(jn(g.interested))+" interested");
+  if(g.tix.length)out.push('<span class="tx">TIX</span>'+jnx(g.tix));
+  if(g.interested.length)out.push(jnx(g.interested)+" interested");
   return out.join(" · ");
 }
 const INVITE_ICON='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="8.5" cy="7" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"></circle><path d="M2.5 19c.8-3.6 3.1-5.4 6-5.4s5.2 1.8 6 5.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path><path d="M17.5 3.5v6M14.5 6.5h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>';
@@ -1366,19 +1414,15 @@ function crewChip0(id){if(!inCrew()){const st=myStatus(id);if(!st)return "";retu
   const lbl=a.length+(a.length===1?" person":" people")+" from your crew"+(mine?", including you":"");
   return ppSym(lbl,false,true);}
 function crewLine(id,max){return crewLine0(id,max)+frLine(id,max);}
-/* who's going lines lead with a two-figure people icon instead of avatar bubbles: an outlined cyan pair for
-   the crew, a filled pink pair for friends (the same figures as the bottom bar) */
-const PI_CREW='<svg class="pi pi-crew" viewBox="0 0 24 16" role="img" aria-label="Crew"><circle cx="7" cy="4.8" r="2.9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><circle cx="17" cy="4.8" r="2.9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M1.8 15a5.2 5.2 0 0 1 10.4 0M11.8 15a5.2 5.2 0 0 1 10.4 0" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>';
-const PI_FR='<svg class="pi pi-fr" viewBox="0 0 24 16" role="img" aria-label="Friends"><circle cx="7" cy="4.8" r="3.2" fill="currentColor"></circle><circle cx="17" cy="4.8" r="3.2" fill="currentColor"></circle><path d="M1 16c0-3.4 2.7-6.2 6-6.2s6 2.8 6 6.2zM11 16c0-3.4 2.7-6.2 6-6.2s6 2.8 6 6.2z" fill="currentColor"></path></svg>';
-function crewLine0(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl" data-ev="'+esc(id)+'">'+PI_CREW+'<span class="t">'+crewText(a)+'</span></div>';}
+function crewLine0(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl" data-ev="'+esc(id)+'"><span class="t">'+crewText(a)+'</span></div>';}
 const IC=(d,sz)=>'<svg viewBox="0 0 16 16" width="'+(sz||16)+'" height="'+(sz||16)+'" aria-hidden="true"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 const I={cal:"M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3",tix:"M2 5h12v2a1.5 1.5 0 0 0 0 3v2H2v-2a1.5 1.5 0 0 0 0-3zM10 5v8",ext:"M6 3H3v10h10v-3M9 2.5h4.5V7M13.5 2.5 7.5 8.5",
-  going:"M3 8.5 6.5 12 13 4.5",interested:"M8 2.5l1.7 3.5 3.8.5-2.8 2.6.7 3.8L8 11.1l-3.4 1.8.7-3.8-2.8-2.6 3.8-.5z",down:"M4 6l4 4 4-4"};
+  interested:"M8 2.5l1.7 3.5 3.8.5-2.8 2.6.7 3.8L8 11.1l-3.4 1.8.7-3.8-2.8-2.6 3.8-.5z",down:"M4 6l4 4 4-4"};
 I.tixst=I.tix;I.tixgo="M7 6.5H2v2.2a1.3 1.3 0 0 1 0 2.6v2.2h11v-2.2a1.3 1.3 0 0 1 0-2.6M10.5 2H14v3.5M14 2 8.5 7.5";
-const ST={going:"Going",interested:"Interested",tix:"Got tix"};
+const ST={tix:"Got tix",interested:"Interested"};
 function rsvpBtns(){return "";}
 function rsvpSelect(id){const st=myStatus(id);
-  const items=["going","interested","tix"].map(v=>'<button type="button" role="menuitemradio" class="ri ri-'+v+'" aria-checked="'+(st===v)+'" data-rsvp="'+esc(id)+'" data-st="'+v+'">'+IC(I[v==="tix"?"tixst":v])+'<span>'+ST[v]+'</span>'+(st===v?'<span class="rx">Tap to clear</span>':'')+'</button>').join("");
+  const items=["tix","interested"].map(v=>'<button type="button" role="menuitemradio" class="ri ri-'+v+'" aria-checked="'+(st===v)+'" data-rsvp="'+esc(id)+'" data-st="'+v+'">'+IC(I[v==="tix"?"tixst":v])+'<span>'+ST[v]+'</span>'+(st===v?'<span class="rx">Tap to clear</span>':'')+'</button>').join("");
   return '<span class="rsel"><button type="button" class="rst'+(st?" on rst-"+st:"")+'" data-rmenu="'+esc(id)+'" aria-haspopup="menu" aria-expanded="false" aria-label="Your plans: '+(st?ST[st]:"none yet")+'">'+
     (st?IC(I[st==="tix"?"tixst":st],15):'')+'<span>'+(st?ST[st]:"Going?")+'</span>'+IC(I.down,14)+'</button><span class="rmenu" role="menu" hidden>'+items+'</span></span>';}
 const icoLink=(href,label,icon)=>'<a class="ib" href="'+esc(href)+'" target="_blank" rel="noopener" aria-label="'+label+'" title="'+label+'">'+IC(icon)+'</a>';
@@ -1397,7 +1441,7 @@ async function carryPlans(){
 async function refreshCrew(){
   if(!CREW_ON||!me)return;
   try{
-    const c=await api("crew_state",{p_code:me.code});
+    const c=await api("crew_state",{p_code:me.code});normRs(c.rsvps);
     if(!c.members.some(m=>m.id===me.member_id)){me=null;crew=null;saveMe();saveCrew();indexCrew();render();toast("You're no longer in that crew");return;}
     const changed=JSON.stringify(c)!==JSON.stringify(crew);
     crew=c;me.crew_name=c.name;saveMe();saveCrew();indexCrew();if(changed){const w=introUntil-performance.now();w>0?setTimeout(render,w):render();}
@@ -1409,7 +1453,7 @@ async function setRsvp(id,st){
     if(next)plans[id]=next;else delete plans[id];
     later(()=>{document.querySelectorAll('[data-rmenu="'+CSS.escape(id)+'"]').forEach(b=>fx(b,"fx-pop"));});
     render();const ev=EVMAP.get(id);const t=ev?ev.title:"that";
-    toast(next==="going"?"Going: "+t:next==="tix"?"Got tix: "+t:next==="interested"?"Interested: "+t:"Cleared your plans for "+t);
+    toast(next==="tix"?"Got tix: "+t:next==="interested"?"Interested: "+t:"Cleared your plans for "+t);
     if(CREW_ON&&me&&!crew){api("crew_rsvp",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_event_id:id,p_status:next}).catch(()=>{});}
     return;
   }
@@ -1420,7 +1464,7 @@ async function setRsvp(id,st){
     if(next)document.querySelectorAll('.crewl[data-ev="'+q+'"] .av.me').forEach(a=>fx(a,"fx-avpop"));});
   indexCrew();render();
   const ev=EVMAP.get(id);const t=ev?ev.title:"that";
-  toast(next==="going"?"Going: "+t:next==="tix"?"Got tix: "+t:next==="interested"?"Interested: "+t:"Cleared your plans for "+t);
+  toast(next==="tix"?"Got tix: "+t:next==="interested"?"Interested: "+t:"Cleared your plans for "+t);
   try{await api("crew_rsvp",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_event_id:id,p_status:next});saveCrew();}
   catch(e){crew.rsvps=JSON.parse(before);indexCrew();render();toast(errMsg(e));}
 }
@@ -1451,7 +1495,7 @@ function nextPlan(m){
 function shortDay(d){if(!d)return "dates TBA";if(d===TODAY)return "tonight";if(d===addDays(TODAY,1))return "tomorrow";return DOW[dow(d)]+" "+MON[parts(d).m]+" "+parts(d).d;}
 function renderCrewStart(){
   return '<div class="cstart"><span class="kicker">Crews</span><h2>Start a crew</h2>'+
-    '<p>A crew is you and your friends. Everyone marks shows Going, Interested or Got tix, and the calendar shows who\'s going to what. No accounts: you share one invite link and friends type their name.</p>'+
+    '<p>A crew is you and your friends. Everyone marks shows Got tix or Interested, and the calendar shows who\'s going to what. No accounts: you share one invite link and friends type their name.</p>'+
     '<form class="cform" id="createForm" autocomplete="off"><label for="crName">Crew name</label><input id="crName" maxlength="40" placeholder="SpunSquabi" required>'+
     '<label for="crMe">Your name</label><input id="crMe" maxlength="30" value="'+esc(lastName())+'" required><button class="go" type="submit">Start the crew</button></form>'+
     '<p class="note">Got an invite? Just open the link your friend sent.</p></div>';
@@ -1461,10 +1505,10 @@ function comingUp(nights){
   const rows=list.map(e=>{const p=parts(e.date);const fest=e.kind==="fest";
     const when=fest&&e.end&&e.end!==e.date?MON[p.m]+" "+p.d+"–"+(parts(e.end).m!==p.m?MON[parts(e.end).m]+" ":"")+parts(e.end).d:DOW[dow(e.date)]+" "+MON[p.m];
     return '<div class="cuprow'+(fest?" fest":"")+'"><span class="cupd"><b>'+p.d+'</b><span>'+when+'</span></span>'+
-      '<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button><span class="wh">'+(fest?"Festival · ":"")+esc(e.where)+'</span></span>'+
+      '<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button><span class="wh">'+esc(e.where)+'</span></span>'+
       crewLine0(e.id,5)+'</div>';}).join("");
   return '<div class="cup"><div class="cuphead"><span class="kicker">Coming up with the crew</span><span class="meta">'+(list.length?list.length+(list.length===1?" plan":" plans"):"")+'</span></div>'+
-    (rows||'<p class="note cupnone">Nothing else on the crew\'s calendar yet. Mark a show Going or Interested and it shows up here for everyone.</p>')+'</div>';
+    (rows||'<p class="note cupnone">Nothing else on the crew\'s calendar yet. Mark a show Got tix or Interested and it shows up here for everyone.</p>')+'</div>';
 }
 function renderCrewView(){
   const el=$("crewView");
@@ -1504,12 +1548,12 @@ function renderCrewView(){
 const FKEY=KEY+":friends",FSYNC=FKEY+":synced";
 let fme=null,fr=null,FRS=new Map();
 try{fme=JSON.parse(localStorage.getItem(FKEY)||"null");}catch(e){}
-try{const f=JSON.parse(localStorage.getItem(FKEY+":state")||"null");if(f&&fme)fr=f;}catch(e){}
+try{const f=JSON.parse(localStorage.getItem(FKEY+":state")||"null");if(f&&fme){(f.friends||[]).forEach(x=>normRs(x.plans));fr=f;}}catch(e){}
 const saveFme=()=>{try{fme?localStorage.setItem(FKEY,JSON.stringify(fme)):localStorage.removeItem(FKEY);}catch(e){}};
 const saveFr=()=>{try{fr?localStorage.setItem(FKEY+":state",JSON.stringify(fr)):localStorage.removeItem(FKEY+":state");}catch(e){}};
 Object.assign(ERRS,{friend_not_found:"That friend link doesn't work. Ask them to send it again.",own_code:"That's your own friend code.",not_a_person:"This device lost its friend code. Make a new one on the Friends page.",too_many_friends:"You've hit the friend limit."});
 function indexFriends(){
-  FRS=new Map();if(!fr)return;const order={tix:0,going:1,interested:2};
+  FRS=new Map();if(!fr)return;const order={tix:0,interested:1};
   fr.friends.forEach(f=>(f.plans||[]).forEach(p=>{if(!FRS.has(p.event_id))FRS.set(p.event_id,[]);FRS.get(p.event_id).push({f,status:p.status});}));
   FRS.forEach(a=>a.sort((x,y)=>order[x.status]-order[y.status]||x.f.name.localeCompare(y.f.name)));
 }
@@ -1521,21 +1565,20 @@ const fav=f=>'<span class="fav" title="'+esc(f.name)+'">'+ini(f.name)+'</span>';
 function favStack(list,max){max=max||4;const fs=list.map(x=>x.f||x);
   return '<span class="favs">'+fs.slice(0,max).map(fav).join("")+(fs.length>max?'<span class="fav more">+'+(fs.length-max)+'</span>':'')+'</span>';}
 function frText(a){
-  const g={tix:[],going:[],interested:[]};a.forEach(x=>g[x.status].push(x.f.name));const out=[];
-  if(g.tix.length)out.push('<span class="tx">TIX</span>'+esc(jn(g.tix)));
-  if(g.going.length)out.push(esc(jn(g.going))+" going");
-  if(g.interested.length)out.push(esc(jn(g.interested))+" interested");
+  const g={tix:[],interested:[]};a.forEach(x=>(g[x.status]||g.tix).push(x.f.name));const out=[];
+  if(g.tix.length)out.push('<span class="tx">TIX</span>'+jnx(g.tix));
+  if(g.interested.length)out.push(jnx(g.interested)+" interested");
   return out.join(" · ");
 }
 function frChip(id){const a=frOn(id);if(!a.length)return "";const mine=!!myStatus(id);
   const lbl=a.length+(a.length===1?" friend has":" friends have")+" plans here"+(mine?", and so do you":"");
   return ppSym(lbl,true,false);}
 function frLine(id,max){const a=frOn(id);if(!a.length)return "";
-  return '<div class="frl" data-ev="'+esc(id)+'">'+PI_FR+'<span class="t">'+frText(a)+'</span></div>';}
+  return '<div class="frl" data-ev="'+esc(id)+'"><span class="t">'+frText(a)+'</span></div>';}
 async function refreshFriends(){
   if(!CREW_ON||!fme)return;
   try{
-    const s=await api("friend_state",{p_id:fme.id,p_token:fme.token});
+    const s=await api("friend_state",{p_id:fme.id,p_token:fme.token});(s.friends||[]).forEach(x=>normRs(x.plans));
     if(prof.pic===undefined&&typeof s.pic==="number"&&s.pic>=0){prof.pic=s.pic;saveProf();}
     if(!prof.sounds&&Array.isArray(s.sounds)&&s.sounds.length){prof.sounds=s.sounds;saveProf();}
     const changed=JSON.stringify(s)!==JSON.stringify(fr);
@@ -1580,6 +1623,12 @@ function renderFrStart(){
     '<form class="cform" id="frCreate" autocomplete="off"><label for="frName">Your name</label><input id="frName" maxlength="30" value="'+esc((me&&me.name)||lastName())+'" required><button class="go" type="submit">Make my friend code</button></form>'+
     '<p class="note">No account needed. This device remembers you.</p></div>';
 }
+const FR_FEW=8;
+/* friend search: hides rows in place so typing doesn't redraw the page (and drop the cursor) */
+function frFilter(v){state.frQ=v;const q=v.trim().toLowerCase(),l=$("frList");if(!l)return;l.classList.toggle("q",!!q);let n=0;
+  l.querySelectorAll(".frrow").forEach(r=>{const hit=!q||r.dataset.q.includes(q);r.hidden=!hit;if(hit)n++;});
+  const none=l.querySelector(".frnomatch");if(none)none.hidden=!(q&&!n);}
+document.addEventListener("input",e=>{if(e.target.id==="frQ")frFilter(e.target.value);});
 function renderFriendsView(){
   const el=$("frView");
   if(!fme){el.innerHTML=renderFrStart();return;}
@@ -1595,18 +1644,27 @@ function renderFriendsView(){
     '<div class="frqt"><p>Met someone at a show? Let them scan this with their phone camera.</p><span class="meta">'+esc(fr.name)+' · '+esc(fr.code.toUpperCase())+'</span></div></div>'+
     '<div class="fracts"><button class="go" type="button" id="frShare">'+(navigator.share?"Share friend link":"Copy friend link")+'</button>'+(navigator.share?'<button class="btn" type="button" id="frCopy">Copy</button>':'')+'</div></div>';
   const fresh=f=>f.since&&(Date.now()-Date.parse(f.since))<3*864e5;
-  const rows=fs.length?fs.map(f=>{const p=frNext(f);
+  /* long lists: soonest plans first, then everyone else A to Z; 8 show until "Show all", and a search box
+     appears once there are more than 8 (it filters in place, see frFilter) */
+  const nx=new Map(fs.map(f=>[f.id,frNext(f)]));
+  const sorted=[...fs].sort((a,b)=>{const x=nx.get(a.id).next,y=nx.get(b.id).next;
+    if(x&&y)return evDate(x.e).localeCompare(evDate(y.e))||a.name.localeCompare(b.name);if(x||y)return x?-1:1;return a.name.localeCompare(b.name);});
+  const many=fs.length>FR_FEW,q=(state.frQ||"").toLowerCase();
+  const rows=fs.length?sorted.map((f,i)=>{const p=nx.get(f.id);const hay=(f.name+" "+(f.note||"")).toLowerCase();
     const sub=p.next?"Next: "+esc(p.next.e.title)+", "+shortDay(p.next.e.date)+(p.next.p.status==="tix"?" · has tix":""):"No shows picked yet";
-    return '<div class="frrow">'+frPic(f,36)+'<button class="frsel" type="button" data-frsel="'+esc(f.id)+'"><b>'+esc(f.name)+'</b>'+(fresh(f)?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span>'+(f.note?'<span class="met">'+esc(f.note)+'</span>':'')+'</button>'+
+    return '<div class="frrow'+(i>=FR_FEW?" more":"")+'" data-q="'+esc(hay)+'"'+(q&&!hay.includes(q)?" hidden":"")+'>'+frPic(f,36)+'<button class="frsel" type="button" data-frsel="'+esc(f.id)+'"><b>'+esc(f.name)+'</b>'+(fresh(f)?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span>'+(f.note?'<span class="met">'+esc(f.note)+'</span>':'')+'</button>'+
       '<span class="cnt">'+p.count+(p.count===1?" show":" shows")+'</span><button class="frx" type="button" data-unfriend="'+esc(f.id)+'" aria-label="Remove '+esc(f.name)+'" title="Remove '+esc(f.name)+'">'+XICON+'</button></div>';}).join(""):
     '<p class="note frnone">No friends yet. Show someone your code at the next show, or send them your link. Once they add you, you\'ll both see each other\'s plans.</p>';
-  const list='<div class="frlist"><div class="cuphead"><span class="kicker">Your friends</span></div>'+rows+'</div>';
+  const list='<div class="frlist'+(state.frAll?" all":"")+(q?" q":"")+'" id="frList"><div class="cuphead"><span class="kicker">Your friends</span><span class="meta">'+(fs.length||"")+'</span></div>'+
+    (many?'<label class="lg" for="frQ" style="position:absolute;left:-9999px">Find a friend</label><input class="search frq" id="frQ" type="search" placeholder="Find a friend" autocomplete="off" value="'+esc(state.frQ||"")+'">':'')+
+    rows+'<p class="note frnomatch"'+(q&&!fs.some(f=>(f.name+" "+(f.note||"")).toLowerCase().includes(q))?"":" hidden")+'>No friends match that.</p>'+
+    (many?'<button class="linkbtn frall" type="button" id="frAll">'+(state.frAll?"Show fewer":"Show all "+fs.length+" friends")+'</button>':'')+'</div>';
   const evs=[...FRS.keys()].map(id=>EVMAP.get(id)).filter(e=>e&&e.date&&evUpcoming(e)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,12);
   const up=fs.length?'<div class="cup frup"><div class="cuphead"><span class="kicker">Where your friends are going</span><span class="meta">'+(evs.length?evs.length+(evs.length===1?" show":" shows"):"")+'</span></div>'+
     (evs.map(e=>{const p=parts(e.date);const fest=e.kind==="fest";
       const when=fest&&e.end&&e.end!==e.date?MON[p.m]+" "+p.d+"–"+(parts(e.end).m!==p.m?MON[parts(e.end).m]+" ":"")+parts(e.end).d:DOW[dow(e.date)]+" "+MON[p.m];
       return '<div class="cuprow'+(fest?" fest":"")+'"><span class="cupd"><b>'+p.d+'</b><span>'+when+'</span></span>'+
-        '<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button>'+(hasPlan(e.id)?'<span class="you2">YOU TOO</span>':'')+'<span class="wh">'+(fest?"Festival · ":"")+esc(e.where)+'</span></span>'+
+        '<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button>'+(hasPlan(e.id)?'<span class="you2">YOU TOO</span>':'')+'<span class="wh">'+esc(e.where)+'</span></span>'+
         frLine(e.id,5)+'</div>';}).join("")||'<p class="note cupnone">None of your friends have picked shows yet.</p>')+'</div>':'';
   el.innerHTML='<div class="fv"><div class="fvl">'+head+code+'</div><div class="fvr">'+list+up+'</div></div>';
 }
@@ -1620,16 +1678,74 @@ const PKEY=KEY+":profile",PSYNC=PKEY+":synced";
 let prof={};
 try{const o=JSON.parse(localStorage.getItem(PKEY)||"null");if(o&&typeof o==="object")prof=o;}catch(e){}
 const saveProf=()=>{try{localStorage.setItem(PKEY,JSON.stringify(prof));}catch(e){}};
-/* people pictures: square tiles like the crew's. No pick yet means one is chosen from the person's id */
+/* people pictures: 66 square tiles on the same Fibonacci grid as the crew's. No pick yet means one is chosen from the person's id */
 const PEOPLE_PICS=[
- {n:"Bolt",bg:"#d6f45a",d:'<path d="M28 4 11 27h11l-3 17 18-25H26z" fill="#000"/>'},
- {n:"Speaker",bg:"#19c6d6",d:'<path d="M12 5h24v38H12z" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="14" r="3.5" fill="#000"/><circle cx="24" cy="30" r="7.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="30" r="2.5" fill="#000"/>'},
- {n:"Headphones",bg:"#ff4fb8",d:'<path d="M9 31v-7a15 15 0 0 1 30 0v7" fill="none" stroke="#000" stroke-width="3.5"/><path d="M7 28h8v14H7zM33 28h8v14h-8z" fill="#000"/>'},
- {n:"Alien",bg:"#3292ff",d:'<path d="M24 6c9 0 15 6 15 14 0 10-9 20-15 22-6-2-15-12-15-22 0-8 6-14 15-14z" fill="none" stroke="#000" stroke-width="3"/><path d="M13 20l9 4-2 6-7-4zM35 20l-9 4 2 6 7-4z" fill="#000"/>'},
- {n:"Flame",bg:"#ff4b5c",d:'<path d="M23 4c3 9 13 12 13 24a12 12 0 0 1-24 0c0-6 3-9 5-11 0 4 2 7 4 7-1-7 0-13 2-20z" fill="#000"/>'},
- {n:"Moon",bg:"#000000",d:'<path d="M29 7a17 17 0 1 0 12 27A14 14 0 0 1 29 7z" fill="#d6f45a"/>'},
- {n:"Eye",bg:"#d1ddd3",d:'<path d="M4 24c6-9 13-13 20-13s14 4 20 13c-6 9-13 13-20 13S10 33 4 24z" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="6" fill="#000"/>'},
- {n:"Totem",bg:"#ffffff",d:'<path d="M14 44V5" stroke="#000" stroke-width="3.5"/><path d="M16 7h22l-6 8 6 8H16z" fill="#000"/>'},
+ {n:"Bolt",bg:"#d6f45a",d:'<path d="M29 7L11 27h11l-3 14 18-20H27z" fill="#000"/>'},
+ {n:"Speaker",bg:"#19c6d6",d:'<path d="M12.5 8.5h23v31h-23z" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="16.5" r="3" fill="#000"/><circle cx="24" cy="30" r="6" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="30" r="2.5" fill="#000"/>'},
+ {n:"Headphones",bg:"#ff4fb8",d:'<path d="M8.5 31v-7a15.5 15.5 0 0 1 31 0v7" fill="none" stroke="#000" stroke-width="3"/><path d="M7 28h7v13H7zM34 28h7v13h-7z" fill="#000"/>'},
+ {n:"Alien",bg:"#3292ff",d:'<path d="M24 8.5c8.5 0 14 5.5 14 13 0 9-8 16.5-14 17.5-6-1-14-8.5-14-17.5 0-7.5 5.5-13 14-13z" fill="none" stroke="#000" stroke-width="3" stroke-linejoin="round"/><path d="M14 20l8.5 4-2 6-6.5-4zM34 20l-8.5 4 2 6 6.5-4z" fill="#000"/>'},
+ {n:"Flame",bg:"#ff4b5c",d:'<path d="M23 7c3 9 13 11 13 22a12 12 0 0 1-24 0c0-6 3-9 5-11 0 4 2 7 4 7-1-7 0-12 2-18z" fill="#000"/>'},
+ {n:"Moon",bg:"#000000",d:'<path d="M34.5 9.3A17 17 0 1 0 34.5 38.7A14.7 14.7 0 0 1 34.5 9.3z" fill="#d6f45a"/>'},
+ {n:"Eye",bg:"#d1ddd3",d:'<path d="M8.5 24c5.5-9 11-12.5 15.5-12.5S34 15 39.5 24c-5.5 9-11 12.5-15.5 12.5S14 33 8.5 24z" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="#000"/>'},
+ {n:"Totem",bg:"#ffffff",d:'<path d="M13 41V7" fill="none" stroke="#000" stroke-width="3"/><path d="M14.5 8h22l-6 9 6 9h-22z" fill="#000"/>'},
+ {n:"Cassette",bg:"#d6f45a",d:'<path d="M8.5 12.5h31v23h-31z" fill="none" stroke="#000" stroke-width="3"/><circle cx="17.5" cy="21" r="3.5" fill="#000"/><circle cx="30.5" cy="21" r="3.5" fill="#000"/><path d="M15.5 35.5l2.5-5h12l2.5 5" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Vinyl",bg:"#ff4fb8",d:'<circle cx="24" cy="24" r="17" fill="#000"/><circle cx="24" cy="24" r="11" fill="none" stroke="#ff4fb8" stroke-width="1.5"/><circle cx="24" cy="24" r="5" fill="#ff4fb8"/><circle cx="24" cy="24" r="1.5" fill="#000"/>'},
+ {n:"Smiley",bg:"#d6f45a",d:'<circle cx="24" cy="24" r="15.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="18" cy="19" r="2.5" fill="#000"/><circle cx="30" cy="19" r="2.5" fill="#000"/><path d="M15.5 27c2.5 5 5.5 7 8.5 7s6-2 8.5-7" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Star",bg:"#3292ff",d:'<path d="M24 8.6l3.8 11.7h12.4l-10 7.3 3.8 11.8-10-7.3-10 7.3 3.8-11.8-10-7.3h12.4z" fill="#000"/>'},
+ {n:"Heart",bg:"#ff4b5c",d:'<path d="M7 17a8.5 8.5 0 0 1 17 0 8.5 8.5 0 0 1 17 0c0 12-17 23-17 23S7 29 7 17z" fill="#000"/>'},
+ {n:"Ghost",bg:"#ffffff",d:'<path d="M9 41V22a15 15 0 0 1 30 0v19l-5-4.5-5 4.5-5-4.5-5 4.5-5-4.5z" fill="#000"/><circle cx="18.5" cy="22" r="2.5" fill="#fff"/><circle cx="29.5" cy="22" r="2.5" fill="#fff"/>'},
+ {n:"Skull",bg:"#d1ddd3",d:'<path d="M24 7c-9.4 0-16 6.6-16 15 0 5 2.4 8.6 6 10.7V36h20v-3.3c3.6-2.1 6-5.7 6-10.7 0-8.4-6.6-15-16-15z" fill="#000"/><circle cx="18" cy="22" r="4" fill="#d1ddd3"/><circle cx="30" cy="22" r="4" fill="#d1ddd3"/><path d="M22 31l2-4 2 4z" fill="#d1ddd3"/><path d="M19 36v5M24 36v5M29 36v5" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Diamond",bg:"#ff4fb8",d:'<path d="M15.5 8.5h17l7.5 9.5L24 39 8.5 18z" fill="none" stroke="#000" stroke-width="3" stroke-linejoin="round"/><path d="M8.5 18h31M15.5 8.5l-3 9.5L24 39l11.5-21-3-9.5" fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round"/>'},
+ {n:"Spiral",bg:"#19c6d6",d:'<path d="M21 39.5A15.5 15.5 0 0 0 36.5 24 15.5 15.5 0 0 0 21 8.5 9.5 9.5 0 0 0 11.5 18 6 6 0 0 0 17.5 24 3.5 3.5 0 0 0 21 20.5 2.5 2.5 0 0 0 18.5 18 1.5 1.5 0 0 0 17 19.5" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Planet",bg:"#3292ff",d:'<circle cx="24" cy="24" r="10.5" fill="#000"/><ellipse cx="24" cy="24" rx="15.5" ry="5.5" fill="none" stroke="#000" stroke-width="3" transform="rotate(-20 24 24)"/>'},
+ {n:"Glowsticks",bg:"#000000",d:'<path d="M9.5 38.5l29-29" fill="none" stroke="#d6f45a" stroke-width="5" stroke-linecap="round"/><path d="M9.5 9.5l29 29" fill="none" stroke="#ff4fb8" stroke-width="5" stroke-linecap="round"/>'},
+ {n:"Lasers",bg:"#000000",d:'<path d="M24 38L9 8M24 38l-7-31M24 38l7-31M24 38l15-30" fill="none" stroke="#19c6d6" stroke-width="3"/><circle cx="24" cy="38" r="3" fill="#19c6d6"/>'},
+ {n:"Crown",bg:"#d6f45a",d:'<path d="M7 38V13l9.5 9.5L24 10l7.5 12.5L41 13v25z" fill="#000"/>'},
+ {n:"Mic",bg:"#19c6d6",d:'<rect x="18.5" y="7" width="11" height="21" rx="5.5" fill="#000"/><path d="M13 22a11 11 0 0 0 22 0M24 33v5M18 39.5h12" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Shades",bg:"#ff4fb8",d:'<path d="M7 16h34v4H7zM9 20h14l-2 12H12zM25 20h14l-3 12h-9z" fill="#000"/>'},
+ {n:"Cap",bg:"#19c6d6",d:'<path d="M7 31a14 14 0 0 1 28 0zM7 31h34v4H7z" fill="#000"/><circle cx="21" cy="16" r="2" fill="#000"/>'},
+ {n:"Cat",bg:"#d6f45a",d:'<path d="M9 40V8l8.5 8.5h13L39 8v32z" fill="#000"/><circle cx="18.5" cy="28" r="2.5" fill="#d6f45a"/><circle cx="29.5" cy="28" r="2.5" fill="#d6f45a"/>'},
+ {n:"Bear",bg:"#d1ddd3",d:'<circle cx="13" cy="14" r="6" fill="#000"/><circle cx="35" cy="14" r="6" fill="#000"/><circle cx="24" cy="26" r="15" fill="#000"/><circle cx="19" cy="23" r="2" fill="#d1ddd3"/><circle cx="29" cy="23" r="2" fill="#d1ddd3"/><ellipse cx="24" cy="31" rx="5" ry="3.5" fill="#d1ddd3"/>'},
+ {n:"Robot",bg:"#19c6d6",d:'<circle cx="24" cy="9.5" r="2.5" fill="#000"/><path d="M23 11h2v4h-2zM11 15h26v26H11zM7 22h4v12H7zM37 22h4v12h-4z" fill="#000"/><path d="M16 22h6v6h-6zM26 22h6v6h-6zM17 33h14v3H17z" fill="#19c6d6"/>'},
+ {n:"Rocket",bg:"#ff4b5c",d:'<path d="M24 7c7 6 9 14 9 22v6H15v-6c0-8 2-16 9-22zM15 27l-6 8v6l6-4zM33 27l6 8v6l-6-4zM20 35h8l-1 6h-6z" fill="#000"/><circle cx="24" cy="21" r="3.5" fill="#ff4b5c"/>'},
+ {n:"UFO",bg:"#3292ff",d:'<path d="M16 16.5a8 8 0 0 1 16 0z" fill="#000"/><ellipse cx="24" cy="20.5" rx="17" ry="6" fill="#000"/><path d="M14 28.5l-4 11M24 28.5v11M34 28.5l4 11" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Comet",bg:"#ff4fb8",d:'<circle cx="32.5" cy="15.5" r="8.5" fill="#000"/><path d="M26 22L8.5 39.5M21 18.5L8.5 31M29.5 27L17 39.5" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Cactus",bg:"#2fd27a",d:'<path d="M20 41V12a4 4 0 0 1 8 0v29zM20 29h-9a4 4 0 0 1-4-4v-8h4v8h9zM28 22h9v-8h4v8a4 4 0 0 1-4 4h-9z" fill="#000"/>'},
+ {n:"Flower",bg:"#ff4fb8",d:'<circle cx="24" cy="14" r="7" fill="#000"/><circle cx="34" cy="24" r="7" fill="#000"/><circle cx="24" cy="34" r="7" fill="#000"/><circle cx="14" cy="24" r="7" fill="#000"/><circle cx="24" cy="24" r="5" fill="#ff4fb8"/>'},
+ {n:"Leaf",bg:"#2fd27a",d:'<path d="M7 41C7 19 21 9 41 7c-2 20-12 34-34 34z" fill="#000"/><path d="M9 39L37 11" fill="none" stroke="#2fd27a" stroke-width="3"/>'},
+ {n:"Snowflake",bg:"#ffffff",d:'<path d="M24 7v34M9.28 15.5l29.44 17M9.28 32.5l29.44-17M19 11l5 5 5-5M19 37l5-5 5 5" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Drop",bg:"#3292ff",d:'<path d="M24 7c7.5 10 12 16 12 22a12 12 0 0 1-24 0c0-6 4.5-12 12-22z" fill="#000"/>'},
+ {n:"Cloud",bg:"#d1ddd3",d:'<circle cx="14" cy="28" r="7" fill="#000"/><circle cx="24" cy="24" r="10" fill="#000"/><circle cx="33" cy="27" r="8" fill="#000"/><path d="M14 27h19v8H14z" fill="#000"/>'},
+ {n:"Sunrise",bg:"#ff8a00",d:'<path d="M10 35a14 14 0 0 1 28 0zM7 37h34v4H7z" fill="#000"/><path d="M24 8v8M11 13l5 5M37 13l-5 5" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Knob",bg:"#d6f45a",d:'<circle cx="24" cy="24" r="12" fill="#000"/><path d="M24 24L17 17" fill="none" stroke="#d6f45a" stroke-width="3"/><path d="M24 7v3M24 38v3M7 24h3M38 24h3M12 12l2.1 2.1M36 12l-2.1 2.1M12 36l2.1-2.1M36 36l-2.1-2.1" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Fader",bg:"#19c6d6",d:'<path d="M12 7v34M24 7v34M36 7v34" fill="none" stroke="#000" stroke-width="3"/><path d="M8 25h8v5H8zM20 13h8v5h-8zM32 31h8v5h-8z" fill="#000"/>'},
+ {n:"Turntable",bg:"#ffffff",d:'<path d="M8.5 10.5h31v27h-31z" fill="none" stroke="#000" stroke-width="3"/><circle cx="20" cy="24" r="8.5" fill="#000"/><circle cx="20" cy="24" r="1.5" fill="#ffffff"/><path d="M35 14v10l-5 6" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Keys",bg:"#ffffff",d:'<path d="M8.5 10.5h31v27h-31z" fill="none" stroke="#000" stroke-width="3"/><path d="M15.5 12v24M24 12v24M32.5 12v24" fill="none" stroke="#000" stroke-width="2"/><path d="M13 12h5v14h-5zM21.5 12h5v14h-5zM30 12h5v14h-5z" fill="#000"/>'},
+ {n:"Drum",bg:"#ff4b5c",d:'<ellipse cx="24" cy="15" rx="15.5" ry="5.5" fill="#000"/><path d="M8.5 15v17c0 3 7 5.5 15.5 5.5S39.5 35 39.5 32V15" fill="none" stroke="#000" stroke-width="3"/><path d="M13 19l7 16M35 19l-7 16" fill="none" stroke="#000" stroke-width="2"/>'},
+ {n:"Note",bg:"#b38aff",d:'<path d="M19 36V12.5l19-4V32M19 18.5l19-4" fill="none" stroke="#000" stroke-width="3"/><circle cx="14.5" cy="36" r="5" fill="#000"/><circle cx="33.5" cy="32" r="5" fill="#000"/>'},
+ {n:"Battery",bg:"#2fd27a",d:'<path d="M8.5 14.5h27v19h-27z" fill="none" stroke="#000" stroke-width="3"/><path d="M37 20h4v8h-4zM12.5 18.5h7v11h-7zM22.5 18.5h7v11h-7z" fill="#000"/>'},
+ {n:"Plug",bg:"#ff8a00",d:'<path d="M17 7v9M31 7v9M24 37v4" fill="none" stroke="#000" stroke-width="5"/><path d="M11 16h26v8a13 13 0 0 1-26 0z" fill="#000"/>'},
+ {n:"Power",bg:"#19c6d6",d:'<path d="M13.3 16.5A14 14 0 1 0 34.7 16.5M24 7v18" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Play",bg:"#d6f45a",d:'<path d="M15 7v34l25-17z" fill="#000"/>'},
+ {n:"Rec",bg:"#ffffff",d:'<circle cx="24" cy="24" r="15.5" fill="none" stroke="#000" stroke-width="3"/><circle cx="24" cy="24" r="9.5" fill="#ff4b5c"/>'},
+ {n:"Butterfly",bg:"#b38aff",d:'<ellipse cx="15.5" cy="17.5" rx="8" ry="10" fill="#000" transform="rotate(-30 15.5 17.5)"/><ellipse cx="32.5" cy="17.5" rx="8" ry="10" fill="#000" transform="rotate(30 32.5 17.5)"/><circle cx="17.5" cy="33" r="6.5" fill="#000"/><circle cx="30.5" cy="33" r="6.5" fill="#000"/><path d="M24 9v31" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Web",bg:"#d1ddd3",d:'<path d="M24 7v34M7 24h34M12 12l24 24M36 12L12 36M24 11l9.2 3.8L37 24l-3.8 9.2L24 37l-9.2-3.8L11 24l3.8-9.2zM24 17l4.95 2.05L31 24l-2.05 4.95L24 31l-4.95-2.05L17 24l2.05-4.95z" fill="none" stroke="#000" stroke-width="2"/>'},
+ {n:"Bat",bg:"#b38aff",d:'<path d="M24 18.05l2.55 -4.25 0.85 5.1c3.4 -3.4 8.5 -4.25 13.6 -1.7 -3.4 1.7 -4.25 5.1 -3.4 9.35 -3.4 -2.55 -6.8 -2.55 -9.35 0 -1.7 2.55 -2.55 5.1 -4.25 7.65 -1.7 -2.55 -2.55 -5.1 -4.25 -7.65 -2.55 -2.55 -5.95 -2.55 -9.35 0 0.85 -4.25 0 -7.65 -3.4 -9.35 5.1 -2.55 10.2 -1.7 13.6 1.7l0.85 -5.1z" fill="#000"/>'},
+ {n:"Hourglass",bg:"#d6f45a",d:'<path d="M11 7h26v4l-10 13 10 13v4H11v-4l10-13-10-13z" fill="#000"/><path d="M18 38h12l-6-8z" fill="#d6f45a"/>'},
+ {n:"Key",bg:"#ff8a00",d:'<circle cx="16.5" cy="24" r="8" fill="none" stroke="#000" stroke-width="3"/><path d="M24.5 24h16.5M34 24v8M39.5 24v6" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Anchor",bg:"#3292ff",d:'<circle cx="24" cy="11" r="2.5" fill="none" stroke="#000" stroke-width="3"/><path d="M24 15v25M16 21h16M8.5 27c0 7 7 11.5 15.5 11.5S39.5 34 39.5 27" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Infinity",bg:"#ff4fb8",d:'<path d="M24 24c-3.24 -4.05 -5.67 -6.48 -8.9 -6.48a6.48 6.48 0 0 0 0 12.95c3.24 0 5.67 -2.43 8.9 -6.48s5.67 -6.48 8.9 -6.48a6.48 6.48 0 0 1 0 12.95c-3.24 0 -5.67 -2.43 -8.9 -6.48z" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Atom",bg:"#19c6d6",d:'<circle cx="24" cy="24" r="3" fill="#000"/><ellipse cx="24" cy="24" rx="15.5" ry="6" fill="none" stroke="#000" stroke-width="3"/><ellipse cx="24" cy="24" rx="15.5" ry="6" fill="none" stroke="#000" stroke-width="3" transform="rotate(60 24 24)"/><ellipse cx="24" cy="24" rx="15.5" ry="6" fill="none" stroke="#000" stroke-width="3" transform="rotate(-60 24 24)"/>'},
+ {n:"Peace",bg:"#2fd27a",d:'<circle cx="24" cy="24" r="15.5" fill="none" stroke="#000" stroke-width="3"/><path d="M24 8.5v31M24 24L14 34M24 24l10 10" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Dice",bg:"#ffffff",d:'<rect x="7" y="7" width="34" height="34" rx="3" fill="#000"/><circle cx="15.5" cy="15.5" r="3" fill="#ffffff"/><circle cx="24" cy="24" r="3" fill="#ffffff"/><circle cx="32.5" cy="32.5" r="3" fill="#ffffff"/>'},
+ {n:"Cherry",bg:"#ff4b5c",d:'<circle cx="14" cy="34" r="7" fill="#000"/><circle cx="30" cy="35" r="6" fill="#000"/><path d="M14 27C16 17 23 11 32 8.5M30 29c-1-9 0-15 2-20.5" fill="none" stroke="#000" stroke-width="3"/><path d="M32 8.5c4 0 8 2 9 6-4 1-8 0-9-6z" fill="#000"/>'},
+ {n:"Pizza",bg:"#ff8a00",d:'<path d="M7 11c11.3-5.3 22.7-5.3 34 0L24 41z" fill="#000"/><circle cx="18" cy="17" r="3" fill="#ff8a00"/><circle cx="29" cy="19" r="3" fill="#ff8a00"/><circle cx="24" cy="28" r="2.5" fill="#ff8a00"/>'},
+ {n:"Donut",bg:"#ff4fb8",d:'<circle cx="24" cy="24" r="17" fill="#000"/><circle cx="24" cy="24" r="6.5" fill="#ff4fb8"/><path d="M13 15l3 2M31 13l2-2M35 26l3 2M14 31l-2 3M27 36l3 1" fill="none" stroke="#ff4fb8" stroke-width="2"/>'},
+ {n:"Fox",bg:"#ff8a00",d:'<path d="M7 7l12 8h10l12-8-4 20L24 41 11 27z" fill="#000"/><circle cx="18" cy="24" r="2.5" fill="#ff8a00"/><circle cx="30" cy="24" r="2.5" fill="#ff8a00"/>'},
+ {n:"Owl",bg:"#d1ddd3",d:'<path d="M9 7l6 5h18l6-5v22c0 7-6.5 12-15 12S9 36 9 29z" fill="#000"/><circle cx="17.5" cy="21" r="5" fill="#d1ddd3"/><circle cx="30.5" cy="21" r="5" fill="#d1ddd3"/><circle cx="17.5" cy="21" r="2" fill="#000"/><circle cx="30.5" cy="21" r="2" fill="#000"/><path d="M22 28l2 3 2-3z" fill="#d1ddd3"/>'},
+ {n:"Paw",bg:"#d6f45a",d:'<ellipse cx="24" cy="32" rx="9.5" ry="8" fill="#000"/><circle cx="11.5" cy="22" r="4.5" fill="#000"/><circle cx="18.5" cy="12.5" r="4.5" fill="#000"/><circle cx="29.5" cy="12.5" r="4.5" fill="#000"/><circle cx="36.5" cy="22" r="4.5" fill="#000"/>'},
+ {n:"Bulb",bg:"#d6f45a",d:'<path d="M24 7a12 12 0 0 0-7.5 21.5V34h15v-5.5A12 12 0 0 0 24 7z" fill="#000"/><path d="M17.5 36.5h13M19.5 39.5h9" fill="none" stroke="#000" stroke-width="3"/>'},
+ {n:"Shield",bg:"#19c6d6",d:'<path d="M24 7l15 5.5v10.5c0 8.5-6.5 14.5-15 18-8.5-3.5-15-9.5-15-18V12.5z" fill="#000"/><path d="M26 14l-7 11h5l-2 10 7-12h-5z" fill="#19c6d6"/>'},
 ];
 const hashIdx=(s,n)=>{let h=0;for(const ch of String(s||""))h=(h*31+ch.charCodeAt(0))>>>0;return h%n;};
 const personPicIdx=(pic,seed)=>typeof pic==="number"&&pic>=0&&pic<PEOPLE_PICS.length?pic:hashIdx(seed,PEOPLE_PICS.length);
@@ -1699,7 +1815,7 @@ function renderMeNav(){
 }
 const whenCol=e=>{const p=parts(e.date);const fest=e.kind==="fest";
   return '<span class="cupd"><b>'+p.d+'</b><span>'+(fest&&e.end&&e.end!==e.date?MON[p.m]+" "+p.d+"–"+(parts(e.end).m!==p.m?MON[parts(e.end).m]+" ":"")+parts(e.end).d:DOW[dow(e.date)]+" "+MON[p.m])+'</span></span>';};
-const evTitle=(e,extra)=>'<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button>'+(extra||"")+'<span class="wh">'+(e.kind==="fest"?"Festival · ":"")+esc(e.where)+'</span></span>';
+const evTitle=(e,extra)=>'<span class="cupt"><button class="ttl" type="button" data-goto="'+esc(e.id)+'">'+esc(e.title)+'</button>'+(extra||"")+'<span class="wh">'+esc(e.where)+'</span></span>';
 const statCell=(n,l)=>'<div class="pst"><b>'+n+'</b><span>'+l+'</span></div>';
 function renderProfile(){
   const el=$("meView");const name=myName();
@@ -1726,7 +1842,7 @@ function renderProfile(){
   const follow='<div class="frcode"><span class="kicker">Artists you follow · '+fol.length+'</span>'+
     (fol.length?'<div class="pfol">'+fol.map(a=>'<button class="fchip" type="button" data-unfollow="'+esc(a)+'" aria-label="Unfollow '+esc(a)+'">'+esc(a)+'<span class="fx" aria-hidden="true">'+XICON+'</span></button>').join("")+'</div>':
       '<p class="note">Open any show and tap Follow next to an artist. Their shows get flagged across the calendar.</p>')+'</div>';
-  const stats='<div class="pstats">'+statCell(going.length,"Going")+statCell(next.filter(e=>myStatus(e.id)==="tix").length,"Got tix")+statCell(next.length-going.length,"Interested")+statCell(been.length,"Been to")+'</div>';
+  const stats='<div class="pstats">'+statCell(next.length,"Coming up")+statCell(going.length,"Got tix")+statCell(next.length-going.length,"Interested")+statCell(been.length,"Been to")+'</div>';
   const nextL='<div class="cup pvup"><div class="cuphead"><span class="kicker">Your next shows</span><span class="meta">'+(next.length?next.length+(next.length===1?" show":" shows"):"")+'</span></div>'+
     (next.map(e=>'<div class="cuprow'+(e.kind==="fest"?" fest":"")+'">'+whenCol(e)+evTitle(e)+rsvpSelect(e.id)+'</div>').join("")||'<p class="note cupnone">Nothing picked yet. Tap Going? on any show and it lands here.</p>')+'</div>';
   const beenL=been.length?'<div class="cup pvup"><div class="cuphead"><span class="kicker">Shows you\'ve been to</span><span class="meta">'+been.length+'</span></div>'+
@@ -1743,9 +1859,9 @@ function renderFriendProfile(f){
   const sound='<div class="frcode"><span class="kicker">'+esc(f.name)+'\'s sound</span>'+
     (fs.length?'<div class="pchips">'+fs.map(id=>'<span class="pchip'+(ms.includes(id)?" same":"")+'"><span class="sw g-'+id+'"></span>'+esc(gLabel(id))+(ms.includes(id)?'<span class="you2">YOU TOO</span>':'')+'</span>').join("")+'</div>':'<p class="note">'+esc(f.name)+' hasn\'t picked a sound yet.</p>')+
     '<button class="frx pvrm" type="button" data-unfriend="'+esc(f.id)+'">Remove '+esc(f.name)+'</button></div>';
-  const stats='<div class="pstats">'+statCell(plans.filter(x=>x.p.status!=="interested").length,"Going")+statCell(plans.filter(x=>x.p.status==="tix").length,"Got tix")+statCell(plans.filter(x=>x.p.status==="interested").length,"Interested")+statCell(both.length,"With you")+'</div>';
+  const stats='<div class="pstats">'+statCell(plans.length,"Coming up")+statCell(plans.filter(x=>x.p.status==="tix").length,"Got tix")+statCell(plans.filter(x=>x.p.status==="interested").length,"Interested")+statCell(both.length,"With you")+'</div>';
   const list='<div class="cup pvup"><div class="cuphead"><span class="kicker">'+esc(f.name)+'\'s next shows</span><span class="meta">'+(plans.length?plans.length+(plans.length===1?" show":" shows"):"")+'</span></div>'+
-    (plans.map(x=>'<div class="cuprow'+(x.e.kind==="fest"?" fest":"")+'">'+whenCol(x.e)+evTitle(x.e,'<span class="pstat">'+(x.p.status==="tix"?"Has tix":x.p.status==="going"?"Going":"Interested")+'</span>')+rsvpSelect(x.e.id)+'</div>').join("")||'<p class="note cupnone">'+esc(f.name)+' hasn\'t picked any shows yet.</p>')+'</div>';
+    (plans.map(x=>'<div class="cuprow'+(x.e.kind==="fest"?" fest":"")+'">'+whenCol(x.e)+evTitle(x.e,'<span class="pstat">'+(x.p.status==="tix"?"Has tix":"Interested")+'</span>')+rsvpSelect(x.e.id)+'</div>').join("")||'<p class="note cupnone">'+esc(f.name)+' hasn\'t picked any shows yet.</p>')+'</div>';
   return '<div class="fv pv"><div class="fvl">'+head+sound+'</div><div class="fvr">'+stats+list+'</div></div>';
 }
 /* add-a-friend landing: ?friend=CODE */
@@ -1755,7 +1871,7 @@ async function openAddFriend(code){
   x.innerHTML='<div class="jmsg"><span class="kicker">Friend request</span><h2 style="margin:0;font-size:32px;font-weight:500">Opening the link…</h2></div>';
   const fail=(h,m)=>{x.innerHTML='<button class="jclose" type="button" data-jclose>Close</button><div class="jmsg"><span class="kicker">Friend request</span><h2 style="margin:0;font-size:32px;font-weight:500">'+h+'</h2><p class="note">'+esc(m)+'</p><button class="btn" type="button" data-jclose'+(fme?' data-gofriends':'')+' style="align-self:flex-start;min-height:44px">'+(fme?"Go to Friends":"Go to the calendar")+'</button></div>';};
   let p;
-  try{p=await api("friend_lookup",{p_code:code});}
+  try{p=await api("friend_lookup",{p_code:code});normRs(p.plans);}
   catch(e){fail(e.message==="friend_not_found"?"This friend link doesn't work":"Can't open the link right now",errMsg(e));return;}
   if(fr&&p.code===fr.code){fail("That's your own friend code","Show it to someone else and they can add you.");return;}
   if(fr&&fr.friends.some(f=>f.id===p.id)){closeJoin();state.view="friends";render();toast("You're already friends with "+p.name);return;}
@@ -1769,7 +1885,7 @@ async function openAddFriend(code){
     (fme?'':'<label for="faName">Your name</label><input id="faName" maxlength="30" value="'+esc((me&&me.name)||lastName())+'" required>')+
     '<label for="faNote">Where did you meet? (optional)</label><input id="faNote" maxlength="40" placeholder="Lost Lands">'+
     '<button class="go" type="submit">Add '+esc(p.name)+'</button><span class="jerr" id="faErr" role="alert"></span></form>'+
-    '<p>No account or app needed. Only your friends'+(inCrew()?" and your crew":"")+' see which shows you mark Going, Interested or Got tix.</p></div></div>';
+    '<p>No account or app needed. Only your friends'+(inCrew()?" and your crew":"")+' see which shows you mark Got tix or Interested.</p></div></div>';
   $("frAddForm").addEventListener("submit",async ev=>{
     ev.preventDefault();const btn=ev.target.querySelector(".go");const ni=$("faName");const name=ni?ni.value.trim():"";const note=$("faNote").value.trim();
     if(ni&&!name){$("faErr").textContent=ERRS.name_required;return;}
@@ -1828,7 +1944,7 @@ async function openJoin(code){
     (c.members.length?'<div class="crewl">'+avStack(c.members,5,"big")+'<span class="t">'+esc(names.length<=4?names.slice(0,-1).join(", ")+(names.length>1?" and ":"")+names[names.length-1]:names.slice(0,3).join(", ")+" and "+(names.length-3)+" more")+'</span></div>':'')+
     (goingIds.length?'<div class="going"><span class="kicker">Already going</span><b>'+goingIds.map(e=>esc(e.title)+" "+shortDay(e.date)).join(" · ")+'</b></div>':'')+
     '</div><div class="jright"><h2>What should the crew call you?</h2><form class="cform" id="joinForm" autocomplete="off"><label for="jnName">Your name</label><input id="jnName" maxlength="30" value="'+esc((me&&me.name)||lastName())+'" required><button class="go" type="submit">Join the crew</button><span class="jerr" id="jnErr" role="alert"></span></form>'+
-    '<p>No account or app needed. This device remembers you. Only the crew sees which shows you mark Going, Interested or Got tix.'+(switching?' You\'ll leave '+esc(me.crew_name||"your current crew")+' on this device.':'')+'</p></div></div>';
+    '<p>No account or app needed. This device remembers you. Only the crew sees which shows you mark Got tix or Interested.'+(switching?' You\'ll leave '+esc(me.crew_name||"your current crew")+' on this device.':'')+'</p></div></div>';
   $("joinForm").addEventListener("submit",async ev=>{
     ev.preventDefault();const name=$("jnName").value.trim();const btn=ev.target.querySelector(".go");
     if(!name){$("jnErr").textContent=ERRS.name_required;return;}
@@ -1861,7 +1977,7 @@ const filtered=()=>SHOWS.filter(visible).sort((a,b)=>a.date.localeCompare(b.date
 /* hero */
 function renderHero(){
   const up=SHOWS.filter(s=>s.date>=TODAY).sort((a,b)=>a.date.localeCompare(b.date)||(a.doors||"99").localeCompare(b.doors||"99"));
-  const mineH=x=>["going","tix"].includes(myStatus(x.id));
+  const mineH=x=>myStatus(x.id)==="tix";
   const s=up.find(mineH)||up[0];
   const h=$("hero");
   if(!s){h.innerHTML='<div class="row1 kicker"><span>Next up</span></div><h1 id="heroTitle">Nothing listed</h1>';return;}
@@ -1898,7 +2014,7 @@ function renderRail(){
   $("folChips").innerHTML=[...follows.values()].sort((a,b)=>a.localeCompare(b)).map(a=>'<button class="fchip" type="button" data-unfollow="'+esc(a)+'" aria-label="Unfollow '+esc(a)+'">'+esc(a)+'<span class="fx" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span></button>').join("");
   $("folNote").hidden=follows.size>0;
   const np=[...EVMAP.keys()].filter(hasPlan).length;$("savedCount").textContent=np;
-  $("savedNote").textContent=inCrew()?"Your picks are shared with "+crew.name+".":np?np+(np===1?" show":" shows")+" marked on this device. Start or join a crew to share them.":"Mark shows Going, Interested or Got tix. Your picks stay on this device.";
+  $("savedNote").textContent=inCrew()?"Your picks are shared with "+crew.name+".":np?np+(np===1?" show":" shows")+" marked on this device. Start or join a crew to share them.":"Mark shows Got tix or Interested. Your picks stay on this device.";
 }
 
 function row(s,opts){
@@ -1943,7 +2059,7 @@ function renderNights(y,m,days,vmap){
     const today=k===TODAY;
     h+='<div class="nrow'+(today?" today":"")+(k<TODAY?" past":"")+'" id="n-'+k+'" data-night="'+k+'"><div class="nd">'+(today?'<span class="k t">Tonight</span>':'')+
       '<span class="n">'+parts(k).d+'</span><span class="k">'+DOW[dow(k)]+'</span>'+'</div><div class="nev">'+
-      fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><div class="nft"><b>'+esc(f.name)+'</b>'+crewChip(f.id)+'</div><span>Festival · day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span></a>').join("")+
+      fe.map(f=>'<a class="nfest" href="#fest-'+f.id+'"><div class="nft"><b>'+esc(f.name)+'</b>'+crewChip(f.id)+'</div><span>Day '+(daysBetween(f.start,k)+1)+' of '+(daysBetween(f.start,f.end)+1)+' · '+esc(f.city)+' '+esc(f.st)+'</span></a>').join("")+
       ev.map(nightShow).join("")+'</div></div>';
   }
   flush();
@@ -2276,7 +2392,7 @@ $("copySaved").onclick=()=>{
   const shows=SHOWS.filter(s=>hasPlan(s.id)).map(s=>({k:s.date,t:longDate(s.date)+": "+s.title+lab(s.id)+(s.tag?" ("+s.tag+")":"")+" @ "+s.venue+(s.doors?", doors "+fmtTime(s.doors):"")+"\n  "+s.url}));
   const fests=FESTS.filter(f=>hasPlan(f.id)).map(f=>({k:f.start||f.sortKey,t:(f.start?range(f.start,f.end):"Dates TBA")+": "+f.name+" "+f.edition+lab(f.id)+" @ "+f.place+", "+f.city+", "+f.st+"\n  "+f.url}));
   const list=shows.concat(fests).sort((a,b)=>a.k.localeCompare(b.k));
-  if(!list.length){toast("Mark a show Going or Interested first");return;}
+  if(!list.length){toast("Mark a show Got tix or Interested first");return;}
   const txt="My Chicago bass shows\n"+list.map(x=>x.t).join("\n");
   const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Copied "+list.length+" shows");}catch(e){toast("Copy blocked here");}ta.remove();};
   try{navigator.clipboard.writeText(txt).then(()=>toast("Copied "+list.length+" shows"),fallback);}catch(e){fallback();}
@@ -2334,7 +2450,9 @@ document.addEventListener("click",e=>{
   const t=e.target;
   const rm=t.closest("[data-rmenu]");
   if(rm){e.preventDefault();e.stopPropagation();const menu=rm.nextElementSibling;const open=menu.hidden;closeMenus();if(open){menu.hidden=false;rm.setAttribute("aria-expanded","true");
-    const r=menu.getBoundingClientRect();menu.classList.toggle("up",r.bottom>innerHeight-8&&rm.getBoundingClientRect().top>r.height+8);menu.querySelector('[aria-checked="true"]')?.focus({preventScroll:true});}return;}
+    /* open upward when the menu would run off the screen, or off the bottom of the banner (it clips what's inside it) */
+    const r=menu.getBoundingClientRect(),box=rm.closest(".hero"),bb=box?box.getBoundingClientRect():{top:0,bottom:innerHeight};
+    menu.classList.toggle("up",r.bottom>Math.min(innerHeight,bb.bottom)-8&&rm.getBoundingClientRect().top-Math.max(0,bb.top)>r.height+8);menu.querySelector('[aria-checked="true"]')?.focus({preventScroll:true});}return;}
   if(!t.closest(".rmenu"))closeMenus();
   const mn=t.closest("[data-mini]");if(mn){if(!mn.disabled)jumpNight(mn.dataset.mini);return;}
   const rb=t.closest("[data-rsvp]");if(rb){e.preventDefault();e.stopPropagation();const m=rb.closest(".rmenu");const go=()=>setRsvp(rb.dataset.rsvp,rb.dataset.st);
@@ -2352,6 +2470,9 @@ document.addEventListener("click",e=>{
     api("crew_set_pic",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_pic:i}).catch(err=>{crew.pic=before;saveCrew();render();toast(errMsg(err));});return;}
   if(t.closest("#frShare")){shareFriend();return;}
   if(t.closest("#frCopy")){copyText(friendUrl(),"Friend link copied");return;}
+  const jm=t.closest(".jmore");if(jm){e.preventDefault();e.stopPropagation();const pv=jm.previousSibling;
+    if(pv&&pv.nodeType===3)pv.textContent=pv.textContent.replace(/\s+$/,"");jm.replaceWith(", "+jm.dataset.more);return;}
+  if(t.closest("#frAll")){state.frAll=!state.frAll;render();return;}
   const fs=t.closest("[data-frsel]");if(fs){state.frSel=fs.dataset.frsel;scrollMem.frlist=window.scrollY;window.scrollTo(0,0);later(()=>stagger($("frView"),".frhead,.frcode,.pst,.cuprow",20));render();return;}
   if(t.closest("[data-frback]")){exitFx($("frView").querySelector(".pv"),"fx-sinkout",()=>{state.frSel=null;later(()=>stagger($("frView"),".frhead,.frcode,.frrow,.cuprow",10));render();window.scrollTo(0,scrollMem.frlist||0);});return;}
   if(t.closest("[data-gofr]")){state.frSel=null;setView("friends");return;}
