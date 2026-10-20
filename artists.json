@@ -8,7 +8,7 @@
   "uk": "UK/deep dubstep, 140, original UK sound",
   "wonky": "wonky, experimental and psychedelic bass, glitch-hop, hip-hop-leaning bass",
   "house": "bass house, UK-garage-leaning house with heavy bass",
-  "adj": "bass-adjacent: festival trap, livetronica, midtempo, breakcore, orchestral bass"
+  "adj": "bass-adjacent: festival trap, livetronica, midtempo, orchestral bass (not breakcore, IDM, cybergrind or hardcore; those are not_bass)"
  },
  "artists": {
   "1991": {
@@ -195,7 +195,8 @@
   "Death Instinct": {
    "genre": "adj",
    "style": "unidentified; on breakcore/cybergrind bill (Nero's Day at Disneyland)",
-   "confidence": "low"
+   "confidence": "low",
+   "not_bass": true
   },
   "Deathpact": {
    "genre": "dubstep",
@@ -589,7 +590,8 @@
   },
   "Nero's Day at Disneyland": {
    "genre": "adj",
-   "style": "breakcore / IDM"
+   "style": "breakcore / drill 'n' bass / IDM",
+   "not_bass": true
   },
   "Netsky": {
    "genre": "dnb",
