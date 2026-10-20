@@ -354,6 +354,10 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .avs.big .av{width:36px;height:36px;font-size:14px}
 .crewl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .crewl .t{min-width:0}
+.pi{width:24px;height:16px;flex:none;display:block}
+.pi-crew{color:var(--signal)}
+.pi-fr{color:var(--pink)}
+.hero .pi-crew,.nfest .pi-crew,.wpick.fest .pi-crew,.jleft .pi-crew{color:var(--on-signal)}
 /* TIX is a ticket stub: round notch each end, outline drawn by ::before under the text */
 .crewl .tx,.frl .tx{--tk-edge:var(--tix-edge);position:relative;isolation:isolate;display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:700;line-height:15px;letter-spacing:.03em;padding:0 7px;margin-right:5px;background:var(--volt);color:var(--on-volt);-webkit-mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 3px at 0 50%,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 3px at 100% 50%,#0000 96%,#000) right/51% 100% no-repeat}
 .crewl .tx::before,.frl .tx::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--tk-edge);-webkit-mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat;mask:linear-gradient(#000 0 0) top/100% 1px no-repeat,linear-gradient(#000 0 0) bottom/100% 1px no-repeat,linear-gradient(#000 0 0) left/1px 100% no-repeat,linear-gradient(#000 0 0) right/1px 100% no-repeat,radial-gradient(circle 4px at 0 50%,#000 96%,#0000) left/51% 100% no-repeat,radial-gradient(circle 4px at 100% 50%,#000 96%,#0000) right/51% 100% no-repeat}
@@ -1360,7 +1364,11 @@ function crewChip0(id){if(!inCrew()){const st=myStatus(id);if(!st)return "";retu
   const lbl=a.length+(a.length===1?" person":" people")+" from your crew"+(mine?", including you":"");
   return ppSym(lbl,false,true);}
 function crewLine(id,max){return crewLine0(id,max)+frLine(id,max);}
-function crewLine0(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl" data-ev="'+esc(id)+'">'+avStack(a,max||4)+'<span class="t">'+crewText(a)+'</span></div>';}
+/* who's going lines lead with a two-figure people icon instead of avatar bubbles: an outlined cyan pair for
+   the crew, a filled pink pair for friends (the same figures as the bottom bar) */
+const PI_CREW='<svg class="pi pi-crew" viewBox="0 0 24 16" role="img" aria-label="Crew"><circle cx="7" cy="4.8" r="2.9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><circle cx="17" cy="4.8" r="2.9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M1.8 15a5.2 5.2 0 0 1 10.4 0M11.8 15a5.2 5.2 0 0 1 10.4 0" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>';
+const PI_FR='<svg class="pi pi-fr" viewBox="0 0 24 16" role="img" aria-label="Friends"><circle cx="7" cy="4.8" r="3.2" fill="currentColor"></circle><circle cx="17" cy="4.8" r="3.2" fill="currentColor"></circle><path d="M1 16c0-3.4 2.7-6.2 6-6.2s6 2.8 6 6.2zM11 16c0-3.4 2.7-6.2 6-6.2s6 2.8 6 6.2z" fill="currentColor"></path></svg>';
+function crewLine0(id,max){const a=crewOn(id);if(!a.length)return "";return '<div class="crewl" data-ev="'+esc(id)+'">'+PI_CREW+'<span class="t">'+crewText(a)+'</span></div>';}
 const IC=(d,sz)=>'<svg viewBox="0 0 16 16" width="'+(sz||16)+'" height="'+(sz||16)+'" aria-hidden="true"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 const I={cal:"M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3",tix:"M2 5h12v2a1.5 1.5 0 0 0 0 3v2H2v-2a1.5 1.5 0 0 0 0-3zM10 5v8",ext:"M6 3H3v10h10v-3M9 2.5h4.5V7M13.5 2.5 7.5 8.5",
   going:"M3 8.5 6.5 12 13 4.5",interested:"M8 2.5l1.7 3.5 3.8.5-2.8 2.6.7 3.8L8 11.1l-3.4 1.8.7-3.8-2.8-2.6 3.8-.5z",down:"M4 6l4 4 4-4"};
@@ -1521,7 +1529,7 @@ function frChip(id){const a=frOn(id);if(!a.length)return "";const mine=!!myStatu
   const lbl=a.length+(a.length===1?" friend has":" friends have")+" plans here"+(mine?", and so do you":"");
   return ppSym(lbl,true,false);}
 function frLine(id,max){const a=frOn(id);if(!a.length)return "";
-  return '<div class="frl" data-ev="'+esc(id)+'">'+favStack(a,max||4)+'<span class="t"><span class="k">FRIENDS</span>'+frText(a)+'</span></div>';}
+  return '<div class="frl" data-ev="'+esc(id)+'">'+PI_FR+'<span class="t">'+frText(a)+'</span></div>';}
 async function refreshFriends(){
   if(!CREW_ON||!fme)return;
   try{
