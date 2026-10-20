@@ -729,6 +729,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .favs .fav+.fav{margin-left:-4px}
 .frl{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.3;color:var(--ink-soft);min-width:0}
 .frl .t{min-width:0}
+.jmore{border:0;background:none;padding:0;color:inherit;font:inherit;letter-spacing:inherit;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
 .frl .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;color:var(--ink-meta);margin-right:6px}
 .frl .tx{--tk-edge:var(--pink);background:transparent;color:var(--ink)}
 .crewl+.frl{margin-top:-2px}
@@ -778,6 +779,11 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .fracts .go{flex:1;height:44px;border:0;background:var(--ink);color:var(--paper);font:700 16px var(--font-sans);cursor:pointer;border-radius:0}
 .fracts .btn{height:44px;padding:0 16px}
 .frlist{display:flex;flex-direction:column;border-top:1px solid var(--rule);padding-top:10px}
+.frlist:not(.all):not(.q) .frrow.more{display:none}
+.frlist.q .frall{display:none}
+.frq{margin:6px 0 4px}
+.frall{margin-top:12px}
+.frnomatch{padding-block:12px}
 .frrow{display:grid;grid-template-columns:36px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft)}
 .frrow .fav{width:36px;height:36px;font-size:14px}
 .frrow b{font-size:18px;font-weight:500;letter-spacing:-.01em}
@@ -1343,11 +1349,14 @@ const av=m=>'<span class="av'+(isMe(m)?" me":"")+'" style="background:'+AV[(m.co
 function avStack(list,max,cls){max=max||4;const ms=list.map(x=>x.m||x);
   return '<span class="avs'+(cls?" "+cls:"")+'">'+ms.slice(0,max).map(av).join("")+(ms.length>max?'<span class="av more">+'+(ms.length-max)+'</span>':'')+'</span>';}
 const jn=a=>a.length<=2?a.join(" + "):a.slice(0,2).join(", ")+" + "+(a.length-2);
+/* the same, as markup: the "+ N" is a button that swaps in the rest of the names, for long friend lists */
+const jnx=a=>{if(a.length<=2)return esc(a.join(" + "));const rest=a.slice(2).join(", ");
+  return esc(a.slice(0,2).join(", "))+' <button type="button" class="jmore" data-more="'+esc(rest)+'" aria-label="Show the other '+(a.length-2)+': '+esc(rest)+'">+ '+(a.length-2)+'</button>';};
 function crewText(a){
   const name=x=>isMe(x.m)?"You":x.m.name;const g={tix:[],interested:[]};a.forEach(x=>(g[x.status]||g.tix).push(name(x)));
   const out=[];
-  if(g.tix.length)out.push('<span class="tx">TIX</span>'+esc(jn(g.tix)));
-  if(g.interested.length)out.push(esc(jn(g.interested))+" interested");
+  if(g.tix.length)out.push('<span class="tx">TIX</span>'+jnx(g.tix));
+  if(g.interested.length)out.push(jnx(g.interested)+" interested");
   return out.join(" · ");
 }
 const INVITE_ICON='<svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="8.5" cy="7" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"></circle><path d="M2.5 19c.8-3.6 3.1-5.4 6-5.4s5.2 1.8 6 5.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path><path d="M17.5 3.5v6M14.5 6.5h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>';
@@ -1516,8 +1525,8 @@ function favStack(list,max){max=max||4;const fs=list.map(x=>x.f||x);
   return '<span class="favs">'+fs.slice(0,max).map(fav).join("")+(fs.length>max?'<span class="fav more">+'+(fs.length-max)+'</span>':'')+'</span>';}
 function frText(a){
   const g={tix:[],interested:[]};a.forEach(x=>(g[x.status]||g.tix).push(x.f.name));const out=[];
-  if(g.tix.length)out.push('<span class="tx">TIX</span>'+esc(jn(g.tix)));
-  if(g.interested.length)out.push(esc(jn(g.interested))+" interested");
+  if(g.tix.length)out.push('<span class="tx">TIX</span>'+jnx(g.tix));
+  if(g.interested.length)out.push(jnx(g.interested)+" interested");
   return out.join(" · ");
 }
 function frChip(id){const a=frOn(id);if(!a.length)return "";const mine=!!myStatus(id);
@@ -1573,6 +1582,12 @@ function renderFrStart(){
     '<form class="cform" id="frCreate" autocomplete="off"><label for="frName">Your name</label><input id="frName" maxlength="30" value="'+esc((me&&me.name)||lastName())+'" required><button class="go" type="submit">Make my friend code</button></form>'+
     '<p class="note">No account needed. This device remembers you.</p></div>';
 }
+const FR_FEW=8;
+/* friend search: hides rows in place so typing doesn't redraw the page (and drop the cursor) */
+function frFilter(v){state.frQ=v;const q=v.trim().toLowerCase(),l=$("frList");if(!l)return;l.classList.toggle("q",!!q);let n=0;
+  l.querySelectorAll(".frrow").forEach(r=>{const hit=!q||r.dataset.q.includes(q);r.hidden=!hit;if(hit)n++;});
+  const none=l.querySelector(".frnomatch");if(none)none.hidden=!(q&&!n);}
+document.addEventListener("input",e=>{if(e.target.id==="frQ")frFilter(e.target.value);});
 function renderFriendsView(){
   const el=$("frView");
   if(!fme){el.innerHTML=renderFrStart();return;}
@@ -1588,12 +1603,21 @@ function renderFriendsView(){
     '<div class="frqt"><p>Met someone at a show? Let them scan this with their phone camera.</p><span class="meta">'+esc(fr.name)+' · '+esc(fr.code.toUpperCase())+'</span></div></div>'+
     '<div class="fracts"><button class="go" type="button" id="frShare">'+(navigator.share?"Share friend link":"Copy friend link")+'</button>'+(navigator.share?'<button class="btn" type="button" id="frCopy">Copy</button>':'')+'</div></div>';
   const fresh=f=>f.since&&(Date.now()-Date.parse(f.since))<3*864e5;
-  const rows=fs.length?fs.map(f=>{const p=frNext(f);
+  /* long lists: soonest plans first, then everyone else A to Z; 8 show until "Show all", and a search box
+     appears once there are more than 8 (it filters in place, see frFilter) */
+  const nx=new Map(fs.map(f=>[f.id,frNext(f)]));
+  const sorted=[...fs].sort((a,b)=>{const x=nx.get(a.id).next,y=nx.get(b.id).next;
+    if(x&&y)return evDate(x.e).localeCompare(evDate(y.e))||a.name.localeCompare(b.name);if(x||y)return x?-1:1;return a.name.localeCompare(b.name);});
+  const many=fs.length>FR_FEW,q=(state.frQ||"").toLowerCase();
+  const rows=fs.length?sorted.map((f,i)=>{const p=nx.get(f.id);const hay=(f.name+" "+(f.note||"")).toLowerCase();
     const sub=p.next?"Next: "+esc(p.next.e.title)+", "+shortDay(p.next.e.date)+(p.next.p.status==="tix"?" · has tix":""):"No shows picked yet";
-    return '<div class="frrow">'+frPic(f,36)+'<button class="frsel" type="button" data-frsel="'+esc(f.id)+'"><b>'+esc(f.name)+'</b>'+(fresh(f)?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span>'+(f.note?'<span class="met">'+esc(f.note)+'</span>':'')+'</button>'+
+    return '<div class="frrow'+(i>=FR_FEW?" more":"")+'" data-q="'+esc(hay)+'"'+(q&&!hay.includes(q)?" hidden":"")+'>'+frPic(f,36)+'<button class="frsel" type="button" data-frsel="'+esc(f.id)+'"><b>'+esc(f.name)+'</b>'+(fresh(f)?'<span class="ytag nw">NEW</span>':'')+'<span class="sub">'+sub+'</span>'+(f.note?'<span class="met">'+esc(f.note)+'</span>':'')+'</button>'+
       '<span class="cnt">'+p.count+(p.count===1?" show":" shows")+'</span><button class="frx" type="button" data-unfriend="'+esc(f.id)+'" aria-label="Remove '+esc(f.name)+'" title="Remove '+esc(f.name)+'">'+XICON+'</button></div>';}).join(""):
     '<p class="note frnone">No friends yet. Show someone your code at the next show, or send them your link. Once they add you, you\'ll both see each other\'s plans.</p>';
-  const list='<div class="frlist"><div class="cuphead"><span class="kicker">Your friends</span></div>'+rows+'</div>';
+  const list='<div class="frlist'+(state.frAll?" all":"")+(q?" q":"")+'" id="frList"><div class="cuphead"><span class="kicker">Your friends</span><span class="meta">'+(fs.length||"")+'</span></div>'+
+    (many?'<label class="lg" for="frQ" style="position:absolute;left:-9999px">Find a friend</label><input class="search frq" id="frQ" type="search" placeholder="Find a friend" autocomplete="off" value="'+esc(state.frQ||"")+'">':'')+
+    rows+'<p class="note frnomatch"'+(q&&!fs.some(f=>(f.name+" "+(f.note||"")).toLowerCase().includes(q))?"":" hidden")+'>No friends match that.</p>'+
+    (many?'<button class="linkbtn frall" type="button" id="frAll">'+(state.frAll?"Show fewer":"Show all "+fs.length+" friends")+'</button>':'')+'</div>';
   const evs=[...FRS.keys()].map(id=>EVMAP.get(id)).filter(e=>e&&e.date&&evUpcoming(e)).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,12);
   const up=fs.length?'<div class="cup frup"><div class="cuphead"><span class="kicker">Where your friends are going</span><span class="meta">'+(evs.length?evs.length+(evs.length===1?" show":" shows"):"")+'</span></div>'+
     (evs.map(e=>{const p=parts(e.date);const fest=e.kind==="fest";
@@ -2347,6 +2371,9 @@ document.addEventListener("click",e=>{
     api("crew_set_pic",{p_code:me.code,p_member_id:me.member_id,p_token:me.token,p_pic:i}).catch(err=>{crew.pic=before;saveCrew();render();toast(errMsg(err));});return;}
   if(t.closest("#frShare")){shareFriend();return;}
   if(t.closest("#frCopy")){copyText(friendUrl(),"Friend link copied");return;}
+  const jm=t.closest(".jmore");if(jm){e.preventDefault();e.stopPropagation();const pv=jm.previousSibling;
+    if(pv&&pv.nodeType===3)pv.textContent=pv.textContent.replace(/\s+$/,"");jm.replaceWith(", "+jm.dataset.more);return;}
+  if(t.closest("#frAll")){state.frAll=!state.frAll;render();return;}
   const fs=t.closest("[data-frsel]");if(fs){state.frSel=fs.dataset.frsel;scrollMem.frlist=window.scrollY;window.scrollTo(0,0);later(()=>stagger($("frView"),".frhead,.frcode,.pst,.cuprow",20));render();return;}
   if(t.closest("[data-frback]")){exitFx($("frView").querySelector(".pv"),"fx-sinkout",()=>{state.frSel=null;later(()=>stagger($("frView"),".frhead,.frcode,.frrow,.cuprow",10));render();window.scrollTo(0,scrollMem.frlist||0);});return;}
   if(t.closest("[data-gofr]")){state.frSel=null;setView("friends");return;}
