@@ -1236,6 +1236,11 @@ function exitFx(el,cls,done){
 function stagger(root,sel,max){if(!root||RM.matches)return;const els=[...root.querySelectorAll(sel)].slice(0,max||14);if(!els.length)return;
   els.forEach((el,i)=>{el.classList.remove("fx-rise");el.style.setProperty("--i",i);});void root.offsetWidth;
   els.forEach(el=>{el.classList.add("fx-rise");el.addEventListener("animationend",function h(e){if(e.target!==el)return;el.classList.remove("fx-rise");el.removeEventListener("animationend",h);});});}
+/* every element rises in, one row at a time from the top: everything on the same line shares a delay */
+function staggerRows(root,sel){if(!root||RM.matches)return;const els=[...root.querySelectorAll(sel)];if(!els.length)return;
+  const tops=[...new Set(els.map(el=>el.offsetTop))].sort((a,b)=>a-b);
+  els.forEach(el=>{el.classList.remove("fx-rise");el.style.setProperty("--i",tops.indexOf(el.offsetTop));});void root.offsetWidth;
+  els.forEach(el=>{el.classList.add("fx-rise");el.addEventListener("animationend",function h(e){if(e.target!==el)return;el.classList.remove("fx-rise");el.removeEventListener("animationend",h);});});}
 function slide(dir){later(()=>{["grid","nlist","mini"].forEach(id=>{if(id)fx($(id),dir>0?"fx-next":"fx-prev");});if(!PHONE.matches)stagger($("dayRows"),":scope>*",6);});}
 function vt(go){if(RM.matches||!document.startViewTransition){go();return;}try{document.startViewTransition(go);}catch(e){go();}}
 function intro(){
@@ -2458,7 +2463,7 @@ document.addEventListener("click",e=>{
   const go=t.closest("[data-goto]");if(go){gotoEvent(go.dataset.goto);return;}
   if(t.closest("[data-jclose]")){const gf=t.closest("[data-gofriends]");closeJoin();if(gf){state.view="friends";render();}return;}
   if(t.closest("#crShare")){shareInvite();return;}
-  if(t.closest("#crPic")){if(state.picOpen){exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.picOpen=false;render();});return;}state.picOpen=true;later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
+  if(t.closest("#crPic")){if(state.picOpen){exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.picOpen=false;render();});return;}state.picOpen=true;later(()=>staggerRows(document.querySelector(".picrow"),".picpick"));render();return;}
   const pk=t.closest("[data-pic]");
   if(pk&&inCrew()){const i=+pk.dataset.pic;const before=crew.pic;crew.pic=i;saveCrew();
     exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.picOpen=false;later(()=>fx(document.querySelector("#crPic .cpic"),"fx-pop"));render();});
@@ -2471,7 +2476,7 @@ document.addEventListener("click",e=>{
   const fs=t.closest("[data-frsel]");if(fs){state.frSel=fs.dataset.frsel;scrollMem.frlist=window.scrollY;window.scrollTo(0,0);later(()=>stagger($("frView"),".frhead,.frcode,.pst,.cuprow",20));render();return;}
   if(t.closest("[data-frback]")){exitFx($("frView").querySelector(".pv"),"fx-sinkout",()=>{state.frSel=null;later(()=>stagger($("frView"),".frhead,.frcode,.frrow,.cuprow",10));render();window.scrollTo(0,scrollMem.frlist||0);});return;}
   if(t.closest("[data-gofr]")){state.frSel=null;setView("friends");return;}
-  if(t.closest("#pfPic")){if(state.pfPicOpen){exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.pfPicOpen=false;render();});return;}state.pfPicOpen=true;later(()=>stagger(document.querySelector(".picrow"),".picpick",30));render();return;}
+  if(t.closest("#pfPic")){if(state.pfPicOpen){exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.pfPicOpen=false;render();});return;}state.pfPicOpen=true;later(()=>staggerRows(document.querySelector(".picrow"),".picpick"));render();return;}
   const pp=t.closest("[data-ppic]");
   if(pp){prof.pic=+pp.dataset.ppic;saveProf();exitFx(document.querySelector(".picrow"),"fx-fadeout",()=>{state.pfPicOpen=false;later(()=>{fx(document.querySelector("#pfPic .cpic"),"fx-pop");fx(document.querySelector("#navMeAv .cpic"),"fx-pop");});render();});return;}
   if(t.closest("#pfEdit")){state.pfEdit=!state.pfEdit;render();if(state.pfEdit){const i=$("pfNameIn");if(i){i.focus();i.select();}}return;}
