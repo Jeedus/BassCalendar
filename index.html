@@ -176,13 +176,12 @@ button,input,select{font:inherit;color:inherit}
 .cell.today{box-shadow:inset 0 3px 0 var(--signal)}
 .cell.sel{background:var(--mist);box-shadow:inset 0 0 0 2px var(--ink)}
 .cell.today.sel{box-shadow:inset 0 0 0 2px var(--ink),inset 0 5px 0 var(--signal)}
-.ev{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:6px;align-items:start;font-size:clamp(12px,1.65cqi,16px);line-height:1.2;font-weight:500;letter-spacing:0;min-width:0;flex:none}
-.ev .sw{width:10px;height:10px}
-.ev .sw{margin-top:.25em}
-.ev>span:nth-child(2){overflow-wrap:anywhere;min-width:0}
-.ev[data-g]{grid-template-columns:minmax(0,1fr) auto;margin:0 -8px;padding:3px 8px;font-weight:600;background:var(--gc);color:var(--on-gc)}
-.ev[data-g]>.sw{display:none}
-.ev.saved>span:nth-child(2){background:var(--volt);color:var(--on-volt);padding:0 3px;justify-self:start}
+/* month grid shows: a mono genre code in the genre colour, then the name; a followed name gets the lime underline */
+.ev,.fev{display:grid;grid-template-columns:2.4em minmax(0,1fr) auto;gap:4px;align-items:start;font-size:clamp(12px,1.65cqi,16px);line-height:1.2;letter-spacing:0;min-width:0;flex:none}
+.ev{font-weight:500;padding:1px 0}
+.ev>span:nth-child(2),.fev>span:nth-child(2){overflow-wrap:anywhere;min-width:0}
+.gcd{font-family:var(--font-mono);font-size:.75em;font-weight:700;line-height:1.6;letter-spacing:.04em;color:var(--gc)}
+.fev .gcd{color:var(--signal)}
 .dots{display:none;gap:3px;flex-wrap:wrap}
 .dots .sw{width:7px;height:7px}
 @media (max-width:640px){.cell{padding:4px}.cell .ev{display:none}.dots{display:flex}.cell .x{font-size:10px;padding:1px 3px}}
@@ -328,7 +327,7 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .wd.sel{background:var(--ink);color:var(--paper);border-color:var(--ink);opacity:1}
 .wd.sel .l{color:var(--paper)}
 .wd.sel .sw.g-dubstep{background:var(--paper)}
-.fev{display:block;overflow-wrap:anywhere;flex:none;margin:0 -8px;padding:4px 8px;background:var(--signal);color:var(--on-signal);font-size:clamp(12px,1.65cqi,16px);font-weight:700;line-height:1.2;letter-spacing:0}
+.fev{overflow-wrap:anywhere;flex:none;margin:0 -8px;padding:4px 8px;background:var(--signal);color:var(--on-signal);font-size:clamp(12px,1.65cqi,16px);font-weight:700;line-height:1.2;letter-spacing:0}
 .fname{background:var(--signal);color:var(--on-signal);padding:0 6px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 @media (max-width:640px){.fev{font-size:0;padding:0;height:6px;margin:0 -2px}}
 @media (max-width:640px){.pgrid{grid-template-columns:minmax(0,1fr)}.t2{font-size:17px}}
@@ -375,8 +374,6 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 .cc svg{width:10px;height:10px;flex:none}
 .cc.me{background:var(--signal);border-color:var(--signal);color:var(--on-signal)}
 .ev .cc{margin-top:1px}
-.fev{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
-.fev>span:first-child{min-width:0;overflow-wrap:anywhere}
 .fev .cc,.nfest .cc{background:var(--on-signal);border-color:var(--on-signal);color:var(--signal)}
 .nname .cc{height:22px;padding:0 7px;font-size:12px;gap:5px;margin-top:2px}
 .nname .cc svg{width:11px;height:11px}
@@ -850,7 +847,7 @@ button.pchip{cursor:pointer}
 }
 /* festivals: a pale cyan tint with a solid cyan edge, so crew and friend dots sit on it as they are */
 .fev,.nfest,.wpick.fest{background:var(--fest-tint);color:var(--ink);box-shadow:inset 4px 0 0 var(--signal)}
-.fev{padding-left:12px}
+.fev{padding:3px 8px;box-shadow:none}
 .nfest,.wpick.fest{padding-left:16px}
 .nfest .crewl,.wpick.fest .crewl,.nfest .frl,.wpick.fest .frl{color:var(--ink-soft)}
 .nfest .frl .k{color:var(--ink-meta)}
@@ -1056,16 +1053,17 @@ button.pchip{cursor:pointer}
 <script>
 function boot(DATA){
 const GENRES = [
-  {id:"dubstep", label:"Dubstep"},
-  {id:"riddim",  label:"Riddim / heavy"},
-  {id:"melodic", label:"Melodic & future bass"},
-  {id:"dnb",     label:"Drum & bass"},
-  {id:"uk",      label:"UK dubstep"},
-  {id:"wonky",   label:"Wonky & experimental"},
-  {id:"house",   label:"Bass house"},
-  {id:"adj",     label:"Bass-adjacent"}
+  {id:"dubstep", label:"Dubstep",               code:"DUB"},
+  {id:"riddim",  label:"Riddim / heavy",        code:"RID"},
+  {id:"melodic", label:"Melodic & future bass", code:"MEL"},
+  {id:"dnb",     label:"Drum & bass",           code:"DNB"},
+  {id:"uk",      label:"UK dubstep",            code:"UK"},
+  {id:"wonky",   label:"Wonky & experimental",  code:"WNK"},
+  {id:"house",   label:"Bass house",            code:"HSE"},
+  {id:"adj",     label:"Bass-adjacent",         code:"ADJ"}
 ];
 const SHOWS = DATA.shows;
+const gCode=id=>(GENRES.find(g=>g.id===id)||{code:""}).code;
 
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -1952,8 +1950,8 @@ function renderMonth(){
     const cls=["cell"];if(k<TODAY)cls.push("past");if(k===TODAY)cls.push("today");if(k===state.sel&&state.allFor!==k)cls.push("sel");
     h+='<button type="button" class="'+cls.join(" ")+'" data-day="'+k+'" aria-label="'+esc(longDate(k))+', '+tot+(tot===1?" event":" events")+'">'+
       '<span class="d"><span>'+d+'</span>'+'</span>'+
-      fe.map(f=>'<span class="fev"><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
-      ev.map(s=>'<span class="ev" data-g="'+s.genre+'"><span class="sw g-'+s.genre+'"></span><span>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
+      fe.map(f=>'<span class="fev"><span class="gcd">FEST</span><span>'+esc(f.name)+'</span>'+crewChip(f.id)+'</span>').join("")+
+      ev.map(s=>'<span class="ev" data-g="'+s.genre+'"><span class="gcd">'+gCode(s.genre)+'</span><span'+(followHit(s)?' class="fol"':'')+'>'+esc(s.title)+'</span>'+crewChip(s.id)+'</span>').join("")+
       '<span class="dots">'+ev.map(s=>'<span class="sw g-'+s.genre+'"></span>').join("")+'</span></button>';}
   const tail=(7-((first+days)%7))%7;for(let i=0;i<tail;i++)h+='<div class="cell off" aria-hidden="true"></div>';
   $("grid").innerHTML=h;
