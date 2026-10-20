@@ -2027,8 +2027,8 @@ function lavaLamp(){
     el.style.display="none";svg.style.display="block";path.setAttribute("fill-rule","evenodd");
     present=d=>path.setAttribute("d",d);
   }
-  let W=0,H=0,X0=0,GX=0,S=4,PH=36,PP=40,nx=0,ny=0,N=0,F=null,nb=null,used=null,pts=null,lo=null,hi=null;
-  const bl=[],sw=[];
+  let W=0,H=0,X0=0,GX=0,S=4,PH=36,PP=40,nx=0,ny=0,N=0,F=null,nb=null,used=null,pts=null,lo=null,hi=null,clock=R()*100;
+  const bl=[],sw=[];let bond=null;
   function setup(){
     W=sec.clientWidth;H=sec.clientHeight;if(!W||!H)return false;
     const ph=W<=640,sc=ph?.5:1;X0=ph?Math.max(0,W-122):0;GX=ph?Math.max(0,X0-70):0;const RW=W-X0,GW=W-GX;
@@ -2037,19 +2037,21 @@ function lavaLamp(){
     S=Math.max(3,Math.min(7,Math.sqrt(GW*H/15000)));
     nx=Math.ceil(GW/S)+3;ny=Math.ceil(H/S)+3;N=nx*ny;
     if(!F||F.length!==N){F=new Float32Array(N);nb=new Int32Array(4*N);used=new Uint8Array(2*N);pts=new Float32Array(4*N);lo=new Int32Array(ny);hi=new Int32Array(ny);}
-    const n=ph?4:7;
-    if(bl.length!==n){bl.length=0;
+    const n=ph?3:7;let fresh=false;
+    if(bl.length!==n){bl.length=0;bond=new Uint8Array(n*n);fresh=true;
       for(let i=0;i<n;i++){const r=(24+Math.pow(R(),1.4)*50)*sc,sz=Math.sqrt(46*sc/r);
-        bl.push({r,x:X0+r+R()*Math.max(1,RW-2*r),y:H*.2+R()*H*.8,vx:0,vy:0,k:0,t:R(),heat:(.12+R()*.16)*sz,cool:(.08+R()*.12)*sz,ph:R()*6.3,wob:.15+R()*.35,
+        bl.push({r,x:X0+r+R()*Math.max(1,RW-2*r),y:H*.2+R()*H*.8,vx:0,vy:0,k:0,cd:0,t:R(),heat:(.12+R()*.16)*sz,cool:(.08+R()*.12)*sz,ph:R()*6.3,wob:.15+R()*.35,
           lobes:[0,1].map(()=>({f:.45+R()*.25,a:R()*6.3,spin:(R()<.5?-1:1)*(.1+R()*.25),x:0,y:0,set:0}))});}}
     const ns=Math.max(2,Math.ceil(RW/190)+1);
     if(sw.length!==ns){sw.length=0;for(let i=0;i<ns;i++)sw.push({r:(22+R()*14)*sc,u:i/ns+R()*.08,sp:.012+R()*.02,ph:R()*6.3,bob:.25+R()*.35});}
     for(const b of bl){b.x=Math.min(Math.max(b.x,X0+b.r),Math.max(X0+b.r,W-b.r));b.y=Math.min(b.y,H-b.r*.3);}
+    /* new blobs start at random spots; run the lamp for a while first so it opens already settled */
+    if(fresh)for(let i=0;i<400;i++){clock+=1/30;step(1/30,clock);}
     return true;
   }
   function step(dt,s){
     for(const b of bl){
-      const depth=b.y/H;
+      const depth=b.y/H;b.cd=Math.max(0,b.cd-dt);
       if(b.y>H-PH-b.r*.3)b.t+=b.heat*dt;
       else if(depth<.4)b.t-=b.cool*dt*(1.6-depth*2);
       else b.t-=b.cool*.2*dt;
@@ -2057,6 +2059,10 @@ function lavaLamp(){
       /* buoyancy (warm rises), a slow sideways wander, and drag from the thick liquid */
       b.vy+=-(b.t-.5)*80*dt;
       b.vx+=Math.sin(s*b.wob+b.ph)*7*dt;
+      /* a blob touching the pool sticks to it until it's warm enough to break away in one go; otherwise it
+         bobbed at the surface and its neck to the pool snapped on and off */
+      const touching=b.y+b.r>H-PH-b.r*.9&&b.y+b.r<H-PH+b.r*.3;
+      if(touching)b.vy+=b.t<.62?(.62-b.t)*160*dt:-50*dt;
       /* soft limits: sinking into the pool, the top and the sides all push back gradually */
       const floor=H-b.r*.45,ceil=b.r*.7,lw=X0+b.r*.8,rw=W-b.r*.8;let visc=1.6;
       if(b.y>floor){b.vy-=(b.y-floor)*9*dt;visc=4;}
@@ -2064,17 +2070,33 @@ function lavaLamp(){
       if(b.x<lw)b.vx+=(lw-b.x)*6*dt;else if(b.x>rw)b.vx-=(b.x-rw)*6*dt;
       const drag=Math.exp(-visc*dt);b.vx*=drag;b.vy*=drag;
     }
-    /* blobs that crowd each other get nudged apart, mostly sideways, so they don't stack up */
-    for(let i=0;i<bl.length;i++)for(let j=i+1;j<bl.length;j++){const a=bl[i],c=bl[j];
-      const dx=c.x-a.x,dy=c.y-a.y,d=Math.hypot(dx,dy)||1,min=(a.r+c.r)*.8;
-      if(d<min){const f=(min-d)*1.6*dt,ux=dx/d,uy=dy/d*.4;a.vx-=ux*f;a.vy-=uy*f;c.vx+=ux*f;c.vy+=uy*f;}}
+    /* blobs bond like wax. Two that come close enough to touch (their shapes merge at about 1.19 times the
+       sum of their radii) are bonded: the bond holds them well inside that distance as one clear shape and
+       they share heat, so they rise and sink together. It breaks when their temperatures drift apart (the
+       small one heats faster in the pool), with a push so the neck snaps in one go and a pause before they
+       can bond again; unbonded blobs that get near are nudged apart. Without this, pairs hovering at the
+       merge distance had their neck snap on and off every few frames */
+    const nb_=bl.length;const nbond=new Uint8Array(nb_);
+    for(let i=0;i<nb_;i++)for(let j=i+1;j<nb_;j++)if(bond[i*nb_+j]){nbond[i]++;nbond[j]++;}
+    for(let i=0;i<nb_;i++)for(let j=i+1;j<nb_;j++){const a=bl[i],c=bl[j],k=i*nb_+j;
+      const dx=c.x-a.x,dy=c.y-a.y,d=Math.hypot(dx,dy)||1,ux=dx/d,uy=dy/d,sum=a.r+c.r,md=sum*1.19;
+      if(!bond[k]&&d<md*.92&&!a.cd&&!c.cd)bond[k]=1;
+      else if(bond[k]&&(Math.abs(a.t-c.t)>.35||d>md*1.3)){bond[k]=0;a.cd=c.cd=2.5;const up=a.t>c.t?-1:1;a.vy+=up*30;c.vy-=up*30;}
+      let f=0;
+      if(bond[k]){f=(d-sum*.85)*5;const m=(a.t+c.t)/2;a.t+=(m-a.t)*.8*dt;c.t+=(m-c.t)*.8*dt;}
+      /* two members of the same clump that aren't bonded to each other are left alone: pushing them apart
+         while a third blob held them both made the clump shiver */
+      else if(d<md*1.35&&!(nbond[i]&&nbond[j]))f=-(md*1.35-d)*3;
+      if(f){f*=dt;a.vx+=ux*f;a.vy+=uy*f*.6;c.vx-=ux*f;c.vy-=uy*f*.6;}}
     const ease=1-Math.exp(-2.2*dt),kE=1-Math.exp(-5*dt);
     for(const b of bl){
       b.x+=b.vx*dt;b.y+=b.vy*dt;
       b.k+=(Math.min(.12,Math.hypot(b.vx,b.vy)/300)-b.k)*kE;
-      /* lobes circle slowly around the drop and trail behind its motion */
-      for(const l of b.lobes){l.a+=l.spin*dt;const off=b.r*(.32+.12*Math.sin(s*.4+l.a*2));
-        const tx=b.x+Math.cos(l.a)*off-b.vx*.9,ty=b.y+Math.sin(l.a)*off*.6-b.vy*1.1;
+      /* lobes circle slowly around the drop and trail a little behind its motion, but never far enough to
+         come loose: a lobe that detached and rejoined a frame later read as flicker */
+      const tr=Math.min(.3*b.r,Math.hypot(b.vx,b.vy)*.5)/(Math.hypot(b.vx,b.vy)||1);
+      for(const l of b.lobes){l.a+=l.spin*dt;const off=b.r*(.22+.1*Math.sin(s*.4+l.a*2));
+        const tx=b.x+Math.cos(l.a)*off-b.vx*tr,ty=b.y+Math.sin(l.a)*off*.6-b.vy*tr;
         if(!l.set){l.set=1;l.x=tx;l.y=ty;}else{l.x+=(tx-l.x)*ease;l.y+=(ty-l.y)*ease;}}
     }
   }
@@ -2092,7 +2114,8 @@ function lavaLamp(){
     for(const b of bl){const sx=1/(1-b.k*.6),sy=1/(1+b.k);balls.push(b.x,b.y,b.r*b.r,sx*sx,sy*sy);
       for(const l of b.lobes){const lr=b.r*l.f;balls.push(l.x,l.y,lr*lr,1,1);}}
     const RW=W-X0;
-    for(const w of sw){const cx=X0+((w.u+s*w.sp)%1)*(RW+2*w.r)-w.r,cy=H-PH+w.r*.7+Math.sin(s*w.bob+w.ph)*4;balls.push(cx,cy,w.r*w.r,1,1);}
+    for(const w of sw){const u=(w.u+s*w.sp)%1,cx=X0+u*(RW+2*w.r)-w.r,cy=H-PH+w.r*.85+Math.sin(s*w.bob+w.ph)*4;
+      const fade=Math.min(1,u*8,(1-u)*8);balls.push(cx,cy,w.r*w.r*fade*fade,1,1);}
     /* the pool: one value per row, and on phones a taper over about 60px left of the column */
     const py0=H-PH+PP,P2=PP*PP,xl=X0+16;
     for(let j=1;j<ny-1;j++){const py=(j-1)*S,dy=py0-py,dy2=dy*dy,base=P2/(dy2+.25),vb=base*base-C0;if(vb<=0)continue;const row=j*nx;touch(j,1,nx-2);
@@ -2128,10 +2151,10 @@ function lavaLamp(){
     for(let k=0;k<2*N;k++){if(used[k]||nb[2*k]<0)continue;
       /* walk the loop, taking every crossing point: each one slides continuously as the blobs move, so the
          curve through them moves continuously too (skipping points made the edges vibrate) */
-      let n=0,prev=-1,cur=k;used[k]=1;pts[0]=px(k);pts[1]=py(k);n=1;
+      let n=0,prev=-1,cur=k;used[k]=1;pts[0]=px(k);pts[1]=py(k);n=1;let bx0=pts[0],bx1=pts[0],by0=pts[1],by1=pts[1];
       while(n<2*N){const a=nb[2*cur],b=nb[2*cur+1];const nxt=a!==prev?a:b;if(nxt<0||nxt===k||used[nxt])break;used[nxt]=1;
-        pts[2*n]=px(nxt);pts[2*n+1]=py(nxt);n++;prev=cur;cur=nxt;}
-      if(n<3)continue;
+        const x=px(nxt),y=py(nxt);pts[2*n]=x;pts[2*n+1]=y;n++;prev=cur;cur=nxt;if(x<bx0)bx0=x;if(x>bx1)bx1=x;if(y<by0)by0=y;if(y>by1)by1=y;}
+      if(n<5||(bx1-bx0<S*2&&by1-by0<S*2))continue;
       /* a closed quadratic B-spline with the points as controls: smooth, never overshoots, and each curve
          piece runs between neighbouring midpoints */
       let mx=(pts[2*n-2]+pts[0])/2,my=(pts[2*n-1]+pts[1])/2;d+="M"+f1(mx)+" "+f1(my);
@@ -2140,16 +2163,16 @@ function lavaLamp(){
       d+="Z";}
     present(d);
   }
-  let raf=0,seen=true,last=0,clock=R()*100,dirty=true;
+  let raf=0,seen=true,last=0,dirty=true;
   function loop(now){raf=0;if(!seen||sec.hidden||document.hidden)return;
     if(dirty){dirty=false;if(!setup())return;}
-    const dt=Math.min(.05,last?(now-last)/1000:0);last=now;
+    const dt=Math.min(1/30,last?(now-last)/1000:0);last=now;
     if(dt>0&&!still.matches){clock+=dt;step(dt,clock);}
     field(clock);outline();
     if(!still.matches)raf=requestAnimationFrame(loop);}
   const go=()=>{last=0;if(!raf)raf=requestAnimationFrame(loop);};
   /* reduced motion: let the lamp settle into a random moment, then hold still */
-  if(still.matches&&setup()){dirty=false;for(let i=0;i<600;i++){clock+=.05;step(.05,clock);}}
+  if(still.matches&&setup())dirty=false;
   try{new IntersectionObserver(es=>{seen=es[0].isIntersecting;if(seen)go();}).observe(sec);}catch(e){}
   try{new ResizeObserver(()=>{dirty=true;go();}).observe(sec);}catch(e){}
   document.addEventListener("visibilitychange",go);
