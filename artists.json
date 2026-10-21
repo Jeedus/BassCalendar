@@ -54,6 +54,12 @@
    "style": "orchestral bass / cinematic trap-midtempo",
    "confidence": "medium"
   },
+  "Ascension": {
+   "genre": "adj",
+   "style": "live-instrument bass project (livetronica, Nashville)",
+   "confidence": "medium",
+   "source": "https://concerts50.com/artists/ascension-tour-dates"
+  },
   "ATLiens": {
    "genre": "dubstep",
    "style": "hybrid trap-dubstep"
@@ -110,6 +116,12 @@
    "genre": "dnb",
    "style": "drum & bass"
   },
+  "Capochino": {
+   "genre": "dubstep",
+   "style": "bass music (Subsidia Records)",
+   "confidence": "medium",
+   "source": "https://concerts50.com/artists/capochino-tour-dates"
+  },
   "Caspa": {
    "genre": "uk",
    "style": "original UK dubstep"
@@ -152,6 +164,12 @@
   "Code: Pandorum": {
    "genre": "riddim",
    "style": "deathstep / heavy dubstep"
+  },
+  "Common Creation": {
+   "genre": "wonky",
+   "style": "psychedelic soul / bass (WAKAAN, Lowtemp)",
+   "confidence": "medium",
+   "source": "https://www.frontstagefestivals.com/artist/common-creation"
   },
   "Conrad.": {
    "genre": "melodic",
@@ -249,6 +267,12 @@
    "genre": "wonky",
    "style": "trippy freeform/psychedelic dubstep",
    "confidence": "medium"
+  },
+  "Effin": {
+   "genre": "dubstep",
+   "style": "sample-heavy bass music with retro textures (Nashville)",
+   "confidence": "medium",
+   "source": "https://concerts50.com/artists/effin-tour-dates"
   },
   "EMRYS": {
    "genre": "dubstep",
@@ -366,6 +390,12 @@
    "style": "riddim",
    "confidence": "medium"
   },
+  "HEYZ": {
+   "genre": "dubstep",
+   "style": "forward-thinking bass (mau5trap, Deadbeats, Bassrush)",
+   "confidence": "medium",
+   "source": "https://concerts50.com/artists/heyz-tour-dates"
+  },
   "Hol!": {
    "genre": "riddim",
    "style": "riddim / heavy dubstep",
@@ -380,6 +410,11 @@
   "Hybrid Minds": {
    "genre": "dnb",
    "style": "liquid drum & bass"
+  },
+  "Ian Snow": {
+   "genre": "dubstep",
+   "style": "dubstep and melodic bass (WAKAAN, Bassrush; Chicago, formerly SNOWMASS)",
+   "source": "https://concerts50.com/artists/ian-snow-tour-dates"
   },
   "ILLENIUM": {
    "genre": "melodic",
@@ -403,6 +438,11 @@
    "genre": "wonky",
    "style": "psychedelic bass"
   },
+  "Jaenga": {
+   "genre": "wonky",
+   "style": "hip-hop acapellas over bass (Deadbeats, WAKAAN)",
+   "source": "https://concerts50.com/artists/jaenga-tour-dates"
+  },
   "Jai Wolf": {
    "genre": "melodic",
    "style": "future bass / indie electronic"
@@ -412,6 +452,11 @@
    "style": "wonky bass / hybrid dubstep-trap",
    "confidence": "medium",
    "source": "https://edmidentity.com/?p=132465"
+  },
+  "Jason Leech": {
+   "genre": "adj",
+   "style": "live keys and synths over dubstep and glitch-hop (livetronica)",
+   "source": "https://www.frontstagefestivals.com/artist/jason-leech"
   },
   "Jason Ross": {
    "genre": "melodic",
@@ -513,10 +558,20 @@
    "style": "unidentified; Subtronics/ALLEYCVT opener",
    "confidence": "low"
   },
+  "Lumasi": {
+   "genre": "wonky",
+   "style": "experimental bass",
+   "source": "https://concerts50.com/artists/lumasi-tour-dates"
+  },
   "Machinedrum": {
    "genre": "wonky",
    "style": "experimental footwork/jungle/electronica",
    "confidence": "medium"
+  },
+  "Maddy O'Neal": {
+   "genre": "wonky",
+   "style": "electro-soul / glitchy hip-hop bass",
+   "source": "https://concerts50.com/artists/maddy-o-neal-tour-dates"
   },
   "Malaa": {
    "genre": "house",
@@ -607,6 +662,12 @@
    "confidence": "medium",
    "source": "https://edmidentity.com/?p=268899"
   },
+  "Ninajirachi": {
+   "genre": "adj",
+   "style": "2010s-style EDM, hyperpop, trance, complextro",
+   "not_bass": true,
+   "source": "https://en.wikipedia.org/wiki/I_Love_My_Computer"
+  },
   "Noirkxtty": {
    "genre": "dubstep",
    "style": "unidentified; Subtronics opener",
@@ -615,6 +676,12 @@
   "Nostalgix": {
    "genre": "house",
    "style": "bass house / UKG-tinged house"
+  },
+  "Odd Language": {
+   "genre": "dubstep",
+   "style": "dubstep / experimental bass / trap (Disciple Round Table, Sable Valley)",
+   "confidence": "medium",
+   "source": "https://www.insomniac.com/?p=479320"
   },
   "Of The Trees": {
    "genre": "wonky",
@@ -639,6 +706,11 @@
    "style": "unidentified; assumed riddim from festival context",
    "confidence": "low"
   },
+  "Paper Skies": {
+   "genre": "melodic",
+   "style": "melodic bass / melodic dubstep (Pilot, Monstercat)",
+   "source": "https://ukf.com/discover/artists/paper-skies/"
+  },
   "Path": {
    "genre": "riddim",
    "style": "unidentified; Richard Finger opener",
@@ -649,11 +721,21 @@
    "style": "riddim / wonky heavy dubstep",
    "confidence": "medium"
   },
+  "Phyphr": {
+   "genre": "wonky",
+   "style": "soul bass with live guitar and talk box",
+   "source": "https://concerts50.com/artists/phyphr-tour-dates"
+  },
   "Pyke": {
    "genre": "riddim",
    "style": "riddim dubstep",
    "confidence": "medium",
    "source": "https://www.mixgraph.io/artists/pyke"
+  },
+  "Ravenscoon": {
+   "genre": "wonky",
+   "style": "experimental bass with punk, metal and hip-hop",
+   "source": "https://concerts50.com/artists/ravenscoon-tour-dates"
   },
   "Ray Volpe": {
    "genre": "dubstep",
@@ -687,6 +769,11 @@
    "confidence": "medium",
    "source": "https://dropthebass.co/artists/saka"
   },
+  "Seth David": {
+   "genre": "dubstep",
+   "style": "R&Bass: hip-hop and R&B over dubstep (Chicago)",
+   "source": "https://concerts50.com/artists/seth-david-tour-dates"
+  },
   "Seven Lions": {
    "genre": "melodic",
    "style": "melodic dubstep / melodic bass-trance"
@@ -716,6 +803,11 @@
    "confidence": "medium",
    "source": "https://songkick.com/artists/35434-skream/calendar"
   },
+  "Skrillex": {
+   "genre": "dubstep",
+   "style": "dubstep / EDM",
+   "source": "https://concerts50.com/artists/skrillex-tour-dates"
+  },
   "SLANDER": {
    "genre": "melodic",
    "style": "melodic bass / melodic dubstep"
@@ -724,6 +816,11 @@
    "genre": "dubstep",
    "style": "hip-hop-flavored heavy dubstep",
    "confidence": "medium"
+  },
+  "SoDown": {
+   "genre": "adj",
+   "style": "saxophone-infused livetronica / bass",
+   "source": "https://concerts50.com/artists/sodown-tour-dates"
   },
   "Sota": {
    "genre": "dnb",
@@ -734,11 +831,27 @@
    "genre": "dubstep",
    "style": "heavy dubstep / drumstep"
   },
+  "Space Wizard": {
+   "genre": "wonky",
+   "style": "experimental bass / dubstep",
+   "source": "https://concerts50.com/artists/space-wizard-tour-dates"
+  },
+  "Spoone": {
+   "genre": "dubstep",
+   "style": "dubstep (South Florida)",
+   "confidence": "medium",
+   "source": "https://soundcharts.com/en/artist/720caa2d-cbab-4e4f-a7be-8d52ce3430d6"
+  },
   "St. Mary": {
    "genre": "melodic",
    "style": "trap & melodic/future bass",
    "confidence": "medium",
    "source": "https://fuxwithit.com/2023/05/17/guest-mix-interview-st-mary/"
+  },
+  "Steller": {
+   "genre": "wonky",
+   "style": "wonky bass, soulful and psychedelic (Zingara collaborator)",
+   "source": "https://concerts50.com/artists/steller-tour-dates"
   },
   "Stoned Level": {
    "genre": "riddim",
@@ -762,6 +875,12 @@
   "Sullivan King": {
    "genre": "riddim",
    "style": "metal dubstep"
+  },
+  "Sully": {
+   "genre": "wonky",
+   "style": "melodic wonky bass (Detroit; Liquid Stranger, Mersiv collaborator)",
+   "confidence": "medium",
+   "source": "https://concerts50.com/artists/sully-tour-dates"
   },
   "SunSquabi": {
    "genre": "adj",
@@ -807,6 +926,11 @@
    "style": "deep/dark dubstep, 140",
    "confidence": "medium"
   },
+  "Trivecta": {
+   "genre": "melodic",
+   "style": "melodic dubstep / 'folk bass' with live guitar",
+   "source": "https://concerts50.com/artists/trivecta-tour-dates"
+  },
   "TroyBoi": {
    "genre": "adj",
    "style": "trap / bass trap"
@@ -814,6 +938,16 @@
   "Truth": {
    "genre": "uk",
    "style": "deep UK-style dubstep (NZ duo)"
+  },
+  "TVBOO": {
+   "genre": "dubstep",
+   "style": "bouncy, high-energy bass",
+   "source": "https://concerts50.com/artists/tvboo-tour-dates"
+  },
+  "TYNAN": {
+   "genre": "dubstep",
+   "style": "genre-bending dubstep / dark trap",
+   "source": "https://concerts50.com/artists/tynan-tour-dates"
   },
   "Usaybflow": {
    "genre": "riddim",
@@ -893,6 +1027,11 @@
    "style": "wobbly riddim dubstep",
    "source": "https://www.frontstagefestivals.com/artist/xaebor"
   },
+  "YDG": {
+   "genre": "dubstep",
+   "style": "high-energy dubstep / experimental bass",
+   "source": "https://concerts50.com/artists/ydg-tour-dates"
+  },
   "YOOKiE": {
    "genre": "dubstep",
    "style": "heavy dubstep"
@@ -916,6 +1055,13 @@
   "Zomboy": {
    "genre": "dubstep",
    "style": "brostep / heavy dubstep"
+  },
+  "Łaszewo": {
+   "genre": "adj",
+   "style": "electronic pop (two producers and a vocalist)",
+   "not_bass": true,
+   "confidence": "medium",
+   "source": "https://www.axs.com/de/artists/1110643"
   }
  }
 }

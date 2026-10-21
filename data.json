@@ -1,6 +1,6 @@
 {
  "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. GENRE GATE (non-bass acts have slipped in three times: hard techno, dance pop, breakcore), check every new show before adding it: 1) Never add a show headlined by anyone in skip or marked not_bass in artists.json. 2) If the headliner isn't in artists.json, research what they are known for (bio, Beatport genre, label, festival pages; not the venue's or ticket site's 'electronic' category) and add them with genre, style and source; if they aren't bass music add them with not_bass: true and put them in skip. 3) Bass music here is dubstep, riddim, melodic bass/future bass, drum & bass, UK/deep dubstep, wonky/experimental bass, bass house, and bass-adjacent festival trap, livetronica, midtempo and orchestral bass. Breakcore, drill 'n' bass, IDM, cybergrind, digital hardcore, hardcore, techno, trance, regular house, hyperpop, synth-pop, dance pop and pop EDM are not bass music, even when a listing calls them electronic. 4) If you can't confirm from a source that the headliner plays bass music, leave the show out and mention it in the update message. 5) A show's genre is always its headliner's genre in artists.json, never the venue's or event's category.",
- "updated": "2026-10-19",
+ "updated": "2026-10-21",
  "checked": "2026-10-18",
  "links": {},
  "locals": [],
@@ -8,7 +8,9 @@
   "Bassvictim",
   "HHUNTER",
   "Nero's Day at Disneyland",
-  "Twinsick"
+  "Ninajirachi",
+  "Twinsick",
+  "Łaszewo"
  ],
  "shows": [
   {
@@ -280,11 +282,24 @@
    "url": "https://concerts50.com/show/whales-in-chicago-tickets-nov-28-2026"
   },
   {
+   "id": "zeds-3",
+   "date": "2026-12-03",
+   "doors": "21:00",
+   "title": "Zeds Dead",
+   "tag": "Night 1",
+   "support": [],
+   "venue": "Aragon Ballroom",
+   "city": "Chicago",
+   "genre": "dubstep",
+   "age": "17+",
+   "url": "https://www.ticketmaster.com/event/04006548C772E3E0"
+  },
+  {
    "id": "zeds-1",
    "date": "2026-12-04",
    "doors": "21:00",
    "title": "Zeds Dead",
-   "tag": "Night 1",
+   "tag": "Night 2",
    "support": [
     "Sippy",
     "4B",
@@ -327,7 +342,7 @@
    "date": "2026-12-05",
    "doors": "21:00",
    "title": "Zeds Dead",
-   "tag": "Night 2",
+   "tag": "Night 3",
    "support": [
     "Saka b2b Fly",
     "ERO808",
@@ -358,6 +373,18 @@
    "url": "https://concordmusichall.com/calendar/richard-finger/"
   },
   {
+   "id": "jason-leech",
+   "date": "2026-12-11",
+   "doors": "21:00",
+   "title": "Jason Leech",
+   "support": [],
+   "venue": "Chop Shop",
+   "addr": "2033 W North Ave",
+   "city": "Chicago",
+   "genre": "adj",
+   "url": "https://dice.fm/event/6abbe76e4a21e20001dee378"
+  },
+  {
    "id": "jkyl-hyde",
    "date": "2026-12-12",
    "doors": "22:00",
@@ -380,6 +407,32 @@
    "city": "Chicago",
    "genre": "riddim",
    "url": "https://app.discotech.me/events/38253282-svdden-death-at-the-salt-shed"
+  },
+  {
+   "id": "paper-skies",
+   "date": "2026-12-19",
+   "doors": "22:00",
+   "title": "Paper Skies",
+   "tag": "Greyscale Tour",
+   "support": [],
+   "venue": "Bourbon on Division",
+   "addr": "2050 W Division St",
+   "city": "Chicago",
+   "genre": "melodic",
+   "url": "https://posh.vip/e/paper-skies-greyscale-tour"
+  },
+  {
+   "id": "whethan-nye",
+   "date": "2026-12-31",
+   "doors": "19:00",
+   "title": "Whethan",
+   "tag": "New Year's Eve",
+   "support": [],
+   "venue": "Aon Grand Ballroom at Navy Pier",
+   "city": "Chicago",
+   "genre": "melodic",
+   "age": "18+",
+   "url": "https://www.tixr.com/groups/navypiereventcenter/events/whethan-207828"
   },
   {
    "id": "know-good",

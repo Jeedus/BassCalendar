@@ -1,5 +1,5 @@
 {
-  "_about": "Bass artists the daily updater checks for Chicago-area dates, on top of the venue and listing sites. Mostly built from recent North American bass festival lineups (sources below), plus a few well-known bass acts that tour the US regularly. Groups use the same genre ids as data.json and match artists.json. Each run checks 15 names in a rotating window so the whole list is covered about every 8 days. Add or remove names freely; keep each name spelled the way the artist bills it.",
+  "_about": "Bass artists the daily updater checks for Chicago-area dates, on top of the venue and listing sites. Mostly built from recent North American bass festival lineups (sources below), plus a few well-known bass acts that tour the US regularly and the bass artists the site owner likes most on SoundCloud. Groups use the same genre ids as data.json and match artists.json. Each run checks 15 names in a rotating window so the whole list is covered about every 10 days. Add or remove names freely; keep each name spelled the way the artist bills it.",
   "sources": [
     "https://edmidentity.com/2025/05/30/lost-lands-2025-lineup/",
     "https://edm.com/events/lost-lands-daily-lineup-2026-excision/",
@@ -19,17 +19,19 @@
     "dubstep": [
       "Excision", "Subtronics", "Zeds Dead", "NGHTMRE", "Virtual Riot", "Flux Pavilion", "Zomboy",
       "Doctor P", "Getter", "Space Laces", "ATLiens", "Tape B", "Black Tiger Sex Machine", "Ray Volpe",
-      "Barely Alive", "FuntCase", "Eptic", "Rusko", "Moody Good", "Deathpact", "Dirt Monkey",
-      "MUST DIE!", "ALLEYCVT", "Kompany", "Gunpoint", "Flozone", "Dennett", "Crankdat", "Smoakland",
-      "Ganja White Night", "Levity", "Hairitage"
+      "Barely Alive", "FuntCase", "Eptic", "Rusko", "Moody Good", "Deathpact", "Dirt Monkey", "MUST DIE!",
+      "ALLEYCVT", "Kompany", "Gunpoint", "Flozone", "Dennett", "Crankdat", "Smoakland",
+      "Ganja White Night", "Levity", "Hairitage", "YDG", "Effin", "Seth David", "HEYZ", "Ian Snow",
+      "Odd Language", "Spoone", "Capochino", "TVBOO", "TYNAN", "Skrillex", "Costa", "Sippy"
     ],
     "riddim": [
       "Sullivan King", "SVDDEN DEATH", "VOYD", "Wooli", "Level Up", "INFEKT", "Jessica Audiffred", "LAYZ",
-      "Marauda", "Hol!", "Calcium", "Code: Pandorum", "Syzy", "PEEKABOO", "Wreckno", "The Resistance", "Kai Wachi"
+      "Marauda", "Hol!", "Calcium", "Code: Pandorum", "Syzy", "PEEKABOO", "Wreckno", "The Resistance",
+      "Kai Wachi"
     ],
     "melodic": [
       "ILLENIUM", "Seven Lions", "SLANDER", "Adventure Club", "Krewella", "Grabbitz", "Whethan",
-      "Said The Sky", "Dabin"
+      "Said The Sky", "Dabin", "Trivecta", "Paper Skies"
     ],
     "dnb": [
       "Basstripper", "Skellytn", "Andy C", "Sub Focus", "Dimension", "Culture Shock", "1991", "WORSHIP",
@@ -42,13 +44,15 @@
     "wonky": [
       "Mport", "VEIL", "Jantsen", "Nikita, the Wicked", "Liquid Stranger", "Of The Trees", "Mersiv",
       "Zingara", "Ahee", "Daily Bread", "Champagne Drip", "Detox Unit", "Super Future", "EAZYBAKED",
-      "Jade Cicada", "Opiuo", "Machinedrum", "Rezz", "LSDream"
+      "Jade Cicada", "Opiuo", "Machinedrum", "Rezz", "LSDream", "Ravenscoon", "Steller", "Lumasi",
+      "Jaenga", "Maddy O'Neal", "Sully", "Common Creation", "Phyphr", "Space Wizard", "Know Good",
+      "JKYL & HYDE", "Saka", "GorillaT"
     ],
     "house": [
       "Malaa", "Nostalgix", "Taiki Nulight"
     ],
     "adj": [
-      "Apashe", "Jon Casey", "TroyBoi", "Big Gigantic", "GRiZ"
+      "Apashe", "Jon Casey", "TroyBoi", "Big Gigantic", "GRiZ", "SoDown", "Ascension", "Jason Leech"
     ]
   }
 }
