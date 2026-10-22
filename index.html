@@ -562,8 +562,8 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
 }
 @media (prefers-reduced-motion:no-preference) and (max-width:900px){.rail:not([hidden]){animation:sheetup .4s var(--ease-out)}}
 
-/* phone mini month + pinned week strip */
-.mini{display:none}
+/* phone mini month + pinned week strip, with a colour key under it */
+.mini,.mkey{display:none}
 @media (max-width:640px){
   .mini{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding:6px 0 12px;border-bottom:2px solid var(--rule)}
   .mini .mdw{text-align:center;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--ink-meta);padding:4px 0}
@@ -582,6 +582,11 @@ details.nshow[open]>summary .nname>span:nth-child(2){text-decoration:underline;t
   .mcr i{width:5px;height:5px;border-radius:50%;background:var(--signal)}
   .mcr i.f{background:var(--pink)}
   .mc.fest::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--signal)}
+  .mkey:not(:empty){display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px 0 12px;border-bottom:1px solid var(--rule-soft);font-family:var(--font-mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--ink-soft)}
+  .mkt{color:var(--ink-meta);margin-right:2px}
+  .mki{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .mki .sw{width:12px;height:4px}
+  .mki .mkf{width:14px;height:3px;background:var(--signal)}
   .nrow{scroll-margin-top:calc(68px + env(safe-area-inset-top,0px))}
 }
 
@@ -1029,6 +1034,7 @@ button.pchip{cursor:pointer}
           </div>
         </div>
         <div class="mini" id="mini" aria-label="Jump to a night"></div>
+        <div class="mkey" id="mkey" aria-label="Colour key"></div>
         <div class="nlist" id="nlist"></div>
         <div class="grid" id="grid" role="grid" aria-labelledby="mTitle"></div>
         <div class="daypanel">
@@ -1063,14 +1069,14 @@ button.pchip{cursor:pointer}
 <script>
 function boot(DATA){
 const GENRES = [
-  {id:"dubstep", label:"Dubstep",               code:"DUB"},
-  {id:"riddim",  label:"Riddim / heavy",        code:"RID"},
-  {id:"melodic", label:"Melodic & future bass", code:"MEL"},
-  {id:"dnb",     label:"Drum & bass",           code:"DNB"},
-  {id:"uk",      label:"UK dubstep",            code:"UK"},
-  {id:"wonky",   label:"Wonky & experimental",  code:"WNK"},
-  {id:"house",   label:"Bass house",            code:"HSE"},
-  {id:"adj",     label:"Bass-adjacent",         code:"ADJ"}
+  {id:"dubstep", label:"Dubstep",               code:"DUB", key:"Dubstep"},
+  {id:"riddim",  label:"Riddim / heavy",        code:"RID", key:"Riddim"},
+  {id:"melodic", label:"Melodic & future bass", code:"MEL", key:"Melodic"},
+  {id:"dnb",     label:"Drum & bass",           code:"DNB", key:"DnB"},
+  {id:"uk",      label:"UK dubstep",            code:"UK",  key:"UK dubstep"},
+  {id:"wonky",   label:"Wonky & experimental",  code:"WNK", key:"Wonky"},
+  {id:"house",   label:"Bass house",            code:"HSE", key:"Bass house"},
+  {id:"adj",     label:"Bass-adjacent",         code:"ADJ", key:"Adjacent"}
 ];
 const SHOWS = DATA.shows;
 const gCode=id=>(GENRES.find(g=>g.id===id)||{code:""}).code;
@@ -1271,10 +1277,14 @@ function renderMini(y,m,days,vmap){
   const first=new Date(Date.UTC(y,m,1)).getUTCDay();
   let h=DOW.map(d=>'<span class="mdw" aria-hidden="true">'+d[0]+'</span>').join("");
   for(let i=0;i<first;i++)h+='<span aria-hidden="true"></span>';
+  const gs=new Set();let fest=false;
   for(let d=1;d<=days;d++){const k=iso(y,m,d);const inf=dayInfo(k);const ok=listed(k,inf);
+    inf.ev.slice(0,3).forEach(s=>gs.add(s.genre));if(inf.fe.length)fest=true;
     h+='<button type="button" class="mc'+(inf.tot?" has":"")+(k<TODAY?" past":"")+(k===TODAY?" today":"")+(inf.fe.length?" fest":"")+'" data-mini="'+k+'"'+(ok?"":" disabled")+
       ' aria-label="'+esc(longDate(k))+(inf.tot?", "+inf.tot+(inf.tot===1?" event":" events"):", nothing listed")+(inf.crew?", crew plans":"")+'"><span>'+d+'</span>'+dayBits(inf)+'</button>';}
   $("mini").innerHTML=h;pinDay=null;
+  /* key: only the colours drawn on this month */
+  $("mkey").innerHTML=gs.size||fest?'<span class="mkt">Key</span>'+GENRES.filter(g=>gs.has(g.id)).map(g=>'<span class="mki"><span class="sw g-'+g.id+'"></span>'+g.key+'</span>').join("")+(fest?'<span class="mki"><span class="mkf"></span>Festival</span>':''):"";
 }
 function pinUpdate(force){
   if(!PHONE.matches||state.view==="crew"||$("monthView").hidden)return;
