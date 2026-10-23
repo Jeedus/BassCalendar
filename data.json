@@ -1,6 +1,6 @@
 {
  "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. GENRE GATE (non-bass acts have slipped in three times: hard techno, dance pop, breakcore), check every new show before adding it: 1) Never add a show headlined by anyone in skip or marked not_bass in artists.json. 2) If the headliner isn't in artists.json, research what they are known for (bio, Beatport genre, label, festival pages; not the venue's or ticket site's 'electronic' category) and add them with genre, style and source; if they aren't bass music add them with not_bass: true and put them in skip. 3) Bass music here is dubstep, riddim, melodic bass/future bass, drum & bass, UK/deep dubstep, wonky/experimental bass, bass house, and bass-adjacent festival trap, livetronica, midtempo and orchestral bass. Breakcore, drill 'n' bass, IDM, cybergrind, digital hardcore, hardcore, techno, trance, regular house, hyperpop, synth-pop, dance pop and pop EDM are not bass music, even when a listing calls them electronic. 4) If you can't confirm from a source that the headliner plays bass music, leave the show out and mention it in the update message. 5) A show's genre is always its headliner's genre in artists.json, never the venue's or event's category.",
- "updated": "2026-10-21",
+ "updated": "2026-10-23",
  "checked": "2026-10-18",
  "links": {},
  "locals": [],
@@ -435,6 +435,24 @@
    "url": "https://www.tixr.com/groups/navypiereventcenter/events/whethan-207828"
   },
   {
+   "id": "tynan",
+   "date": "2027-01-22",
+   "doors": "22:00",
+   "title": "TYNAN",
+   "tag": "TYNAN TIME Tour",
+   "support": [
+    "HerShe",
+    "Wolfie"
+   ],
+   "venue": "Concord Music Hall",
+   "addr": "2047 N Milwaukee Ave",
+   "city": "Chicago",
+   "genre": "dubstep",
+   "price": "$17.50",
+   "age": "18+",
+   "url": "https://concordmusichall.com/calendar/tynan360-set/"
+  },
+  {
    "id": "know-good",
    "date": "2027-01-23",
    "doors": "21:00",
@@ -476,6 +494,38 @@
    "city": "Chicago",
    "genre": "dubstep",
    "url": "https://edm.com/events/levity-vow-break-north-american-laser-record-octobot-production/"
+  },
+  {
+   "id": "effin",
+   "date": "2027-02-05",
+   "doors": "22:00",
+   "title": "Effin",
+   "tag": "Heartbeats Tour",
+   "support": [
+    "Nikita, the Wicked",
+    "AYCH"
+   ],
+   "venue": "Concord Music Hall",
+   "addr": "2047 N Milwaukee Ave",
+   "city": "Chicago",
+   "genre": "dubstep",
+   "price": "$19.50",
+   "age": "18+",
+   "url": "https://concordmusichall.com/calendar/effin/"
+  },
+  {
+   "id": "cyclops",
+   "date": "2027-02-19",
+   "doors": "20:00",
+   "title": "Cyclops",
+   "tag": "Eye Witness Tour",
+   "support": [],
+   "venue": "Joe's on Weed St",
+   "addr": "940 W Weed St",
+   "city": "Chicago",
+   "genre": "dubstep",
+   "age": "21+",
+   "url": "https://wl.eventim.us/event/cyclops-at-joes-on-weed-st-or-chicago-il/708127"
   },
   {
    "id": "level-up",

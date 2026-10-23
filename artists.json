@@ -64,6 +64,12 @@
    "genre": "dubstep",
    "style": "hybrid trap-dubstep"
   },
+  "AYCH": {
+   "genre": "dubstep",
+   "style": "heavy bass with hip-hop influence (Bassrush, Subsidia; Nashville)",
+   "confidence": "medium",
+   "source": "https://gravitascreate.com/artist/aych/"
+  },
   "Barely Alive": {
    "genre": "dubstep",
    "style": "heavy dubstep / brostep"
@@ -195,6 +201,12 @@
   "Culture Shock": {
    "genre": "dnb",
    "style": "drum & bass"
+  },
+  "Cyclops": {
+   "genre": "dubstep",
+   "style": "heavy dubstep (Boston; Eye Witness tour)",
+   "confidence": "medium",
+   "source": "https://magneticmag.com/2026/10/cyclops-2027-eye-witness-north-american-tour/"
   },
   "CØNTRA": {
    "genre": "uk",
@@ -384,6 +396,12 @@
   "Hedex": {
    "genre": "dnb",
    "style": "jump-up drum & bass"
+  },
+  "HerShe": {
+   "genre": "dubstep",
+   "style": "dubstep / bass house / trap with live beatboxing and rapping",
+   "confidence": "medium",
+   "source": "https://www.mixgraph.io/artists/hershe"
   },
   "Hexx": {
    "genre": "riddim",
@@ -1007,6 +1025,11 @@
    "style": "140 / deep dubstep (Chicago)",
    "confidence": "medium",
    "source": "https://www.beatport.com/track/up/16835026"
+  },
+  "Wolfie": {
+   "genre": "dubstep",
+   "style": "unidentified; guessed from TYNAN bill",
+   "confidence": "low"
   },
   "Wooli": {
    "genre": "riddim",
