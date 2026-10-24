@@ -1,7 +1,7 @@
 {
  "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. GENRE GATE (non-bass acts have slipped in three times: hard techno, dance pop, breakcore), check every new show before adding it: 1) Never add a show headlined by anyone in skip or marked not_bass in artists.json. 2) If the headliner isn't in artists.json, research what they are known for (bio, Beatport genre, label, festival pages; not the venue's or ticket site's 'electronic' category) and add them with genre, style and source; if they aren't bass music add them with not_bass: true and put them in skip. 3) Bass music here is dubstep, riddim, melodic bass/future bass, drum & bass, UK/deep dubstep, wonky/experimental bass, bass house, and bass-adjacent festival trap, livetronica, midtempo and orchestral bass. Breakcore, drill 'n' bass, IDM, cybergrind, digital hardcore, hardcore, techno, trance, regular house, hyperpop, synth-pop, dance pop and pop EDM are not bass music, even when a listing calls them electronic. 4) If you can't confirm from a source that the headliner plays bass music, leave the show out and mention it in the update message. 5) A show's genre is always its headliner's genre in artists.json, never the venue's or event's category.",
- "updated": "2026-10-23",
- "checked": "2026-10-18",
+ "updated": "2026-10-24",
+ "checked": "2026-10-24",
  "links": {},
  "locals": [],
  "skip": [
@@ -13,6 +13,19 @@
   "Łaszewo"
  ],
  "shows": [
+  {
+   "id": "jason-ross",
+   "date": "2026-10-17",
+   "doors": null,
+   "title": "Jason Ross",
+   "tag": "The True North Tour",
+   "support": [],
+   "venue": "Concord Music Hall",
+   "addr": "2047 N Milwaukee Ave",
+   "city": "Chicago",
+   "genre": "melodic",
+   "url": "https://concordmusichall.com/calendar/jason-ross-3/"
+  },
   {
    "id": "subtronics-1",
    "date": "2026-10-17",
@@ -33,19 +46,6 @@
    "url": "https://www.radius-chicago.com/events/detail/1497659"
   },
   {
-   "id": "jason-ross",
-   "date": "2026-10-17",
-   "doors": null,
-   "title": "Jason Ross",
-   "tag": "The True North Tour",
-   "support": [],
-   "venue": "Concord Music Hall",
-   "addr": "2047 N Milwaukee Ave",
-   "city": "Chicago",
-   "genre": "melodic",
-   "url": "https://concordmusichall.com/calendar/jason-ross-3/"
-  },
-  {
    "id": "subtronics-2",
    "date": "2026-10-18",
    "doors": "21:00",
@@ -63,6 +63,17 @@
    "genre": "dubstep",
    "age": "18+",
    "url": "https://www.radius-chicago.com/events/detail/1500446"
+  },
+  {
+   "id": "grabbitz",
+   "date": "2026-10-23",
+   "doors": null,
+   "title": "Grabbitz",
+   "support": [],
+   "venue": "Outset",
+   "city": "Chicago",
+   "genre": "melodic",
+   "url": "https://www.songkick.com/concerts/43333682-grabbitz-at-outset"
   },
   {
    "id": "truth",
@@ -85,17 +96,6 @@
    "url": "https://concordmusichall.com/calendar/truth/"
   },
   {
-   "id": "grabbitz",
-   "date": "2026-10-23",
-   "doors": null,
-   "title": "Grabbitz",
-   "support": [],
-   "venue": "Outset",
-   "city": "Chicago",
-   "genre": "melodic",
-   "url": "https://www.songkick.com/concerts/43333682-grabbitz-at-outset"
-  },
-  {
    "id": "sunsquabi",
    "date": "2026-10-29",
    "doors": null,
@@ -107,6 +107,17 @@
    "city": "Lisle",
    "genre": "adj",
    "url": "https://www.jambase.com/show/sunsquabi-basecamp-pub-20261029"
+  },
+  {
+   "id": "skream",
+   "date": "2026-10-30",
+   "doors": null,
+   "title": "Skream",
+   "support": [],
+   "venue": "Alhambra Palace",
+   "city": "Chicago",
+   "genre": "uk",
+   "url": "https://www.jambase.com/show/skream-alhambra-palace-20261030"
   },
   {
    "id": "atliens",
@@ -124,17 +135,6 @@
    "genre": "dubstep",
    "age": "18+",
    "url": "https://www.radius-chicago.com/events/detail/1534963"
-  },
-  {
-   "id": "skream",
-   "date": "2026-10-30",
-   "doors": null,
-   "title": "Skream",
-   "support": [],
-   "venue": "Alhambra Palace",
-   "city": "Chicago",
-   "genre": "uk",
-   "url": "https://www.jambase.com/show/skream-alhambra-palace-20261030"
   },
   {
    "id": "feed-me",
@@ -355,6 +355,18 @@
    "url": "https://thedailyfrequency.com/2026/10/06/zeds-dead-chicago-2026/"
   },
   {
+   "id": "jason-leech",
+   "date": "2026-12-11",
+   "doors": "21:00",
+   "title": "Jason Leech",
+   "support": [],
+   "venue": "Chop Shop",
+   "addr": "2033 W North Ave",
+   "city": "Chicago",
+   "genre": "adj",
+   "url": "https://dice.fm/event/6abbe76e4a21e20001dee378"
+  },
+  {
    "id": "richard-finger",
    "date": "2026-12-11",
    "doors": "22:00",
@@ -371,18 +383,6 @@
    "price": "$19.50",
    "age": "18+",
    "url": "https://concordmusichall.com/calendar/richard-finger/"
-  },
-  {
-   "id": "jason-leech",
-   "date": "2026-12-11",
-   "doors": "21:00",
-   "title": "Jason Leech",
-   "support": [],
-   "venue": "Chop Shop",
-   "addr": "2033 W North Ave",
-   "city": "Chicago",
-   "genre": "adj",
-   "url": "https://dice.fm/event/6abbe76e4a21e20001dee378"
   },
   {
    "id": "jkyl-hyde",
@@ -433,6 +433,19 @@
    "genre": "melodic",
    "age": "18+",
    "url": "https://www.tixr.com/groups/navypiereventcenter/events/whethan-207828"
+  },
+  {
+   "id": "kai-wachi-navy-pier-2027-01-01",
+   "date": "2027-01-01",
+   "doors": null,
+   "title": "Kai Wachi",
+   "venue": "Navy Pier",
+   "addr": "600 E Grand Ave",
+   "city": "Chicago",
+   "genre": "riddim",
+   "flag": "Only listed on concerts50 so far; venue space and start time (7pm) unconfirmed",
+   "added": "2026-10-24",
+   "url": "https://concerts50.com/show/kai-wachi-in-chicago-tickets-jan-01-2027"
   },
   {
    "id": "tynan",
