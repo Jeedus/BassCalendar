@@ -1085,6 +1085,11 @@
    "not_bass": true,
    "confidence": "medium",
    "source": "https://www.axs.com/de/artists/1110643"
+  },
+  "Kayzo": {
+   "genre": "dubstep",
+   "style": "hardstyle/dubstep/trap bass, rocktronic",
+   "source": "https://en.wikipedia.org/wiki/Kayzo"
   }
  }
 }

@@ -1,7 +1,7 @@
 {
  "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. GENRE GATE (non-bass acts have slipped in three times: hard techno, dance pop, breakcore), check every new show before adding it: 1) Never add a show headlined by anyone in skip or marked not_bass in artists.json. 2) If the headliner isn't in artists.json, research what they are known for (bio, Beatport genre, label, festival pages; not the venue's or ticket site's 'electronic' category) and add them with genre, style and source; if they aren't bass music add them with not_bass: true and put them in skip. 3) Bass music here is dubstep, riddim, melodic bass/future bass, drum & bass, UK/deep dubstep, wonky/experimental bass, bass house, and bass-adjacent festival trap, livetronica, midtempo and orchestral bass. Breakcore, drill 'n' bass, IDM, cybergrind, digital hardcore, hardcore, techno, trance, regular house, hyperpop, synth-pop, dance pop and pop EDM are not bass music, even when a listing calls them electronic. 4) If you can't confirm from a source that the headliner plays bass music, leave the show out and mention it in the update message. 5) A show's genre is always its headliner's genre in artists.json, never the venue's or event's category.",
- "updated": "2026-10-24",
- "checked": "2026-10-24",
+ "updated": "2026-10-31",
+ "checked": "2026-10-31",
  "links": {},
  "locals": [],
  "skip": [
@@ -527,6 +527,21 @@
    "url": "https://concordmusichall.com/calendar/effin/"
   },
   {
+   "id": "zingara",
+   "date": "2027-02-06",
+   "doors": null,
+   "title": "Zingara",
+   "tag": "The Aliens Are Making Sounds Tour",
+   "support": [],
+   "venue": "Ramova Theatre",
+   "addr": "3520 S Halsted St",
+   "city": "Chicago",
+   "genre": "wonky",
+   "age": "18+",
+   "added": "2026-10-31",
+   "url": "https://ramovachicago.com/calendar"
+  },
+  {
    "id": "cyclops",
    "date": "2027-02-19",
    "doors": "20:00",
@@ -558,6 +573,20 @@
    "url": "https://concerts50.com/show/level-up-in-chicago-tickets-feb-20-2027"
   },
   {
+   "id": "mersiv",
+   "date": "2027-02-27",
+   "doors": null,
+   "title": "MERSIV",
+   "tag": "Nostalgia Tour",
+   "support": [],
+   "venue": "The Salt Shed",
+   "city": "Chicago",
+   "genre": "wonky",
+   "flag": "Only one ticket site lists this so far. Confirm with the venue before buying.",
+   "added": "2026-10-31",
+   "url": "https://concerts50.com/show/mersiv-in-chicago-tickets-feb-27-2027"
+  },
+  {
    "id": "alleycvt",
    "date": "2027-03-05",
    "doors": "20:00",
@@ -570,6 +599,36 @@
    "city": "Chicago",
    "genre": "dubstep",
    "url": "https://www.eventworld.com/alleycvt-chicago-tickets-03-05-2027/event/584705"
+  },
+  {
+   "id": "kayzo-hhunter-night-1",
+   "date": "2027-03-05",
+   "doors": null,
+   "title": "Kayzo x HHunter",
+   "tag": "Night 1",
+   "support": [],
+   "venue": "Cermak Hall at Radius",
+   "addr": "640 W Cermak Rd",
+   "city": "Chicago",
+   "genre": "dubstep",
+   "flag": "Only one ticket site lists this so far. Confirm with the venue before buying.",
+   "added": "2026-10-31",
+   "url": "https://concerts50.com/show/kayzo-in-chicago-tickets-mar-05-2027"
+  },
+  {
+   "id": "kayzo-hhunter-night-2",
+   "date": "2027-03-06",
+   "doors": null,
+   "title": "Kayzo x HHunter",
+   "tag": "Night 2",
+   "support": [],
+   "venue": "Cermak Hall at Radius",
+   "addr": "640 W Cermak Rd",
+   "city": "Chicago",
+   "genre": "dubstep",
+   "flag": "Only one ticket site lists this so far. Confirm with the venue before buying.",
+   "added": "2026-10-31",
+   "url": "https://concerts50.com/show/kayzo-in-chicago-tickets-mar-06-2027"
   }
  ],
  "festivals": [
