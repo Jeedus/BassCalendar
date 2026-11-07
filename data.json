@@ -1,15 +1,19 @@
 {
  "_rules": "Never change or reuse an existing show id or festival id. Crew RSVPs are saved against these ids, so renaming one erases everyone's plans for it. New shows get new ids; fix typos in title/venue/etc but keep the id. GENRE GATE (non-bass acts have slipped in three times: hard techno, dance pop, breakcore), check every new show before adding it: 1) Never add a show headlined by anyone in skip or marked not_bass in artists.json. 2) If the headliner isn't in artists.json, research what they are known for (bio, Beatport genre, label, festival pages; not the venue's or ticket site's 'electronic' category) and add them with genre, style and source; if they aren't bass music add them with not_bass: true and put them in skip. 3) Bass music here is dubstep, riddim, melodic bass/future bass, drum & bass, UK/deep dubstep, wonky/experimental bass, bass house, and bass-adjacent festival trap, livetronica, midtempo and orchestral bass. Breakcore, drill 'n' bass, IDM, cybergrind, digital hardcore, hardcore, techno, trance, regular house, hyperpop, synth-pop, dance pop and pop EDM are not bass music, even when a listing calls them electronic. 4) If you can't confirm from a source that the headliner plays bass music, leave the show out and mention it in the update message. 5) A show's genre is always its headliner's genre in artists.json, never the venue's or event's category. Every show has a support list: [] when no support acts are announced.",
- "updated": "2026-10-31",
- "checked": "2026-10-31",
+ "updated": "2026-11-07",
+ "checked": "2026-11-07",
  "links": {},
  "locals": [],
  "skip": [
+  "AYYBO",
   "Bassvictim",
+  "Fantasm",
   "HHUNTER",
   "Nero's Day at Disneyland",
   "Ninajirachi",
+  "Riordan",
   "Twinsick",
+  "Westend",
   "Łaszewo"
  ],
  "shows": [
@@ -480,6 +484,24 @@
    "url": "https://www.tixr.com/groups/ramovatheatre/events/know-good-presents-against-all-odds-tour-192012"
   },
   {
+   "id": "the-resistance",
+   "date": "2027-01-23",
+   "doors": "20:00",
+   "title": "The Resistance",
+   "tag": "Rise of the Shadowcell Tour",
+   "support": [
+    "INAKTIV"
+   ],
+   "venue": "Chop Shop",
+   "addr": "2033 W North Ave",
+   "city": "Chicago",
+   "genre": "riddim",
+   "price": "From $18",
+   "age": "18+",
+   "added": "2026-11-07",
+   "url": "https://dice.fm/event/xe3gne-the-resistance-rise-of-the-shadowcell-tour-23rd-jan-chop-shop-chicago-tickets"
+  },
+  {
    "id": "levity-1",
    "date": "2027-01-29",
    "doors": null,
@@ -555,6 +577,20 @@
    "genre": "dubstep",
    "age": "21+",
    "url": "https://wl.eventim.us/event/cyclops-at-joes-on-weed-st-or-chicago-il/708127"
+  },
+  {
+   "id": "liquid-stranger-electric-helix",
+   "date": "2027-02-19",
+   "doors": "21:00",
+   "title": "Liquid Stranger",
+   "tag": "Electric Helix",
+   "support": [],
+   "venue": "Ramova Theatre",
+   "addr": "3520 S Halsted St",
+   "city": "Chicago",
+   "genre": "wonky",
+   "added": "2026-11-07",
+   "url": "https://www.tixr.com/groups/ramovatheatre/events/liquid-stranger-presents-electric-helix-192020"
   },
   {
    "id": "level-up",
