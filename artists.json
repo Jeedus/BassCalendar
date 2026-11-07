@@ -1090,6 +1090,40 @@
    "genre": "dubstep",
    "style": "hardstyle/dubstep/trap bass, rocktronic",
    "source": "https://en.wikipedia.org/wiki/Kayzo"
+  },
+  "INAKTIV": {
+   "genre": "dubstep",
+   "style": "dark, heavy dubstep (Cyclops Recordings; The Resistance support)",
+   "confidence": "medium",
+   "source": "https://www.mixgraph.io/artists/inaktiv"
+  },
+  "AYYBO": {
+   "genre": "house",
+   "style": "house / tech house",
+   "not_bass": true,
+   "confidence": "medium",
+   "source": "https://www.axs.com/artists/1114706/ayybo-tickets"
+  },
+  "Fantasm": {
+   "genre": "adj",
+   "style": "industrial techno",
+   "not_bass": true,
+   "confidence": "medium",
+   "source": "https://ra.co/dj/fantasm"
+  },
+  "Riordan": {
+   "genre": "house",
+   "style": "house / tech house / UK garage (REMAPPED)",
+   "not_bass": true,
+   "confidence": "medium",
+   "source": "https://ra.co/dj/riordan"
+  },
+  "Westend": {
+   "genre": "house",
+   "style": "tech house / house (NYC)",
+   "not_bass": true,
+   "confidence": "medium",
+   "source": "https://www.axs.com/events/1570599/westend-tickets"
   }
  }
 }
