@@ -1079,6 +1079,8 @@ const GENRES = [
   {id:"adj",     label:"Bass-adjacent",         code:"ADJ", key:"Adjacent"}
 ];
 const SHOWS = DATA.shows;
+/* a show without a support list (a hand-added one, say) would break every view that lists it */
+SHOWS.forEach(x=>{if(!Array.isArray(x.support))x.support=[];});
 const gCode=id=>(GENRES.find(g=>g.id===id)||{code:""}).code;
 
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];

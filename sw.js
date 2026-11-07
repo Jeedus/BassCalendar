@@ -1,4 +1,4 @@
-const SHELL = "basschi-shell-2026-10-22-colour-key";
+const SHELL = "basschi-shell-2026-11-07-supportfix";
 const DATA = "basschi-data";
 const FONTS = "basschi-fonts";
 const SHELL_FILES = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png", "share.png", "qr.js"];
